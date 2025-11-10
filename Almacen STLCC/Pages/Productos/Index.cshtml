@@ -1,0 +1,57 @@
+﻿@page
+@model Almacen_STLCC.Pages.Productos.IndexModel
+@{
+    ViewData["Title"] = "Productos - Almacén STLCC";
+}
+<link rel="stylesheet" href="~/css/productos/Index.css" />
+<div class="contenedor">
+    <header class="header">
+        <div class="titulo-header">
+            <div>
+                <h1>📋 Lista de Productos</h1>
+                <p>Consulta y gestiona todos los productos registrados en el inventario.</p>
+            </div>
+            <div class="prod-crear">
+                <a asp-page="/Productos/Crear" class="btn-verde">➕ Añadir Producto</a>
+            </div>
+        </div>
+    </header>
+    <section class="tabla-productos">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Categoría</th>
+                    <th>Cantidad</th>
+                    <th>Proveedor</th>
+                    <th>Fecha de Registro</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Productos != null && Model.Productos.Any())
+                {
+                    @foreach (var producto in Model.Productos)
+                    {
+                        <tr>
+                            <td>@producto.NombreProd</td>
+                            <td>@producto.CategoriaProd</td>
+                            <td>@producto.CantidadProd</td>
+                            <td>@producto.Proveedor</td>
+                            <td>@producto.FechaRegistro.ToString("dd/MM/yyyy")</td>
+                            <td class="acciones">
+                                <a asp-page="/Productos/Editar" asp-route-id="@producto.Id" class="btn-amarillo">Editar</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="mensaje-vacio">No hay productos registrados.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </section>
+</div>

@@ -1,0 +1,126 @@
+﻿body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background-color: #f5f6fa;
+    margin: 0;
+    padding: 0;
+}
+
+.contenedor {
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 20px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+    .header h1 {
+        color: #5CCDDE;
+        font-size: 32px;
+        margin-bottom: 10px;
+    }
+
+    .header p {
+        color: #333;
+        font-size: 18px;
+    }
+
+.paneles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    justify-items: center;
+}
+
+.tarjetas {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    width: 100%;
+    max-width: 320px;
+}
+
+    .tarjetas:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+.icono-productos,
+.icono-crear,
+.icono-editar,
+.icono-reportes,
+.icono-historial {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.tarjetas h3 {
+    margin: 10px 0;
+    color: #333;
+    font-size: 20px;
+}
+
+.tarjetas p {
+    color: #666;
+    font-size: 15px;
+    margin-bottom: 20px;
+}
+
+.btn-productos,
+.btn-crear,
+.btn-editar,
+.btn-reportes,
+.btn-historial {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 8px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.2s ease;
+}
+
+.btn-productos {
+    background: #A0826D;
+}
+
+    .btn-productos:hover {
+        background: #7D6555;
+    }
+
+.btn-crear {
+    background: #50c213;
+}
+
+    .btn-crear:hover {
+        background: #37850d;
+    }
+
+.btn-editar {
+    background: #dbcd09;
+}
+
+    .btn-editar:hover {
+        background: #9e9408;
+    }
+
+.btn-reportes {
+    background: #dc3545;
+}
+
+    .btn-reportes:hover {
+        background: #c82333;
+    }
+
+.btn-historial {
+    background: #5DABFB;
+}
+
+    .btn-historial:hover {
+        background: #3A8FE8;
+    }
