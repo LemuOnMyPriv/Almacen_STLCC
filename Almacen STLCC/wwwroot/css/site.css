@@ -30,16 +30,22 @@ body {
 }
 
 .layout-logo {
-    font-size: 22px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    display: none;
 }
 
 .layout-nav {
     display: flex;
-    gap: 25px;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    gap: 0;
+}
+
+.nav-left,
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
 }
 
 .nav-link {
@@ -52,6 +58,29 @@ body {
     .nav-link:hover {
         opacity: 0.8;
     }
+
+.nav-left .nav-link {
+    padding: 6px 8px;
+}
+
+.logout-btn {
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.08);
+    transition: background 0.15s ease, transform 0.08s ease;
+}
+
+    .logout-btn:hover {
+        background: rgba(255,255,255,0.18);
+        transform: translateY(-1px);
+    }
+
+.nav-user {
+    font-weight: 600;
+    opacity: 0.95;
+    pointer-events: none;
+}
 
 .layout-main {
     padding: 40px 0;

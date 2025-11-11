@@ -3,34 +3,40 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Sistema de gestión de inventario para Almacén STLCC" />
     <title>@ViewData["Title"] - Almacén STLCC</title>
-    <link rel="icon" href="~/favicon.ico" type="image/x-icon" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    @RenderSection("Estilos", required: false)
 </head>
 <body>
-    <header class="layout-header">
-        <div class="layout-contenedor">
-            <div class="layout-logo">
-                <span>Almacén STLCC</span>
+    @if (!string.IsNullOrEmpty(Context.Session.GetString("Username")))
+    {
+        <header class="layout-header">
+            <div class="layout-contenedor">
+                <nav class="layout-nav">
+                    <div class="nav-left">
+                        <a asp-page="/Index" class="nav-link">Inicio</a>
+                        <a asp-page="/Productos/Index" class="nav-link">Productos</a>
+                        <a asp-page="/Reportes/Index" class="nav-link">Reportes</a>
+                        <a asp-page="/Historial/Index" class="nav-link">Historial</a>
+                    </div>
+
+                    <div class="nav-right">
+                        <span class="nav-link nav-user">👤 @Context.Session.GetString("DisplayName")</span>
+                        <a asp-page="/Logout" class="nav-link logout-btn">Cerrar Sesión</a>
+                    </div>
+                </nav>
             </div>
-            <nav class="layout-nav">
-                <a asp-page="/Index" class="nav-link">Inicio</a>
-                <a asp-page="/Productos/Index" class="nav-link">Productos</a>
-                <a asp-page="/Reportes/Index" class="nav-link">Reportes</a>
-                <a asp-page="/Historial/Index" class="nav-link">Historial</a>
-            </nav>
-        </div>
-    </header>
+        </header>
+    }
     <main class="layout-main">
         <div class="layout-content">
             @RenderBody()
         </div>
     </main>
-    <footer class="layout-footer">
-        <p>&copy; 2025 Almacén STLCC | Sistema de Inventario</p>
-    </footer>
-    @RenderSection("Scripts", required: false)
+    @if (!string.IsNullOrEmpty(Context.Session.GetString("Username")))
+    {
+        <footer class="layout-footer">
+            <p>&copy; 2025 Almacén STLCC | Sistema de Inventario</p>
+        </footer>
+    }
 </body>
 </html>

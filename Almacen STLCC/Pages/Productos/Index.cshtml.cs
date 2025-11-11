@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
-using Almacen_STLCC.Models;
+using Almacen_STLCC.Models.Productos;
 using Almacen_STLCC.Data;
 
 namespace Almacen_STLCC.Pages.Productos
 {
-    public class IndexModel : PageModel
+    public class IndexModel : SecurePageModel
     {
         private readonly ApplicationDbContext _context;
 
@@ -19,7 +19,6 @@ namespace Almacen_STLCC.Pages.Productos
 
         public async Task OnGetAsync()
         {
-
             Productos = await _context.Productos.ToListAsync();
         }
     }

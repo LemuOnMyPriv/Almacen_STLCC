@@ -1,0 +1,30 @@
+﻿@page
+@model Almacen_STLCC.Pages.Usuarios.CreateModel
+@{
+    ViewData["Title"] = "Crear Usuario Local";
+}
+
+<h2>Crear Usuario Local</h2>
+
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="Input.Usuario" class="form-label"></label>
+        <input asp-for="Input.Usuario" class="form-control" />
+        <span asp-validation-for="Input.Usuario" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Input.Contraseña" class="form-label"></label>
+        <input asp-for="Input.Contraseña" class="form-control" type="password" />
+        <span asp-validation-for="Input.Contraseña" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Input.ConfirmarContraseña" class="form-label"></label>
+        <input asp-for="Input.ConfirmarContraseña" class="form-control" type="password" />
+        <span asp-validation-for="Input.ConfirmarContraseña" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Crear Usuario</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

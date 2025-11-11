@@ -1,0 +1,23 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Almacen_STLCC.Models.Usuarios
+{
+    [Table("usuarios")]
+    public class Usuario
+    {
+        [Key]
+        [Column("id_usuario")]
+        public int Id_Usuario { get; set; }
+
+        [Required(ErrorMessage = "El nombre de usuario es obligatorio")]
+        [StringLength(100)]
+        [Column("nombre_usuario")]
+        public string NombreUsuario { get; set; }
+
+        [Required]
+        [StringLength(255)]
+        [Column("contraseña")]
+        public string Contraseña { get; set; }
+    }
+}
