@@ -12,12 +12,16 @@ namespace Almacen_STLCC.Models.Usuarios
 
         [Required(ErrorMessage = "El nombre de usuario es obligatorio")]
         [StringLength(100)]
-        [Column("nombre_usuario")]
+        [Column("nombreusuario")]
         public string NombreUsuario { get; set; }
 
         [Required]
         [StringLength(255)]
         [Column("contraseña")]
         public string Contraseña { get; set; }
+
+        [Required]
+        [Column("rol")]
+        public string Rol { get; set; } = "USUARIO";
     }
 }

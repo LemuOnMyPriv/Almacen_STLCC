@@ -1,5 +1,6 @@
 using Almacen_STLCC.Data;
 using Almacen_STLCC.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
