@@ -6,7 +6,12 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages()
+    .AddDataAnnotationsLocalization(options =>
+    {
+        // Evita que ASP.NET traduzca los mensajes por defecto
+        options.DataAnnotationLocalizerProvider = (type, factory) => null;
+    });
 
 // Configurar MySQL
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

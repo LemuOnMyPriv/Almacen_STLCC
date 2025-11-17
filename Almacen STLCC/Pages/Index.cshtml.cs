@@ -13,9 +13,14 @@ namespace Almacen_STLCC.Pages
             _logger = logger;
         }
 
-        public void OnGet()
+        public IActionResult OnGet()
         {
-
+            var username = HttpContext.Session.GetString("Username");
+            if (string.IsNullOrEmpty(username))
+            {
+                return RedirectToPage("/Login");
+            }
+            return Page();
         }
     }
 }

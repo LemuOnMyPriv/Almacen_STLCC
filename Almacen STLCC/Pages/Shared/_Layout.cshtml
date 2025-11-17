@@ -9,6 +9,9 @@
 <body>
     @if (!string.IsNullOrEmpty(Context.Session.GetString("Username")))
     {
+        var rol = Context.Session.GetString("Rol");
+        var esAdmin = rol == "ADMINISTRADOR";
+
         <header class="layout-header">
             <div class="layout-contenedor">
                 <nav class="layout-nav">
@@ -17,10 +20,21 @@
                         <a asp-page="/Productos/Index" class="nav-link">Productos</a>
                         <a asp-page="/Reportes/Index" class="nav-link">Reportes</a>
                         <a asp-page="/Historial/Index" class="nav-link">Historial</a>
+
+                        @if (esAdmin)
+                        {
+                            <a asp-page="/Usuarios/Index" class="nav-link">Usuarios</a>
+                        }
                     </div>
 
                     <div class="nav-right">
-                        <span class="nav-link nav-user">👤 @Context.Session.GetString("DisplayName")</span>
+                        <span class="nav-link nav-user">
+                            @Context.Session.GetString("DisplayName")
+                            @if (esAdmin)
+                            {
+                                <span class="badge-admin">ADMIN</span>
+                            }
+                        </span>
                         <a asp-page="/Logout" class="nav-link logout-btn">Cerrar Sesión</a>
                     </div>
                 </nav>
@@ -38,5 +52,10 @@
             <p>&copy; 2025 Almacén STLCC | Sistema de Inventario</p>
         </footer>
     }
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

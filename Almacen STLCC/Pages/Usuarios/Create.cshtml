@@ -3,28 +3,76 @@
 @{
     ViewData["Title"] = "Crear Usuario Local";
 }
+<link rel="stylesheet" href="~/css/usuarios/crear.css" />
 
-<h2>Crear Usuario Local</h2>
+<div class="crear-container">
+    <div class="crear-card">
+        <div class="crear-header">
+            <h2>Crear Usuario</h2>
+            <p>Registra un nuevo usuario para el acceso al sistema</p>
+        </div>
 
-<form method="post">
-    <div class="mb-3">
-        <label asp-for="Input.Usuario" class="form-label"></label>
-        <input asp-for="Input.Usuario" class="form-control" />
-        <span asp-validation-for="Input.Usuario" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="Input.Contraseña" class="form-label"></label>
-        <input asp-for="Input.Contraseña" class="form-control" type="password" />
-        <span asp-validation-for="Input.Contraseña" class="text-danger"></span>
-    </div>
-    <div class="mb-3">
-        <label asp-for="Input.ConfirmarContraseña" class="form-label"></label>
-        <input asp-for="Input.ConfirmarContraseña" class="form-control" type="password" />
-        <span asp-validation-for="Input.ConfirmarContraseña" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Crear Usuario</button>
-</form>
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert alert-danger">
+                ⚠️ @Model.ErrorMessage
+            </div>
+        }
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+        @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+        {
+            <div class="alert alert-success">
+                ✅ @Model.SuccessMessage
+            </div>
+        }
+
+        <form method="post">
+            <div class="cajas">
+                <label asp-for="Input.Usuario">Nombre de Usuario:</label>
+                <input asp-for="Input.Usuario"
+                       class="form-control"
+                       placeholder="Nombre"
+                       autocomplete="off" />
+                <span asp-validation-for="Input.Usuario" class="validacion"></span>
+                <small style="color: #666; font-size: 13px; display: block; margin-top: 5px;">
+                    Ej: Juan Carlos Fonseca Alfaro
+                </small>
+            </div>
+
+            <div class="cajas">
+                <label asp-for="Input.Contraseña">Contraseña:</label>
+                <input asp-for="Input.Contraseña"
+                       class="form-control"
+                       type="password"
+                       placeholder="********"
+                       autocomplete="new-password" />
+                <span asp-validation-for="Input.Contraseña" class="validacion"></span>
+                <small style="color: #666; font-size: 13px; display: block; margin-top: 5px;">
+                    Mínimo 6 caracteres
+                </small>
+            </div>
+
+            <div class="cajas">
+                <label asp-for="Input.ConfirmarContraseña">Confirmar Contraseña:</label>
+                <input asp-for="Input.ConfirmarContraseña"
+                       class="form-control"
+                       type="password"
+                       placeholder="********"
+                       autocomplete="new-password" />
+                <span asp-validation-for="Input.ConfirmarContraseña" class="validacion"></span>
+                <small style="color: #666; font-size: 13px; display: block; margin-top: 5px;">
+                    Repita su contraseña
+                </small>
+            </div>
+
+            <button type="submit" class="btn-crear">Crear Usuario</button>
+        </form>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <a asp-page="/Usuarios/Index" class="btn-volver">
+                Volver a la lista de usuarios
+            </a>
+        </div>
+    </div>
+</div>
+

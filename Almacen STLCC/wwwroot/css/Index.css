@@ -17,13 +17,13 @@
 }
 
     .header h1 {
-        color: #5CCDDE;
+        color: #88CFE0;
         font-size: 32px;
         margin-bottom: 10px;
     }
 
     .header p {
-        color: #333;
+        color: #949699;
         font-size: 18px;
     }
 
@@ -61,7 +61,7 @@
 
 .tarjetas h3 {
     margin: 10px 0;
-    color: #333;
+    color: #949699;
     font-size: 20px;
 }
 
@@ -110,7 +110,7 @@
     }
 
 .btn-reportes {
-    background: #dc3545;
+    background: #DB473C;
 }
 
     .btn-reportes:hover {

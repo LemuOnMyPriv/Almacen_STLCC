@@ -1,0 +1,136 @@
+﻿body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f8;
+    color: #000;
+    margin: 0;
+    padding: 0;
+}
+
+.contenedor {
+    max-width: 30%;
+    margin: 40px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.header {
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    color: #2c3e50;
+    font-size: 28px;
+    margin-bottom: 10px;
+}
+
+.header p {
+    color: #666;
+    font-size: 15px;
+    margin: 0;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #949699;
+}
+
+.form-control {
+    width: 93%;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: border-color 0.3s;
+}
+
+    .form-control:focus {
+        outline: none;
+        border-color: #88CFE0;
+    }
+
+.form-select {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 15px;
+    background-color: white;
+    cursor: pointer;
+    transition: border-color 0.3s;
+}
+
+    .form-select:focus {
+        outline: none;
+        border-color: #88CFE0;
+    }
+
+.text-danger {
+    color: #DB473C;
+    font-size: 13px;
+    margin-top: 5px;
+    display: block;
+}
+
+.form-text {
+    font-size: 13px;
+    color: #666;
+    margin-top: 5px;
+    display: block;
+}
+
+.form-actions {
+    margin-top: 25px;
+    display: flex;
+    gap: 10px;
+}
+
+.btn-guardar {
+    background-color: #28a745; /* verde clásico */
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+    .btn-guardar:hover {
+        background-color: #218838; /* verde un poco más oscuro al pasar el mouse */
+        transform: translateY(-2px);
+    }
+
+.btn-cancelar {
+    background-color: #c82333; /* rojo oscuro clásico */
+    color: white;
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.3s, transform 0.2s;
+    display: inline-block;
+}
+
+    .btn-cancelar:hover {
+        background-color: #a71d2a; /* rojo más oscuro al pasar el mouse */
+        transform: translateY(-2px);
+    }

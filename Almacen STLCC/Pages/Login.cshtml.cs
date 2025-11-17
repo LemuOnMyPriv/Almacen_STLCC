@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using Almacen_STLCC.Data;
 using Almacen_STLCC.Services;
 
 namespace Almacen_STLCC.Pages
@@ -7,10 +9,11 @@ namespace Almacen_STLCC.Pages
     public class LoginModel : PageModel
     {
         private readonly LdapAuthenticationService _ldapService;
-
-        public LoginModel(LdapAuthenticationService ldapService)
+        private readonly ApplicationDbContext _context;
+        public LoginModel(LdapAuthenticationService ldapService, ApplicationDbContext context)
         {
             _ldapService = ldapService;
+            _context = context;
         }
 
         [BindProperty]
@@ -31,7 +34,7 @@ namespace Almacen_STLCC.Pages
             return Page();
         }
 
-        public IActionResult OnPost()
+        public async Task<IActionResult> OnPostAsync()
         {
             if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
             {
@@ -40,7 +43,7 @@ namespace Almacen_STLCC.Pages
             }
 
             bool isValidUser = _ldapService.ValidateUser(Username, Password);
-            
+
             if (!isValidUser)
             {
                 ErrorMessage = "Usuario o contraseña incorrectos";
@@ -48,14 +51,33 @@ namespace Almacen_STLCC.Pages
             }
 
             bool isInAlmacenGroup = _ldapService.IsUserInAlmacenGroup(Username);
-            
-            if (!isInAlmacenGroup)
+
+            var usuarioLocal = await _context.Usuarios
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.NombreUsuario == Username);
+
+            if (usuarioLocal == null && !isInAlmacenGroup)
             {
                 ErrorMessage = "No tienes permisos para acceder al sistema de almacén";
                 return Page();
             }
 
             HttpContext.Session.SetString("Username", Username);
+
+            if (usuarioLocal != null)
+            {
+                HttpContext.Session.SetString("DisplayName", usuarioLocal.NombreUsuario);
+                HttpContext.Session.SetString("Email", "");
+                HttpContext.Session.SetString("Rol", usuarioLocal.Rol);
+                HttpContext.Session.SetString("TipoUsuario", "LOCAL");
+            }
+            else
+            {
+                HttpContext.Session.SetString("DisplayName", Username);
+                HttpContext.Session.SetString("Email", "");
+                HttpContext.Session.SetString("Rol", "USUARIO");
+                HttpContext.Session.SetString("TipoUsuario", "AD");
+            }
 
             return RedirectToPage("/Index");
         }
