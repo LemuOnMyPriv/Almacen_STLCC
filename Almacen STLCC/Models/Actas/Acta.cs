@@ -1,0 +1,43 @@
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Almacen_STLCC.Models.Actas
+{
+    [Table("actas")]
+    public class Acta
+    {
+        [Key]
+        [Column("id_acta")]
+        public int Id_Acta { get; set; }
+
+        [StringLength(100)]
+        [Column("orden_compra")]
+        public string? Orden_Compra { get; set; }
+
+        [Required(ErrorMessage = "El código F01 es obligatorio")]
+        [StringLength(100)]
+        [Column("f01")]
+        public string F01 { get; set; }
+
+        [StringLength(100)]
+        [Column("requisicion")]
+        public string? Requisicion { get; set; }
+
+        [Required(ErrorMessage = "El proveedor es obligatorio")]
+        [Column("id_proveedor")]
+        public int Id_Proveedor { get; set; }
+
+        [Required(ErrorMessage = "La fecha es obligatoria")]
+        [Column("fecha")]
+        public DateTime Fecha { get; set; }
+
+        // Navegación
+        [ForeignKey("Id_Proveedor")]
+        public Proveedores.Proveedor Proveedor { get; set; }
+
+        // Relaciones
+        public ICollection<DetalleActa> DetallesActa { get; set; } = new List<DetalleActa>();
+        public ICollection<Movimientos.Movimiento> Movimientos { get; set; } = new List<Movimientos.Movimiento>();
+        public ICollection<Anexo> Anexos { get; set; } = new List<Anexo>();
+    }
+}

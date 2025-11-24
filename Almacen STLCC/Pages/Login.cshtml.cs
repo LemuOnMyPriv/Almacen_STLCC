@@ -67,14 +67,12 @@ namespace Almacen_STLCC.Pages
             if (usuarioLocal != null)
             {
                 HttpContext.Session.SetString("DisplayName", usuarioLocal.NombreUsuario);
-                HttpContext.Session.SetString("Email", "");
                 HttpContext.Session.SetString("Rol", usuarioLocal.Rol);
                 HttpContext.Session.SetString("TipoUsuario", "LOCAL");
             }
             else
             {
                 HttpContext.Session.SetString("DisplayName", Username);
-                HttpContext.Session.SetString("Email", "");
                 HttpContext.Session.SetString("Rol", "USUARIO");
                 HttpContext.Session.SetString("TipoUsuario", "AD");
             }

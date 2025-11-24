@@ -20,11 +20,12 @@
         <table>
             <thead>
                 <tr>
+                    <th>Código</th>
                     <th>Nombre</th>
                     <th>Categoría</th>
-                    <th>Cantidad</th>
+                    <th>Unidad de Medida</th>
                     <th>Proveedor</th>
-                    <th>Fecha de Registro</th>
+                    <th>Inventario Actual</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
@@ -34,13 +35,23 @@
                     @foreach (var producto in Model.Productos)
                     {
                         <tr>
-                            <td>@producto.NombreProd</td>
-                            <td>@producto.CategoriaProd</td>
-                            <td>@producto.CantidadProd</td>
-                            <td>@producto.Proveedor</td>
-                            <td>@producto.FechaRegistro.ToString("dd/MM/yyyy")</td>
+                            <td>@producto.Codigo_Producto</td>
+                            <td>@producto.Nombre_Producto</td>
+                            <td>@(producto.Categoria?.Nombre_Categoria ?? "Sin categoría")</td>
+                            <td>@producto.Unidad_Medida</td>
+                            <td>@(producto.Proveedor?.Nombre_Proveedor ?? "Sin proveedor")</td>
+                            <td>
+                                @if (Model.Inventarios != null && Model.Inventarios.ContainsKey(producto.Id_Producto))
+                                {
+                                    <span>@Model.Inventarios[producto.Id_Producto]</span>
+                                }
+                                else
+                                {
+                                    <span>0</span>
+                                }
+                            </td>
                             <td class="acciones">
-                                <a asp-page="/Productos/Editar" asp-route-id="@producto.Id" class="btn-amarillo">Editar</a>
+                                <a asp-page="/Productos/Editar" asp-route-id="@producto.Id_Producto" class="btn-amarillo">Editar</a>
                             </td>
                         </tr>
                     }
@@ -48,7 +59,7 @@
                 else
                 {
                     <tr>
-                        <td colspan="6" class="mensaje-vacio">No hay productos registrados.</td>
+                        <td colspan="7" class="mensaje-vacio">No hay productos registrados.</td>
                     </tr>
                 }
             </tbody>
