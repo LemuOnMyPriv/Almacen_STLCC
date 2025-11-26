@@ -30,9 +30,13 @@
                     <div class="nav-right">
                         <span class="nav-link nav-user">
                             @Context.Session.GetString("DisplayName")
-                            @if (esAdmin)
+                            @if (rol == "ADMINISTRADOR")
                             {
-                                <span class="badge-admin">ADMIN</span>
+                                <span class="badge-admin-layout">ADMIN</span>
+                            }
+                            else
+                            {
+                                <span class="badge-usuario-layout">USUARIO</span>
                             }
                         </span>
                         <a asp-page="/Logout" class="nav-link logout-btn">Cerrar Sesión</a>

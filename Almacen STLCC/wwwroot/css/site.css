@@ -101,12 +101,22 @@ body {
     border-top: 1px solid #ccc;
 }
 
-.badge-admin {
+.badge-admin-layout {
     background-color: #DB473C;
     color: white;
     padding: 3px 8px;
     border-radius: 4px;
     font-size: 11px;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.badge-usuario-layout {
+    background-color: #6c757d;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 12px;
     font-weight: bold;
     margin-left: 5px;
 }
