@@ -12,7 +12,7 @@
                 <p>Consulta y gestiona todos los productos registrados en el inventario.</p>
             </div>
             <div class="prod-crear">
-                <a asp-page="/CrearP/CrearP" class="btn-verde">➕ Añadir Producto</a>
+                <a asp-page="/Productos/CrearP" class="btn-verde">➕ Añadir Producto</a>
             </div>
         </div>
     </header>
@@ -22,6 +22,7 @@
                 <tr>
                     <th>Código</th>
                     <th>Nombre</th>
+                    <th>Marca</th>
                     <th>Categoría</th>
                     <th>Unidad de Medida</th>
                     <th>Proveedor</th>
@@ -37,6 +38,7 @@
                         <tr>
                             <td>@producto.Codigo_Producto</td>
                             <td>@producto.Nombre_Producto</td>
+                            <td>@producto.Marca</td>
                             <td>@(producto.Categoria?.Nombre_Categoria ?? "Sin categoría")</td>
                             <td>@producto.Unidad_Medida</td>
                             <td>@(producto.Proveedor?.Nombre_Proveedor ?? "Sin proveedor")</td>
@@ -59,10 +61,20 @@
                 else
                 {
                     <tr>
-                        <td colspan="7" class="mensaje-vacio">No hay productos registrados.</td>
+                        <td colspan="8" class="mensaje-vacio">No hay productos registrados.</td>
                     </tr>
                 }
             </tbody>
         </table>
     </section>
 </div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="successMessage" data-message='@Json.Serialize(TempData["SuccessMessage"])'></div>
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/js/productos/index.js"></script>
+}

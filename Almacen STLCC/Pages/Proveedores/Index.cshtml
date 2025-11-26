@@ -1,0 +1,61 @@
+﻿@page
+@model Almacen_STLCC.Pages.Proveedores.IndexModel
+@{
+    ViewData["Title"] = "Proveedores - Almacén STLCC";
+}
+<link rel="stylesheet" href="~/css/proveedores/Index.css" />
+<div class="contenedor">
+    <header class="header">
+        <div class="titulo-header">
+            <div>
+                <h1>🚚 Lista de Proveedores</h1>
+                <p>Consulta y gestiona todos los proveedores existentes para el inventario.</p>
+            </div>
+            <div class="prov-crear">
+                <a asp-page="/Proveedores/CrearProveedor" class="btn-verde">➕ Añadir Proveedor</a>
+            </div>
+        </div>
+    </header>
+    <section class="tabla-proveedores">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nombre del Proveedor</th>
+                    <th>RTN</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Proveedores != null && Model.Proveedores.Any())
+                {
+                    @foreach (var proveedor in Model.Proveedores)
+                    {
+                        <tr>
+                            <td>@proveedor.Nombre_Proveedor</td>
+                            <td>@proveedor.Rtn</td>
+                            <td class="acciones">
+                                <a asp-page="/Proveedores/EditarProveedor" asp-route-id="@proveedor.Id_Proveedor" class="btn-amarillo">Editar</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3" class="mensaje-vacio">No hay proveedores registrados.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </section>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="successMessage" data-message='@Json.Serialize(TempData["SuccessMessage"])'></div>
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/js/proveedores/index.js"></script>
+}

@@ -19,6 +19,11 @@ namespace Almacen_STLCC.Models.Productos
         [Column("nombre_producto")]
         public string Nombre_Producto { get; set; }
 
+        [Required(ErrorMessage = "La Marca del producto es obligatoria")]
+        [StringLength(50)]
+        [Column("marca")]
+        public string Marca { get; set; }
+
         [Required(ErrorMessage = "La categoría es obligatoria")]
         [Column("id_categoria")]
         public int Id_Categoria { get; set; }

@@ -15,10 +15,6 @@ namespace Almacen_STLCC.Models.Proveedores
         [Column("nombre_proveedor")]
         public string Nombre_Proveedor { get; set; }
 
-        [StringLength(50)]
-        [Column("marca")]
-        public string? Marca { get; set; }
-
         [Required(ErrorMessage = "El RTN es obligatorio")]
         [StringLength(20)]
         [Column("rtn")]

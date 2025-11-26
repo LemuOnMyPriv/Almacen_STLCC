@@ -1,0 +1,104 @@
+﻿@page
+@model Almacen_STLCC.Pages.Productos.CrearPModel
+@{
+    ViewData["Title"] = "Crear Producto";
+}
+
+<link rel="stylesheet" href="~/css/productos/crearp.css" />
+
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h2>Crear Nuevo Producto</h2>
+            <button type="button" class="btn-close" id="btnClose">&times;</button>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert alert-danger">
+                ⚠️ @Model.ErrorMessage
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+        {
+            <div class="alert alert-success">
+                ✅ @Model.SuccessMessage
+            </div>
+        }
+
+        <form method="post" id="formCrearProducto">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label asp-for="Input.Codigo_Producto">Código del Producto:</label>
+                    <input asp-for="Input.Codigo_Producto"
+                           class="form-control"
+                           type="number"
+                           placeholder="Ej: 330996"
+                           autocomplete="off"
+                           autofocus />
+                    <span asp-validation-for="Input.Codigo_Producto" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Nombre_Producto">Nombre del Producto:</label>
+                    <input asp-for="Input.Nombre_Producto"
+                           class="form-control"
+                           placeholder="Ej: Resma de papel bond"
+                           autocomplete="off" />
+                    <span asp-validation-for="Input.Nombre_Producto" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Marca">Marca del Producto:</label>
+                    <input asp-for="Input.Marca"
+                           class="form-control"
+                           placeholder="Ej: Chamex"
+                           autocomplete="off" />
+                    <span asp-validation-for="Input.Marca" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Id_Categoria">Categoría:</label>
+                    <select asp-for="Input.Id_Categoria" class="form-select">
+                        <option value="">-- Seleccione una categoría --</option>
+                        @foreach (var categoria in Model.Categorias)
+                        {
+                            <option value="@categoria.Id_Categoria">@categoria.Nombre_Categoria</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Input.Id_Categoria" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Unidad_Medida">Unidad de Medida:</label>
+                    <input asp-for="Input.Unidad_Medida"
+                           class="form-control"
+                           placeholder="Ej: Paquete"
+                           autocomplete="off" />
+                    <span asp-validation-for="Input.Unidad_Medida" class="text-danger"></span>
+                </div>
+
+                <div class="form-group full-width">
+                    <label asp-for="Input.Id_Proveedor">Proveedor:</label>
+                    <select asp-for="Input.Id_Proveedor" class="form-select">
+                        <option value="">-- Sin proveedor --</option>
+                        @foreach (var proveedor in Model.Proveedores)
+                        {
+                            <option value="@proveedor.Id_Proveedor">@proveedor.Nombre_Proveedor</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Input.Id_Proveedor" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-guardar">Guardar Producto</button>
+                <button type="button" class="btn-cancelar" id="btnCancelar">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/js/productos/crearp.js"></script>
+}
