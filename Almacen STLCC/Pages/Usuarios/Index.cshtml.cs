@@ -5,16 +5,11 @@ using Almacen_STLCC.Models.Usuarios;
 
 namespace Almacen_STLCC.Pages.Usuarios
 {
-    public class IndexModel : SecurePageModel
+    public class IndexModel(ApplicationDbContext context) : SecurePageModel
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context = context;
 
-        public IndexModel(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
-        public List<Usuario> Usuarios { get; set; }
+        public required List<Usuario> Usuarios { get; set; }
 
         public async Task<IActionResult> OnGetAsync()
         {

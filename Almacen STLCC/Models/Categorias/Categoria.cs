@@ -15,6 +15,6 @@ namespace Almacen_STLCC.Models.Categorias
         public string? Nombre_Categoria { get; set; }
 
         // Relación: Una categoría tiene muchos productos
-        public ICollection<Productos.Producto> Productos { get; set; } = new List<Productos.Producto>();
+        public ICollection<Productos.Producto> Productos { get; set; } = [];
     }
 }

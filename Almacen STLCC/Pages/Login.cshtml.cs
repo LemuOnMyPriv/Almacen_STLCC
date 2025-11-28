@@ -1,81 +1,44 @@
+using Almacen_STLCC.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
-using Almacen_STLCC.Data;
-using Almacen_STLCC.Services;
 
 namespace Almacen_STLCC.Pages
 {
-    public class LoginModel : PageModel
+    public class LoginModel(LdapAuthenticationService ldapService) : PageModel
     {
-        private readonly LdapAuthenticationService _ldapService;
-        private readonly ApplicationDbContext _context;
-        public LoginModel(LdapAuthenticationService ldapService, ApplicationDbContext context)
-        {
-            _ldapService = ldapService;
-            _context = context;
-        }
+        private readonly LdapAuthenticationService _ldapService = ldapService;
 
         [BindProperty]
-        public string Username { get; set; }
+        public string Username { get; set; } = string.Empty;
 
         [BindProperty]
-        public string Password { get; set; }
+        public string Password { get; set; } = string.Empty;
 
-        public string ErrorMessage { get; set; }
+        public string ErrorMessage { get; set; } = string.Empty;
 
-        public IActionResult OnGet()
+        public void OnGet()
         {
-            if (HttpContext.Session.GetString("Username") != null)
-            {
-                return RedirectToPage("/Index");
-            }
-
-            return Page();
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public IActionResult OnPost()
         {
             if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
             {
-                ErrorMessage = "Se requiere Usuario y Contraseña";
+                ErrorMessage = "Por favor ingrese usuario y contraseña";
                 return Page();
             }
 
-            bool isValidUser = _ldapService.ValidateUser(Username, Password);
+            var resultado = _ldapService.ValidateUserDetailed(Username, Password);
 
-            if (!isValidUser)
+            if (!resultado.IsValid)
             {
-                ErrorMessage = "Usuario o contraseña incorrectos";
-                return Page();
-            }
-
-            bool isInAlmacenGroup = _ldapService.IsUserInAlmacenGroup(Username);
-
-            var usuarioLocal = await _context.Usuarios
-                .AsNoTracking()
-                .FirstOrDefaultAsync(u => u.NombreUsuario == Username);
-
-            if (usuarioLocal == null && !isInAlmacenGroup)
-            {
-                ErrorMessage = "No tienes permisos para acceder al sistema de almacén";
+                ErrorMessage = resultado.ErrorMessage;
                 return Page();
             }
 
             HttpContext.Session.SetString("Username", Username);
-
-            if (usuarioLocal != null)
-            {
-                HttpContext.Session.SetString("DisplayName", usuarioLocal.NombreUsuario);
-                HttpContext.Session.SetString("Rol", usuarioLocal.Rol);
-                HttpContext.Session.SetString("TipoUsuario", "LOCAL");
-            }
-            else
-            {
-                HttpContext.Session.SetString("DisplayName", Username);
-                HttpContext.Session.SetString("Rol", "USUARIO");
-                HttpContext.Session.SetString("TipoUsuario", "AD");
-            }
+            HttpContext.Session.SetString("DisplayName", resultado.DisplayName ?? Username);
+            HttpContext.Session.SetString("Rol", resultado.Rol ?? "USUARIO");
 
             return RedirectToPage("/Index");
         }

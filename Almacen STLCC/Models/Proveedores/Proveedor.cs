@@ -13,15 +13,15 @@ namespace Almacen_STLCC.Models.Proveedores
         [Required(ErrorMessage = "El nombre del proveedor es obligatorio")]
         [StringLength(100)]
         [Column("nombre_proveedor")]
-        public string Nombre_Proveedor { get; set; }
+        public required string Nombre_Proveedor { get; set; }
 
         [Required(ErrorMessage = "El RTN es obligatorio")]
         [StringLength(20)]
         [Column("rtn")]
-        public string Rtn { get; set; }
+        public required string Rtn { get; set; }
 
         // Relaciones
-        public ICollection<Productos.Producto> Productos { get; set; } = new List<Productos.Producto>();
-        public ICollection<Actas.Acta> Actas { get; set; } = new List<Actas.Acta>();
+        public ICollection<Productos.Producto> Productos { get; set; } = [];
+        public ICollection<Actas.Acta> Actas { get; set; } = [];
     }
 }

@@ -5,16 +5,11 @@ using Almacen_STLCC.Data;
 
 namespace Almacen_STLCC.Pages.Proveedores
 {
-    public class IndexModel : SecurePageModel
+    public class IndexModel(ApplicationDbContext context) : SecurePageModel
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context = context;
 
-        public IndexModel(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
-        public List<Proveedor> Proveedores { get; set; } = new();
+        public List<Proveedor> Proveedores { get; set; } = [];
 
         public async Task OnGetAsync()
         {

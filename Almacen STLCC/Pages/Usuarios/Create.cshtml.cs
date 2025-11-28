@@ -1,29 +1,23 @@
+using Almacen_STLCC.Data;
+using Almacen_STLCC.Models.Usuarios;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Almacen_STLCC.Data;
-using Almacen_STLCC.Models.Usuarios;
 
 namespace Almacen_STLCC.Pages.Usuarios
 {
-    public class CreateModel : SecurePageModel
+    public class CreateModel(ApplicationDbContext context) : SecurePageModel
     {
-        private readonly ApplicationDbContext _context;
-        private readonly PasswordHasher<Usuario> _hasher;
-
-        public CreateModel(ApplicationDbContext context)
-        {
-            _context = context;
-            _hasher = new PasswordHasher<Usuario>();
-        }
+        private readonly ApplicationDbContext _context = context;
+        private readonly PasswordHasher<Usuario> _hasher = new();
 
         [BindProperty]
-        public RegisterUserViewModel Input { get; set; }
+        public required RegisterUserViewModel? Input { get; set; }
 
-        public string ErrorMessage { get; set; }
-        public string SuccessMessage { get; set; }
+        public required string ErrorMessage { get; set; }
+        public required string SuccessMessage { get; set; }
 
-        public async Task<IActionResult> OnGetAsync()
+        public IActionResult OnGet()
         {
             var rol = HttpContext.Session.GetString("Rol");
 
@@ -78,9 +72,10 @@ namespace Almacen_STLCC.Pages.Usuarios
             var nuevoUsuario = new Usuario
             {
                 NombreUsuario = Input.Usuario,
-                Contraseña = _hasher.HashPassword(null, Input.Contraseña),
+                Contraseña = string.Empty,
                 Rol = "USUARIO"
             };
+            nuevoUsuario.Contraseña = _hasher.HashPassword(nuevoUsuario, Input.Contraseña);
 
             _context.Usuarios.Add(nuevoUsuario);
             await _context.SaveChangesAsync();

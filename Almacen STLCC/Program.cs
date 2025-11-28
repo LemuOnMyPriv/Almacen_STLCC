@@ -2,6 +2,7 @@ using Almacen_STLCC.Data;
 using Almacen_STLCC.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,8 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages()
     .AddDataAnnotationsLocalization(options =>
     {
-        // Evita que ASP.NET traduzca los mensajes por defecto
-        options.DataAnnotationLocalizerProvider = (type, factory) => null;
+        options.DataAnnotationLocalizerProvider = (type, factory) => (IStringLocalizer?)null!;
     });
 
 // Configurar MySQL

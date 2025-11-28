@@ -17,22 +17,22 @@ namespace Almacen_STLCC.Models.Actas
         [Required(ErrorMessage = "El nombre del archivo es obligatorio")]
         [StringLength(255)]
         [Column("nombre_archivo")]
-        public string Nombre_Archivo { get; set; }
+        public required string Nombre_Archivo { get; set; }
 
         [Required(ErrorMessage = "El tipo de archivo es obligatorio")]
         [StringLength(50)]
         [Column("tipo_archivo")]
-        public string Tipo_Archivo { get; set; }
+        public required string Tipo_Archivo { get; set; }
 
         [Required]
         [StringLength(500)]
         [Column("ruta_minio")]
-        public string Ruta_Minio { get; set; }
+        public required string Ruta_Minio { get; set; }
 
         [Required]
         [StringLength(100)]
         [Column("bucket_minio")]
-        public string Bucket_Minio { get; set; } = "anexos-inventario";
+        public required string Bucket_Minio { get; set; } = "anexos-inventario";
 
         [Required]
         [Column("tamaño_kb")]
@@ -44,6 +44,6 @@ namespace Almacen_STLCC.Models.Actas
 
         // Navegación
         [ForeignKey("Id_Acta")]
-        public Acta Acta { get; set; }
+        public required Acta Acta { get; set; }
     }
 }

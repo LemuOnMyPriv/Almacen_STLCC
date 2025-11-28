@@ -6,19 +6,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Almacen_STLCC.Pages.Usuarios
 {
-    public class EditModel : SecurePageModel
+    public class EditModel(ApplicationDbContext context) : SecurePageModel
     {
-        private readonly ApplicationDbContext _context;
-
-        public EditModel(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+        private readonly ApplicationDbContext _context = context;
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public required InputModel Input { get; set; }
 
-        public string ErrorMessage { get; set; }
+        public required string ErrorMessage { get; set; }
 
         public class InputModel
         {
@@ -26,8 +21,8 @@ namespace Almacen_STLCC.Pages.Usuarios
 
             [Required(ErrorMessage = "El nombre de usuario es obligatorio")]
             [StringLength(100)]
-            public string NombreUsuario { get; set; }
-            public string Rol { get; set; }
+            public required string NombreUsuario { get; set; }
+            public required string Rol { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync(int id)

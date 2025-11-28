@@ -17,7 +17,7 @@ namespace Almacen_STLCC.Models.Actas
         [Required(ErrorMessage = "El código F01 es obligatorio")]
         [StringLength(100)]
         [Column("f01")]
-        public string F01 { get; set; }
+        public required string F01 { get; set; }
 
         [StringLength(100)]
         [Column("requisicion")]
@@ -33,11 +33,11 @@ namespace Almacen_STLCC.Models.Actas
 
         // Navegación
         [ForeignKey("Id_Proveedor")]
-        public Proveedores.Proveedor Proveedor { get; set; }
+        public required Proveedores.Proveedor Proveedor { get; set; }
 
         // Relaciones
-        public ICollection<DetalleActa> DetallesActa { get; set; } = new List<DetalleActa>();
-        public ICollection<Movimientos.Movimiento> Movimientos { get; set; } = new List<Movimientos.Movimiento>();
-        public ICollection<Anexo> Anexos { get; set; } = new List<Anexo>();
+        public ICollection<DetalleActa> DetallesActa { get; set; } = [];
+        public ICollection<Movimientos.Movimiento> Movimientos { get; set; } = [];
+        public ICollection<Anexo> Anexos { get; set; } = [];
     }
 }

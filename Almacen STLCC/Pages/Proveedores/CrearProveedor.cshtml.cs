@@ -6,35 +6,30 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Almacen_STLCC.Pages.Proveedores
 {
-    public class CrearProveedorModel : SecurePageModel
+    public class CrearProveedorModel(ApplicationDbContext context) : SecurePageModel
     {
-        private readonly ApplicationDbContext _context;
-
-        public CrearProveedorModel(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+        private readonly ApplicationDbContext _context = context;
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public required InputModel Input { get; set; }
 
-        public string ErrorMessage { get; set; }
-        public string SuccessMessage { get; set; }
+        public required string ErrorMessage { get; set; }
+        public required string SuccessMessage { get; set; }
 
         public class InputModel
         {
             [Required(ErrorMessage = "El nombre del proveedor es obligatorio")]
             [StringLength(100, ErrorMessage = "El nombre no puede superar los 100 caracteres")]
             [Display(Name = "Nombre del Proveedor")]
-            public string Nombre_Proveedor { get; set; }
+            public required string Nombre_Proveedor { get; set; }
 
             [Required(ErrorMessage = "El RTN es obligatorio")]
             [StringLength(20, ErrorMessage = "El RTN no puede superar los 20 caracteres")]
             [Display(Name = "RTN")]
-            public string Rtn { get; set; }
+            public required string Rtn { get; set; }
         }
 
-        public async Task<IActionResult> OnGetAsync()
+        public IActionResult OnGet()
         {
             return Page();
         }

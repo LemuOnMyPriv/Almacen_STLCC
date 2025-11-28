@@ -4,14 +4,9 @@ using Almacen_STLCC.Data;
 
 namespace Almacen_STLCC.Pages
 {
-    public class IndexModel : PageModel
+    public class IndexModel(ILogger<IndexModel> logger) : PageModel
     {
-        private readonly ILogger<IndexModel> _logger;
-
-        public IndexModel(ILogger<IndexModel> logger)
-        {
-            _logger = logger;
-        }
+        private readonly ILogger<IndexModel> _logger = logger;
 
         public IActionResult OnGet()
         {

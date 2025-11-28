@@ -7,35 +7,29 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Almacen_STLCC.Pages.Usuarios
 {
-    public class ChangePasswordModel : SecurePageModel
+    public class ChangePasswordModel(ApplicationDbContext context) : SecurePageModel
     {
-        private readonly ApplicationDbContext _context;
-        private readonly PasswordHasher<Usuario> _hasher;
-
-        public ChangePasswordModel(ApplicationDbContext context)
-        {
-            _context = context;
-            _hasher = new PasswordHasher<Usuario>();
-        }
+        private readonly ApplicationDbContext _context = context;
+        private readonly PasswordHasher<Usuario> _hasher = new();
 
         [BindProperty]
-        public InputModel Input { get; set; }
+        public required InputModel? Input { get; set; }
 
-        public string ErrorMessage { get; set; }
-        public string SuccessMessage { get; set; }
-        public string TargetUsername { get; set; }
+        public required string ErrorMessage { get; set; }
+        public required string SuccessMessage { get; set; }
+        public required string TargetUsername { get; set; }
 
         public class InputModel
         {
             [Required(ErrorMessage = "La nueva contraseña es requerida")]
             [StringLength(100, MinimumLength = 6, ErrorMessage = "La contraseña debe tener al menos 6 caracteres")]
             [DataType(DataType.Password)]
-            public string NuevaContraseña { get; set; }
+            public required string NuevaContraseña { get; set; }
 
             [Required(ErrorMessage = "Debes confirmar la nueva contraseña")]
             [DataType(DataType.Password)]
             [Compare("NuevaContraseña", ErrorMessage = "Las contraseñas no coinciden")]
-            public string ConfirmarContraseña { get; set; }
+            public required string ConfirmarContraseña { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync(string username)
@@ -92,7 +86,7 @@ namespace Almacen_STLCC.Pages.Usuarios
                 return Page();
             }
 
-            usuario.Contraseña = _hasher.HashPassword(usuario, Input.NuevaContraseña);
+            usuario.Contraseña = _hasher.HashPassword(usuario, Input!.NuevaContraseña);
             await _context.SaveChangesAsync();
 
             SuccessMessage = $"Contraseña de '{username}' actualizada correctamente.";

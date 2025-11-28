@@ -17,7 +17,7 @@ namespace Almacen_STLCC.Models.Movimientos
         [Required(ErrorMessage = "El tipo de movimiento es obligatorio")]
         [StringLength(10)]
         [Column("tipo_movimiento")]
-        public string Tipo_Movimiento { get; set; } // "entrada", "salida", "ajuste"
+        public required string Tipo_Movimiento { get; set; } // "entrada", "salida", "ajuste"
 
         [Required(ErrorMessage = "La cantidad es obligatoria")]
         [Column("cantidad")]
@@ -32,7 +32,7 @@ namespace Almacen_STLCC.Models.Movimientos
 
         // Navegación
         [ForeignKey("Id_Producto")]
-        public Productos.Producto Producto { get; set; }
+        public required Productos.Producto Producto { get; set; }
 
         [ForeignKey("Id_Acta")]
         public Actas.Acta? Acta { get; set; }

@@ -30,9 +30,9 @@ namespace Almacen_STLCC.Models.Actas
 
         // Navegación
         [ForeignKey("Id_Acta")]
-        public Acta Acta { get; set; }
+        public required Acta Acta { get; set; }
 
         [ForeignKey("Id_Producto")]
-        public Productos.Producto Producto { get; set; }
+        public required Productos.Producto Producto { get; set; }
     }
 }

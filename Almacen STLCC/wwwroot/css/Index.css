@@ -14,6 +14,7 @@
 .header {
     text-align: center;
     margin-bottom: 30px;
+    padding: 30px 20px;
 }
 
     .header h1 {
@@ -25,7 +26,11 @@
     .header p {
         color: #949699;
         font-size: 18px;
+        line-height: 1.5;
+        max-width: 700px;
+        margin: 0 auto;
     }
+
 
 .paneles {
     display: grid;
@@ -38,11 +43,15 @@
     background: white;
     border-radius: 12px;
     padding: 25px;
+    display: flex;
+    flex-direction: column;
+    height: 88%;
     text-align: center;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    width: 100%;
+    width: 80%;
     max-width: 320px;
+    gap: 15px;
 }
 
     .tarjetas:hover {
@@ -50,11 +59,7 @@
         box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     }
 
-.icono-productos,
-.icono-crear,
-.icono-editar,
-.icono-reportes,
-.icono-historial {
+.icono {
     font-size: 48px;
     margin-bottom: 15px;
 }
@@ -68,59 +73,33 @@
 .tarjetas p {
     color: #666;
     font-size: 15px;
-    margin-bottom: 20px;
+    margin: 0;
 }
 
-.btn-productos,
-.btn-crear,
-.btn-editar,
-.btn-reportes,
-.btn-historial {
+.btn-rojo,
+.btn-negro {
     display: inline-block;
     padding: 10px 20px;
     border-radius: 8px;
+    margin-top: auto;
     color: white;
     text-decoration: none;
     font-weight: bold;
     transition: background 0.2s ease;
 }
 
-.btn-productos {
-    background: #A0826D;
-}
-
-    .btn-productos:hover {
-        background: #7D6555;
-    }
-
-.btn-crear {
-    background: #50c213;
-}
-
-    .btn-crear:hover {
-        background: #37850d;
-    }
-
-.btn-editar {
-    background: #dbcd09;
-}
-
-    .btn-editar:hover {
-        background: #9e9408;
-    }
-
-.btn-reportes {
+.btn-rojo {
     background: #DB473C;
 }
 
-    .btn-reportes:hover {
+    .btn-rojo:hover {
         background: #c82333;
     }
 
-.btn-historial {
-    background: #5DABFB;
+.btn-negro {
+    background: #555;
 }
 
-    .btn-historial:hover {
-        background: #3A8FE8;
+    .btn-negro:hover {
+        background: #171717;
     }

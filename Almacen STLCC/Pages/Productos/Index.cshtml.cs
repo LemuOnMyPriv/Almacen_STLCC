@@ -5,17 +5,12 @@ using Almacen_STLCC.Data;
 
 namespace Almacen_STLCC.Pages.Productos
 {
-    public class IndexModel : SecurePageModel
+    public class IndexModel(ApplicationDbContext context) : SecurePageModel
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context = context;
 
-        public IndexModel(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
-        public List<Producto> Productos { get; set; } = new();
-        public Dictionary<int, int> Inventarios { get; set; } = new();
+        public List<Producto> Productos { get; set; } = [];
+        public Dictionary<int, int> Inventarios { get; set; } = [];
 
         public async Task OnGetAsync()
         {

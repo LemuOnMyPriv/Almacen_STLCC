@@ -8,18 +8,11 @@ using Almacen_STLCC.Models.Usuarios;
 
 namespace Almacen_STLCC.Pages.Setup
 {
-    public class CreateAdminModel : PageModel
+    public class CreateAdminModel(ApplicationDbContext context, IWebHostEnvironment env) : PageModel
     {
-        private readonly ApplicationDbContext _context;
-        private readonly PasswordHasher<Usuario> _hasher;
-        private readonly IWebHostEnvironment _env;
-
-        public CreateAdminModel(ApplicationDbContext context, IWebHostEnvironment env)
-        {
-            _context = context;
-            _hasher = new PasswordHasher<Usuario>();
-            _env = env;
-        }
+        private readonly ApplicationDbContext _context = context;
+        private readonly PasswordHasher<Usuario> _hasher = new();
+        private readonly IWebHostEnvironment _env = env;
 
         //link para crear el usuario administrador https://localhost:7142/Setup/CreateAdmin
 
@@ -31,10 +24,17 @@ namespace Almacen_STLCC.Pages.Setup
             if (await _context.Usuarios.AnyAsync(u => u.Rol == "ADMINISTRADOR"))
                 return Content("Ya existe un usuario administrador en el sistema");
 
+            var tempUser = new Usuario
+            {
+                NombreUsuario = "soporte",
+                Contraseña = string.Empty,
+                Rol = "ADMINISTRADOR"
+            };
+
             var admin = new Usuario
             {
                 NombreUsuario = "soporte",
-                Contraseña = _hasher.HashPassword(null, "@soporte2025"),
+                Contraseña = _hasher.HashPassword(tempUser, "@soporte2025"),
                 Rol = "ADMINISTRADOR"
             };
 
