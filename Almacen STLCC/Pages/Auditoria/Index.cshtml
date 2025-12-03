@@ -1,0 +1,149 @@
+﻿@page
+@model Almacen_STLCC.Pages.Auditoria.IndexModel
+@{
+    ViewData["Title"] = "Auditoría del Sistema";
+}
+
+<link rel="stylesheet" href="~/css/auditoria/index.css" />
+
+<div class="contenedor">
+    <div class="header">
+        <h1><i class="fa-solid fa-magnifying-glass"></i> Auditoría del Sistema</h1>
+        <p>Registro detallado de todas las acciones realizadas en el sistema</p>
+    </div>
+
+    <form method="get" class="filtros">
+        <div class="filtros-grid">
+            <div class="filtro-item">
+                <label>Usuario:</label>
+                <input type="text"
+                       name="FiltroUsuario"
+                       value="@Model.FiltroUsuario"
+                       placeholder="Buscar por usuario"
+                       class="form-control"/>
+            </div>
+
+            <div class="filtro-item">
+                <label>Tabla:</label>
+                <select name="FiltroTabla" class="form-control">
+                    <option value="">Todas</option>
+                    <option value="producto" selected="@(Model.FiltroTabla == "producto")">Productos</option>
+                    <option value="proveedor" selected="@(Model.FiltroTabla == "proveedor")">Proveedores</option>
+                    <option value="categoria" selected="@(Model.FiltroTabla == "categoria")">Categorías</option>
+                    <option value="acta" selected="@(Model.FiltroTabla == "acta")">Actas</option>
+                    <option value="movimiento" selected="@(Model.FiltroTabla == "movimiento")">Movimientos</option>
+                    <option value="usuario" selected="@(Model.FiltroTabla == "usuario")">Usuarios</option>
+                </select>
+            </div>
+
+            <div class="filtro-item">
+                <label>Acción:</label>
+                <select name="FiltroAccion" class="form-control">
+                    <option value="">Todas</option>
+                    <option value="CREAR" selected="@(Model.FiltroAccion == "CREAR")">Crear</option>
+                    <option value="EDITAR" selected="@(Model.FiltroAccion == "EDITAR")">Editar</option>
+                    <option value="ELIMINAR" selected="@(Model.FiltroAccion == "ELIMINAR")">Eliminar</option>
+                </select>
+            </div>
+
+            <div class="filtro-item">
+                <label>Desde:</label>
+                <input type="date"
+                       name="FechaDesde"
+                       value="@Model.FechaDesde?.ToString("yyyy-MM-dd")"
+                       class="form-control" />
+            </div>
+
+            <div class="filtro-item">
+                <label>Hasta:</label>
+                <input type="date"
+                       name="FechaHasta"
+                       value="@Model.FechaHasta?.ToString("yyyy-MM-dd")"
+                       class="form-control" />
+            </div>
+
+            <div class="filtro-botones">
+                <button type="submit" class="btn-filtrar"><i class="fa-solid fa-magnifying-glass"></i> Filtrar</button>
+                <a href="/Auditoria/Index" class="btn-limpiar"><i class="fa-solid fa-broom"></i> Limpiar</a>
+            </div>
+        </div>
+    </form>
+
+    <div class="resumen">
+        <span><i class="fa-solid fa-chart-simple"></i> Total de registros: <strong>@Model.TotalRegistros</strong></span>
+        <span><i class="fa-solid fa-file-lines"></i> Mostrando página <strong>@Model.PaginaActual</strong> de <strong>@Model.TotalPaginas</strong></span>
+    </div>
+
+    @if (Model.Auditorias.Any())
+    {
+        <div class="tabla-auditoria">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha y Hora</th>
+                        <th>Usuario</th>
+                        <th>Acción</th>
+                        <th>Tabla</th>
+                        <th>Descripción</th>
+                        <th>IP</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var audit in Model.Auditorias)
+                    {
+                        <tr>
+                            <td class="fecha">@audit.Fecha_Hora.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                            <td class="usuario">@audit.Usuario</td>
+                            <td>
+                                @if (audit.Accion == "CREAR")
+                                {
+                                    <span class="badge-crear">CREAR</span>
+                                }
+                                else if (audit.Accion == "EDITAR")
+                                {
+                                    <span class="badge-editar">EDITAR</span>
+                                }
+                                else if (audit.Accion == "ELIMINAR")
+                                {
+                                    <span class="badge-eliminar">ELIMINAR</span>
+                                }
+                                else
+                                {
+                                    <span class="badge-otro">@audit.Accion</span>
+                                }
+                            </td>
+                            <td class="tabla">@audit.Tabla</td>
+                            <td class="descripcion">@audit.Descripcion</td>
+                            <td class="ip">@(audit.Ip_Address ?? "N/A")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        @if (Model.TotalPaginas > 1)
+        {
+            <div class="paginacion">
+                @if (Model.PaginaActual > 1)
+                {
+                    <a href="?pagina=@(Model.PaginaActual - 1)&FiltroUsuario=@Model.FiltroUsuario&FiltroTabla=@Model.FiltroTabla&FiltroAccion=@Model.FiltroAccion&FechaDesde=@Model.FechaDesde&FechaHasta=@Model.FechaHasta"
+                       class="btn-paginacion">← Anterior</a>
+                }
+
+                <span class="pagina-actual">Página @Model.PaginaActual de @Model.TotalPaginas</span>
+
+                @if (Model.PaginaActual < Model.TotalPaginas)
+                {
+                    <a href="?pagina=@(Model.PaginaActual + 1)&FiltroUsuario=@Model.FiltroUsuario&FiltroTabla=@Model.FiltroTabla&FiltroAccion=@Model.FiltroAccion&FechaDesde=@Model.FechaDesde&FechaHasta=@Model.FechaHasta"
+                       class="btn-paginacion">Siguiente →</a>
+                }
+            </div>
+        }
+    }
+    else
+    {
+        <div class="mensaje-vacio">
+            <i class="fa-regular fa-file-lines"></i> No hay registros de auditoría que coincidan con los filtros seleccionados
+        </div>
+    }
+</div>

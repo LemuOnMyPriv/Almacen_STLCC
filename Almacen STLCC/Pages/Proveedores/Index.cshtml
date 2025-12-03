@@ -7,12 +7,17 @@
 <div class="contenedor">
     <header class="header">
         <div class="titulo-header">
-            <div>
-                <h1>🚚 Lista de Proveedores</h1>
-                <p>Consulta y gestiona todos los proveedores existentes para el inventario.</p>
+            <div class="titulo-left">
+                <i class="fa-solid fa-truck fa-lg"></i>
+                <div class="titulo-texto">
+                    <h1>Lista de Proveedores</h1>
+                    <p>Consulta y gestiona todos los proveedores existentes para el inventario.</p>
+                </div>
             </div>
             <div class="prov-crear">
-                <a asp-page="/Proveedores/CrearProveedor" class="btn-verde">➕ Añadir Proveedor</a>
+                <a asp-page="/Proveedores/CrearProveedor" class="btn-crear">
+                    <i class="fa-solid fa-circle-plus"></i> Añadir Proveedor
+                </a>
             </div>
         </div>
     </header>
@@ -34,7 +39,7 @@
                             <td>@proveedor.Nombre_Proveedor</td>
                             <td>@proveedor.Rtn</td>
                             <td class="acciones">
-                                <a asp-page="/Proveedores/EditarProveedor" asp-route-id="@proveedor.Id_Proveedor" class="btn-amarillo">Editar</a>
+                                <a asp-page="/Proveedores/EditarProveedor" asp-route-id="@proveedor.Id_Proveedor" class="btn-editar">Editar</a>
                             </td>
                         </tr>
                     }

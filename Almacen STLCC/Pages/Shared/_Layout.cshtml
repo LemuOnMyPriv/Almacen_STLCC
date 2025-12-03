@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Almacén STLCC</title>
+    <title>@ViewData["Title"] Almacén STLCC</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
@@ -24,6 +25,7 @@
                         @if (esAdmin)
                         {
                             <a asp-page="/Usuarios/Index" class="nav-link">Usuarios</a>
+                            <a asp-page="/Auditoria/Index" class="nav-link">Auditoría</a>
                         }
                     </div>
 
@@ -40,7 +42,6 @@
                             }
                         </span>
                         <a asp-page="/Logout" class="nav-link logout-btn">Cerrar Sesión</a>
-                        <img class="logo" src="https://stlcc.gob.hn/wp-content/uploads/2024/09/LOGOS-STLCC-GOBIERNO-CURVAS-04-2000x909.png" alt="Logo STLCC" />
                     </div>
                 </nav>
             </div>
@@ -48,6 +49,7 @@
     }
     <main class="layout-main">
         <div class="layout-content">
+            <img class="logo" src="https://stlcc.gob.hn/wp-content/uploads/2024/09/LOGOS-STLCC-GOBIERNO-CURVAS-04-2000x909.png" alt="Logo STLCC"/>
             @RenderBody()
         </div>
     </main>

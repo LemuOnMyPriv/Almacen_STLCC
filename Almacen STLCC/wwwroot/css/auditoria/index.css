@@ -1,0 +1,259 @@
+﻿body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f8;
+    color: #000;
+    margin: 0;
+    padding: 0;
+}
+
+.contenedor {
+    max-width: 1400px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.header {
+    margin-bottom: 25px;
+}
+
+    .header h1 {
+        font-size: 29px;
+        color: #2c3e50;
+        margin: 0 0 10px 0;
+    }
+
+    .header p {
+        color: #666;
+        font-size: 15px;
+        margin: 0;
+    }
+
+.filtros {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.filtros-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.filtro-item label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #555;
+    font-size: 14px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+    .form-control:focus {
+        outline: none;
+        border-color: #88CFE0;
+    }
+
+.filtro-botones {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 10px;
+}
+
+.btn-filtrar,
+.btn-limpiar {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.btn-filtrar {
+    background-color: #3A8FE8;
+    color: white;
+}
+
+    .btn-filtrar:hover {
+        background-color: #2F7FD6;
+    }
+
+.btn-limpiar {
+    background-color: #6c757d;
+    color: white;
+    display: inline-block;
+    text-align: center;
+}
+
+    .btn-limpiar:hover {
+        background-color: #5a6268;
+    }
+
+.resumen {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    background-color: #e7f3ff;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.tabla-auditoria {
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+    .tabla-auditoria table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
+    }
+
+    .tabla-auditoria thead {
+        background-color: #88CFE0;
+        color: white;
+    }
+
+    .tabla-auditoria th,
+    .tabla-auditoria td {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+    }
+
+    .tabla-auditoria th {
+        font-weight: 600;
+    }
+
+    .tabla-auditoria tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+
+.fecha {
+    white-space: nowrap;
+    color: #666;
+    font-size: 13px;
+}
+
+.usuario {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.tabla {
+    text-transform: capitalize;
+    color: #555;
+}
+
+.descripcion {
+    max-width: 400px;
+    word-wrap: break-word;
+}
+
+.ip {
+    color: #999;
+    font-size: 13px;
+}
+
+.badge-crear,
+.badge-editar,
+.badge-eliminar,
+.badge-otro {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.badge-crear {
+    background-color: #555;
+    color: white;
+}
+
+.badge-editar {
+    background-color: #f1e60f;
+    color: white;
+}
+
+.badge-eliminar {
+    background-color: #DB473C;
+    color: white;
+}
+
+.badge-otro {
+    background-color: #007bff;
+    color: white;
+}
+
+.paginacion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn-paginacion {
+    padding: 8px 16px;
+    background-color: #3A8FE8;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    transition: background-color 0.2s ease;
+}
+
+    .btn-paginacion:hover {
+        background-color: #2F7FD6;
+    }
+
+.pagina-actual {
+    color: #666;
+    font-weight: 600;
+}
+
+.mensaje-vacio {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+    padding: 40px;
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    .filtros-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .resumen {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .tabla-auditoria {
+        font-size: 12px;
+    }
+
+    .descripcion {
+        max-width: 200px;
+    }
+}

@@ -14,7 +14,7 @@ namespace Almacen_STLCC.Pages.Setup
         private readonly PasswordHasher<Usuario> _hasher = new();
         private readonly IWebHostEnvironment _env = env;
 
-        //link para crear el usuario administrador https://localhost:7142/Setup/CreateAdmin
+        //link para crear el usuario administrador https://almacen.stlcc.gob.hn/Setup/CreateAdmin
 
         public async Task<IActionResult> OnGetAsync()
         {

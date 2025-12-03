@@ -1,9 +1,10 @@
+using Almacen_STLCC.Data;
+using Almacen_STLCC.Models.Categorias;
+using Almacen_STLCC.Models.Productos;
+using Almacen_STLCC.Models.Proveedores;
+using Almacen_STLCC.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Almacen_STLCC.Data;
-using Almacen_STLCC.Models.Productos;
-using Almacen_STLCC.Models.Categorias;
-using Almacen_STLCC.Models.Proveedores;
 using System.ComponentModel.DataAnnotations;
 
 namespace Almacen_STLCC.Pages.Productos
@@ -89,7 +90,7 @@ namespace Almacen_STLCC.Pages.Productos
                 Id_Categoria = Input.Id_Categoria,
                 Unidad_Medida = Input.Unidad_Medida.Trim(),
                 Id_Proveedor = Input.Id_Proveedor,
-                Categoria = categoria // Inicializa el miembro requerido
+                Categoria = categoria
             };
 
             _context.Productos.Add(producto);

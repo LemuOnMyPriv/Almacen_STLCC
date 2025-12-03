@@ -16,7 +16,7 @@ body {
 .layout-header {
     background-color: var(--color-primario);
     color: white;
-    padding: 12px 0;
+    padding: 22px 0;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
@@ -48,15 +48,6 @@ body {
     gap: 18px;
 }
 
-    .nav-right .logo {
-        max-width: 150px;
-        height: auto;
-        margin-bottom: 15px;
-        border-radius: 10px;
-        box-shadow: 0 1px 1px rgba(0,0,0,0.1);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-
 .nav-link {
     color: white;
     text-decoration: none;
@@ -75,14 +66,12 @@ body {
 .logout-btn {
     padding: 6px 10px;
     border-radius: 6px;
-    background: rgba(255,255,255,0.12);
-    border: 1px solid rgba(255,255,255,0.08);
     transition: background 0.15s ease, transform 0.08s ease;
 }
 
     .logout-btn:hover {
         background: rgba(255,255,255,0.18);
-        transform: translateY(-1px);
+        transform: translateY(-2px);
     }
 
 .nav-user {
@@ -93,6 +82,12 @@ body {
 
 .layout-main {
     padding: 40px 0;
+}
+
+.logo {
+    max-width: 300px;
+    height: auto;
+    border-radius: 6px;
 }
 
 .layout-content {

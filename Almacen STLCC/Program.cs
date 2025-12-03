@@ -13,6 +13,8 @@ builder.Services.AddRazorPages()
         options.DataAnnotationLocalizerProvider = (type, factory) => (IStringLocalizer?)null!;
     });
 
+builder.Services.AddHttpContextAccessor();
+
 // Configurar MySQL
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(

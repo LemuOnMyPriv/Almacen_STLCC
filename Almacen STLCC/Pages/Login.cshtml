@@ -2,6 +2,7 @@
 @model Almacen_STLCC.Pages.LoginModel
 @{
     ViewData["Title"] = "Inicia Sesión en Almacén STLCC:";
+    Layout = null;
 }
 
 <link rel="stylesheet" href="~/css/Login.css" />
@@ -9,14 +10,15 @@
 <div class="login-container">
     <div class="login-card">
         <div class="login-header">
-            <h1>🏢 Almacén STLCC</h1>
+            <img class="logo" src="https://stlcc.gob.hn/wp-content/uploads/2024/09/LOGOS-STLCC-GOBIERNO-CURVAS-04-2000x909.png" alt="Logo STLCC" />
+            <h1> Almacén STLCC</h1>
             <p>Sistema de Inventario</p>
         </div>
 
         @if (!string.IsNullOrEmpty(Model.ErrorMessage))
         {
             <div class="alert alert-danger">
-                ⚠️ @Model.ErrorMessage
+                <i class="fa-solid fa-triangle-exclamation"></i> @Model.ErrorMessage
             </div>
         }
 
