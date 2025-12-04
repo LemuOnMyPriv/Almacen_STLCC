@@ -1,28 +1,27 @@
-﻿document.addEventListener("DOMContentLoaded", function () {
+﻿let formModificado = false;
+
+document.addEventListener("DOMContentLoaded", function () {
     const modalOverlay = document.getElementById('modalOverlay');
     const btnClose = document.getElementById('btnClose');
     const btnCancelar = document.getElementById('btnCancelar');
+    const btnGuardar = document.getElementById('btnGuardar');
     const formCrearProveedor = document.getElementById('formCrearProveedor');
-    let formModificado = false;
 
     if (formCrearProveedor) {
         formCrearProveedor.addEventListener('input', () => {
             formModificado = true;
         });
+    }
 
-        formCrearProveedor.addEventListener('submit', () => {
-            formModificado = false;
+if (btnGuardar) {
+        btnGuardar.addEventListener('click', function (e) {
+            e.preventDefault();
+            confirmarGuardado(formCrearProveedor, '¿Está seguro de guardar este proveedor?');
         });
     }
 
     function cerrarModal() {
-        if (formModificado) {
-            if (confirm('¿Estás seguro(a) de que deseas salir? Los cambios no guardados se perderán.')) {
-                window.location.href = '/Proveedores/Index';
-            }
-        } else {
-            window.location.href = '/Proveedores/Index';
-        }
+        cerrarModalConConfirmacion('formCrearProveedor', '/Proveedores/Index', formModificado);
     }
 
     if (btnClose) btnClose.addEventListener('click', cerrarModal);

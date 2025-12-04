@@ -31,7 +31,7 @@
                         <th>Formato</th>
                         <th>Peso</th>
                         <th>Fecha de Subida</th>
-                        <th>Enlace</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -39,16 +39,21 @@
                     {
                         <tr>
                             <td>@anexo.Nombre_Archivo</td>
-                            <td><span class="badge-formato">@anexo.Tipo_Archivo?.ToUpper()</span></td>
+                            <td><span class="badge-formato">@anexo.Tipo_Archivo.ToUpper()</span></td>
                             <td>@anexo.Tamaño_Kb KB</td>
                             <td>@anexo.Fecha_Subida.ToString("dd/MM/yyyy")</td>
-                            <td>
+                            <td class="acciones-archivos">
                                 <a asp-page-handler="Descargar"
                                    asp-route-id="@anexo.Id_Anexo"
                                    class="btn-descargar"
                                    target="_blank">
                                     <i class="fa-solid fa-download"></i> Descargar
                                 </a>
+                                <button type="button"
+                                        class="btn-eliminar"
+                                        onclick="confirmarEliminar(@anexo.Id_Anexo, '@anexo.Nombre_Archivo')">
+                                    <i class="fa-solid fa-trash-can"></i> Eliminar
+                                </button>
                             </td>
                         </tr>
                     }
@@ -66,42 +71,54 @@
         </section>
     }
 
-    <div id="formularioSubida" class="formulario-subida" style="display: none;">
+    <div id="formularioSubida" class="formulario-overlay" style="display: none;">
         <div class="formulario-container">
-            <h3>Subir Archivo</h3>
-
-            @if (!string.IsNullOrEmpty(Model.ErrorMessage))
-            {
-                <div class="alert alert-danger">@Model.ErrorMessage</div>
-            }
+            <div class="formulario-header">
+                <h3>Subir Archivos</h3>
+                <button type="button" class="btn-cerrar-form" onclick="ocultarFormulario()">&times;</button>
+            </div>
 
             <form method="post" enctype="multipart/form-data" id="formArchivo">
                 <input type="hidden" name="IdActa" value="@(Model.Acta?.Id_Acta ?? 0)" />
 
-                <div class="dropzone" id="dropzone">
+                <div class="dropzone" id="dropzone" onclick="document.getElementById('inputArchivo').click()">
                     <div class="dropzone-content">
-                        <p><i class="fa-solid fa-file-arrow-up"></i> Arrastre su archivo aquí</p>
-                        <p>o</p>
-                        <label for="inputArchivo" class="btn-seleccionar">Seleccionar archivo</label>
+                        <p><i class="fa-solid fa-folder-open"></i> Haga clic aquí o arrastre sus archivos</p>
+                        <p class="dropzone-subtitle">Puedes seleccionar múltiples archivos</p>
                         <input type="file"
                                id="inputArchivo"
-                               name="Archivo"
+                               name="Archivos"
                                accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"
                                style="display: none;"
-                               onchange="mostrarNombreArchivo(this)" />
-                        <p class="archivo-seleccionado" id="archivoSeleccionado"></p>
-                        <small>Formatos permitidos: JPG, PNG, PDF, DOC, DOCX (tamaño máximo 10 MB)</small>
+                               multiple
+                               onchange="mostrarArchivosSeleccionados(this)" />
+                        <div id="archivosSeleccionados" class="archivos-seleccionados"></div>
+                        <small>Formatos permitidos: JPG, PNG, PDF, DOC, DOCX (máx. 10 MB por archivo)</small>
                     </div>
                 </div>
 
                 <div class="form-actions">
-                    <button type="submit" class="btn-guardar"><i class="fa-solid fa-floppy-disk"></i> Subir Archivo</button>
-                    <button type="button" class="btn-cancelar" onclick="ocultarFormulario()">Cancelar</button>
+                    <button type="button" class="btn-guardar" onclick="validarYSubir()"><i class="fa-solid fa-floppy-disk"></i> Subir Archivos</button>
+                    <button type="button" class="btn-cancelar" onclick="ocultarFormulario()"><i class="fa-solid fa-ban"></i> Cancelar</button>
                 </div>
             </form>
         </div>
     </div>
+
+    <form id="formEliminar" method="post" asp-page-handler="Eliminar" style="display: none;">
+        <input type="hidden" name="IdAnexo" id="idAnexoEliminar" />
+    </form>
 </div>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="successMessage" data-message="@TempData["SuccessMessage"]" style="display:none;"></div>
+}
 
 <script src="~/js/actas/archivos.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            mostrarMensajeExito();
+        });
+    </script>
+}

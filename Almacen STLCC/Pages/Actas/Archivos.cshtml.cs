@@ -17,17 +17,17 @@ namespace Almacen_STLCC.Pages.Actas
             _minioService = minioService;
         }
 
-        public Acta? Acta { get; set; } = null!;
+        public Acta? Acta { get; set; }
         public List<Anexo> Anexos { get; set; } = new();
 
         [BindProperty]
         public int IdActa { get; set; }
 
         [BindProperty]
-        public IFormFile Archivo { get; set; } = null!;
+        public List<IFormFile> Archivos { get; set; } = new();
 
-        public string? ErrorMessage { get; set; }
-        public string? SuccessMessage { get; set; } 
+        [BindProperty]
+        public int IdAnexo { get; set; }
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -50,47 +50,71 @@ namespace Almacen_STLCC.Pages.Actas
 
         public async Task<IActionResult> OnPostAsync()
         {
-            if (Archivo == null)
+            if (Archivos == null || !Archivos.Any())
             {
-                ErrorMessage = "No se ha seleccionado ningún archivo";
-                return await OnGetAsync(IdActa);
+                TempData["ErrorMessage"] = "No se seleccionaron archivos";
+                return RedirectToPage(new { id = IdActa });
             }
 
-            if (!_minioService.ValidarArchivo(Archivo, out string mensajeError))
-            {
-                ErrorMessage = mensajeError;
-                return await OnGetAsync(IdActa);
-            }
+            int archivosSubidos = 0;
+            int archivosRechazados = 0;
+            var errores = new List<string>();
 
-            try
+            foreach (var archivo in Archivos)
             {
-                var rutaMinio = await _minioService.SubirArchivo(Archivo);
-
-                var anexo = new Anexo
+                if (!_minioService.ValidarArchivo(archivo, out string mensajeError))
                 {
-                    Id_Acta = IdActa,
-                    Nombre_Archivo = Archivo.FileName,
-                    Tipo_Archivo = Path.GetExtension(Archivo.FileName).TrimStart('.').ToLower(),
-                    Ruta_Minio = rutaMinio,
-                    Bucket_Minio = "almacen",
-                    Tamaño_Kb = (int)(Archivo.Length / 1024),
-                    Fecha_Subida = DateTime.Now,
-                    Acta = null!
-                };
+                    archivosRechazados++;
+                    errores.Add($"{archivo.FileName}: {mensajeError}");
+                    continue;
+                }
 
-                _context.Anexos.Add(anexo);
-                await _context.SaveChangesAsync();
+                try
+                {
+                    var rutaMinio = await _minioService.SubirArchivo(archivo, "actas");
 
-                SuccessMessage = "Archivo subido correctamente";
-                return await OnGetAsync(IdActa);
+                    var anexo = new Anexo
+                    {
+                        Id_Acta = IdActa,
+                        Nombre_Archivo = archivo.FileName,
+                        Tipo_Archivo = Path.GetExtension(archivo.FileName).TrimStart('.').ToLower(),
+                        Ruta_Minio = rutaMinio,
+                        Bucket_Minio = "almacen",
+                        Tamaño_Kb = (int)(archivo.Length / 1024),
+                        Fecha_Subida = DateTime.Now,
+                        Acta = null!
+                    };
+
+                    _context.Anexos.Add(anexo);
+                    archivosSubidos++;
+                }
+                catch (Exception ex)
+                {
+                    archivosRechazados++;
+                    errores.Add($"{archivo.FileName}: Error al subir - {ex.Message}");
+                }
             }
-            catch (Exception ex)
+
+            if (archivosSubidos > 0)
             {
-                ErrorMessage = $"Error al subir el archivo: {ex.Message}";
-                return await OnGetAsync(IdActa);
+                await _context.SaveChangesAsync();
             }
-        }
 
+            if (archivosSubidos > 0 && archivosRechazados == 0)
+            {
+                TempData["SuccessMessage"] = $" {archivosSubidos} archivo(s) subido(s) exitosamente";
+            }
+            else if (archivosSubidos > 0 && archivosRechazados > 0)
+            {
+                TempData["WarningMessage"] = $" {archivosSubidos} archivo(s) subido(s), {archivosRechazados} rechazado(s). Errores: {string.Join("; ", errores)}";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = $" No se pudo subir ningún archivo. Errores: {string.Join("; ", errores)}";
+            }
+
+            return RedirectToPage(new { id = IdActa });
+        }
 
         public async Task<IActionResult> OnGetDescargarAsync(int id)
         {
@@ -118,6 +142,32 @@ namespace Almacen_STLCC.Pages.Actas
                 TempData["ErrorMessage"] = $"Error al descargar: {ex.Message}";
                 return RedirectToPage(new { id = anexo.Id_Acta });
             }
+        }
+
+        public async Task<IActionResult> OnPostEliminarAsync()
+        {
+            var anexo = await _context.Anexos.FindAsync(IdAnexo);
+            if (anexo == null)
+            {
+                TempData["ErrorMessage"] = "Archivo no encontrado";
+                return RedirectToPage(new { id = IdActa });
+            }
+
+            try
+            {
+                await _minioService.EliminarArchivo(anexo.Ruta_Minio);
+
+                _context.Anexos.Remove(anexo);
+                await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = $"Archivo '{anexo.Nombre_Archivo}' eliminado exitosamente";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error al eliminar: {ex.Message}";
+            }
+
+            return RedirectToPage(new { id = anexo.Id_Acta });
         }
     }
 }

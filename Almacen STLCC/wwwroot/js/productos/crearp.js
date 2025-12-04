@@ -1,28 +1,27 @@
-﻿document.addEventListener("DOMContentLoaded", function () {
+﻿let formModificado = false;
+
+document.addEventListener("DOMContentLoaded", function () {
     const modalOverlay = document.getElementById('modalOverlay');
     const btnClose = document.getElementById('btnClose');
     const btnCancelar = document.getElementById('btnCancelar');
+    const btnGuardar = document.getElementById('btnGuardar');
     const formCrearProducto = document.getElementById('formCrearProducto');
-    let formModificado = false;
 
     if (formCrearProducto) {
         formCrearProducto.addEventListener('input', () => {
             formModificado = true;
         });
+    }
 
-        formCrearProducto.addEventListener('submit', () => {
-            formModificado = false;
+    if (btnGuardar) {
+        btnGuardar.addEventListener('click', function (e) {
+            e.preventDefault();
+            confirmarGuardado(formCrearProducto, '¿Está seguro de guardar este producto?');
         });
     }
 
     function cerrarModal() {
-        if (formModificado) {
-            if (confirm('¿Estás seguro(a) de que deseas salir? Los cambios no guardados se perderán.')) {
-                window.location.href = '/Productos/Index';
-            }
-        } else {
-            window.location.href = '/Productos/Index';
-        }
+        cerrarModalConConfirmacion('formCrearProducto', '/Productos/Index', formModificado);
     }
 
     if (btnClose) btnClose.addEventListener('click', cerrarModal);

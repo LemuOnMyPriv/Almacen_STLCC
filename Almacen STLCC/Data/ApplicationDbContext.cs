@@ -49,11 +49,6 @@ namespace Almacen_STLCC.Data
             return base.SaveChanges();
         }
 
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            RegistrarAuditoria();
-            return await base.SaveChangesAsync(cancellationToken);
-        }
 
         private void RegistrarAuditoria()
         {
@@ -69,6 +64,11 @@ namespace Almacen_STLCC.Data
 
             foreach (var entry in entries)
             {
+                if (entry.State == EntityState.Added)
+                {
+                    continue;
+                }
+
                 var auditoria = new Auditoria
                 {
                     Usuario = usuario,
@@ -83,6 +83,49 @@ namespace Almacen_STLCC.Data
                 Auditorias.Add(auditoria);
             }
         }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            var result = await base.SaveChangesAsync(cancellationToken);
+
+            var entriesCreadas = ChangeTracker.Entries()
+                .Where(e => e.State == EntityState.Unchanged && e.Entity.GetType() != typeof(Auditoria))
+                .ToList();
+
+            var usuario = _httpContextAccessor?.HttpContext?.Session.GetString("Username") ?? "Sistema";
+            var ipAddress = _httpContextAccessor?.HttpContext?.Connection.RemoteIpAddress?.ToString();
+
+            foreach (var entry in entriesCreadas)
+            {
+                var id = ObtenerIdRegistro(entry);
+                var tabla = ObtenerNombreTabla(entry.Entity);
+
+                var yaExiste = await Auditorias.AnyAsync(a =>
+                    a.Tabla == tabla &&
+                    a.Id_Registro == id &&
+                    a.Accion == "CREAR");
+
+                if (!yaExiste && id > 0)
+                {
+                    var auditoria = new Auditoria
+                    {
+                        Usuario = usuario,
+                        Accion = "CREAR",
+                        Tabla = tabla,
+                        Id_Registro = id,
+                        Descripcion = $"Creó {entry.Entity.GetType().Name}: {ObtenerNombreEntidad(entry)}",
+                        Fecha_Hora = DateTime.Now,
+                        Ip_Address = ipAddress
+                    };
+
+                    Auditorias.Add(auditoria);
+                    await base.SaveChangesAsync(cancellationToken);
+                }
+            }
+
+            return result;
+        }
+
 
         private static string ObtenerAccion(EntityState state)
         {

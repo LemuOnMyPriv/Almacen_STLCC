@@ -71,10 +71,13 @@
 
 @if (TempData["SuccessMessage"] != null)
 {
-    <div id="successMessage" data-message='@Json.Serialize(TempData["SuccessMessage"])'></div>
+    <div id="successMessage" data-message="@TempData["SuccessMessage"]" style="display:none;"></div>
 }
 
 @section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="~/js/productos/index.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            mostrarMensajeExito();
+        });
+    </script>
 }
