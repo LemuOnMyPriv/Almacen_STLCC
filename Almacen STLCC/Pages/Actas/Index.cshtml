@@ -1,0 +1,71 @@
+﻿@page
+@model Almacen_STLCC.Pages.Actas.IndexModel
+@{
+    ViewData["Title"] = "Actas";
+}
+<link rel="stylesheet" href="~/css/actas/index.css" />
+
+<div class="contenedor">
+    <header class="header">
+        <div class="titulo-header">
+            <div>
+                <h1><i class="fa-solid fa-list"></i> Lista de Actas</h1>
+                <p>Consulta y gestiona todas las actas de compra registradas.</p>
+            </div>
+            <div>
+                <a asp-page="/Actas/CrearActa" class="btn-crear"><i class="fa-solid fa-circle-plus"></i> Agregar Acta</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="tabla-actas">
+        <table>
+            <thead>
+                <tr>
+                    <th>F01</th>
+                    <th>Orden de Compra</th>
+                    <th>Requisición</th>
+                    <th>Proveedor</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Actas != null && Model.Actas.Any())
+                {
+                    @foreach (var acta in Model.Actas)
+                    {
+                        <tr>
+                            <td>@acta.F01</td>
+                            <td>@(acta.Orden_Compra ?? "N/A")</td>
+                            <td>@(acta.Requisicion ?? "N/A")</td>
+                            <td>@acta.Proveedor.Nombre_Proveedor</td>
+                            <td>@acta.Fecha.ToString("dd/MM/yyyy")</td>
+                            <td class="acciones">
+                                <a asp-page="/Actas/Detalles"
+                                   asp-route-id="@acta.Id_Acta"
+                                   class="btn-detalles">Ver Detalles</a>
+                                <a asp-page="/Actas/Archivos"
+                                   asp-route-id="@acta.Id_Acta"
+                                   class="btn-ver">Ver Archivos</a>
+                                <a asp-page="/Actas/Editar"
+                                   asp-route-id="@acta.Id_Acta"
+                                   class="btn-editar">Editar</a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="mensaje-vacio">No hay actas registradas.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </section>
+</div>
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/js/actas/index.js"></script>
+}

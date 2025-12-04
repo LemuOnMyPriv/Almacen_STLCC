@@ -41,7 +41,7 @@ namespace Almacen_STLCC.Pages.Setup
             _context.Usuarios.Add(admin);
             await _context.SaveChangesAsync();
 
-            return Content("Usuario administrador creado exitosamente\n\nUsuario: soporte\nContraseña: @soporte2025");
+            return Content("Usuario administrador creado exitosamente\n\nEl usuario y contraseña han sido restablecidos a los valores por defecto. Si usted está autorizado y no conoce las credenciales, póngase en contacto con el administrador del sistema.");
         }
     }
 }

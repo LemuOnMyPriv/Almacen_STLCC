@@ -1,0 +1,100 @@
+﻿@page "{id:int}"
+@model Almacen_STLCC.Pages.Actas.DetallesModel
+@{
+    ViewData["Title"] = $"Detalles del Acta {Model.Acta.F01}";
+}
+<link rel="stylesheet" href="~/css/actas/detalles.css" />
+
+<div class="contenedor">
+    <header class="header">
+        <div>
+            <h1><i class="fa-solid fa-clipboard-question"></i> Detalles del Acta</h1>
+            <p>Productos registrados en esta acta de compra</p>
+        </div>
+        <a asp-page="/Actas/Index" class="btn-volver"><i class="fa-solid fa-angle-left"></i> Volver a Actas</a>
+    </header>
+
+    <section class="info-acta">
+        <div class="info-item">
+            <strong>F01:</strong> @Model.Acta.F01
+        </div>
+        <div class="info-item">
+            <strong>Orden de Compra:</strong> @(Model.Acta.Orden_Compra ?? "N/A")
+        </div>
+        <div class="info-item">
+            <strong>Requisición:</strong> @(Model.Acta.Requisicion ?? "N/A")
+        </div>
+        <div class="info-item">
+            <strong>Proveedor:</strong> @Model.Acta.Proveedor.Nombre_Proveedor
+        </div>
+        <div class="info-item">
+            <strong>Fecha:</strong> @Model.Acta.Fecha.ToString("dd/MM/yyyy")
+        </div>
+    </section>
+
+    <section class="tabla-productos">
+        <h2>Productos del Acta</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Precio con ISV</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Detalles != null && Model.Detalles.Any())
+                {
+                    decimal total = 0;
+                    @foreach (var detalle in Model.Detalles)
+                    {
+                        var subtotal = detalle.Precio_Con_Isv.HasValue
+                        ? detalle.Precio_Con_Isv.Value * detalle.Cantidad
+                        : (detalle.Precio_Unitario ?? 0) * detalle.Cantidad;
+                        total += subtotal;
+
+                        <tr>
+                            <td>@detalle.Producto.Codigo_Producto</td>
+                            <td>@detalle.Producto.Nombre_Producto</td>
+                            <td>@detalle.Cantidad</td>
+                            <td>
+                                @if (detalle.Precio_Unitario.HasValue)
+                                {
+                                    <span>L. @detalle.Precio_Unitario.Value.ToString("N2")</span>
+                                }
+                                else
+                                {
+                                    <span>-</span>
+                                }
+                            </td>
+                            <td>
+                                @if (detalle.Precio_Con_Isv.HasValue)
+                                {
+                                    <span>L. @detalle.Precio_Con_Isv.Value.ToString("N2")</span>
+                                }
+                                else
+                                {
+                                    <span>-</span>
+                                }
+                            </td>
+                            <td><strong>L. @subtotal.ToString("N2")</strong></td>
+                        </tr>
+                    }
+                    <tr class="fila-total">
+                        <td colspan="5" style="text-align: right;"><strong>TOTAL:</strong></td>
+                        <td><strong>L. @total.ToString("N2")</strong></td>
+                    </tr>
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="mensaje-vacio">No hay productos registrados en esta acta.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </section>
+</div>

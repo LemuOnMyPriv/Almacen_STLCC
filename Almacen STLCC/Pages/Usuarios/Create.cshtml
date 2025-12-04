@@ -15,14 +15,14 @@
         @if (!string.IsNullOrEmpty(Model.ErrorMessage))
         {
             <div class="alert alert-danger">
-                ⚠️ @Model.ErrorMessage
+                <i class="fa-solid fa-triangle-exclamation"></i> @Model.ErrorMessage
             </div>
         }
 
         @if (!string.IsNullOrEmpty(Model.SuccessMessage))
         {
             <div class="alert alert-success">
-                ✅ @Model.SuccessMessage
+                <i class="fa-solid fa-check"></i> @Model.SuccessMessage
             </div>
         }
 

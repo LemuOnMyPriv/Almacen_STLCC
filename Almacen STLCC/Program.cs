@@ -3,6 +3,7 @@ using Almacen_STLCC.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
+using Minio;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,21 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
 // Registrar servicio LDAP
 builder.Services.AddScoped<LdapAuthenticationService>();
+
+// Configurar MinIO
+builder.Services.AddSingleton<IMinioClient>(sp =>
+{
+    var config = builder.Configuration.GetSection("MinIO");
+
+    var client = new MinioClient()
+        .WithEndpoint(config["Endpoint"])
+        .WithCredentials(config["AccessKey"], config["SecretKey"]);
+
+    return client.Build();
+});
+
+// Registrar MinioService
+builder.Services.AddScoped<MinioService>();
 
 // Configurar sesiones
 builder.Services.AddSession(options =>

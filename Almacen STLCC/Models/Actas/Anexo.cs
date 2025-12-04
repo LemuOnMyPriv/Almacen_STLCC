@@ -32,7 +32,7 @@ namespace Almacen_STLCC.Models.Actas
         [Required]
         [StringLength(100)]
         [Column("bucket_minio")]
-        public required string Bucket_Minio { get; set; } = "anexos-inventario";
+        public string Bucket_Minio { get; set; } = "anexos-inventario";
 
         [Required]
         [Column("tamaño_kb")]
@@ -42,7 +42,6 @@ namespace Almacen_STLCC.Models.Actas
         [Column("fecha_subida")]
         public DateTime Fecha_Subida { get; set; }
 
-        // Navegación
         [ForeignKey("Id_Acta")]
         public required Acta Acta { get; set; }
     }
