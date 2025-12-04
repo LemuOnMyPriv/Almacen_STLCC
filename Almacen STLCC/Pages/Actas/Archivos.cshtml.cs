@@ -26,7 +26,8 @@ namespace Almacen_STLCC.Pages.Actas
         [BindProperty]
         public IFormFile Archivo { get; set; } = null!;
 
-        public string ErrorMessage { get; set; } = string.Empty;
+        public string? ErrorMessage { get; set; }
+        public string? SuccessMessage { get; set; } 
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -49,6 +50,12 @@ namespace Almacen_STLCC.Pages.Actas
 
         public async Task<IActionResult> OnPostAsync()
         {
+            if (Archivo == null)
+            {
+                ErrorMessage = "No se ha seleccionado ningún archivo";
+                return await OnGetAsync(IdActa);
+            }
+
             if (!_minioService.ValidarArchivo(Archivo, out string mensajeError))
             {
                 ErrorMessage = mensajeError;
@@ -57,7 +64,7 @@ namespace Almacen_STLCC.Pages.Actas
 
             try
             {
-                var rutaMinio = await _minioService.SubirArchivo(Archivo, "actas");
+                var rutaMinio = await _minioService.SubirArchivo(Archivo);
 
                 var anexo = new Anexo
                 {
@@ -74,7 +81,8 @@ namespace Almacen_STLCC.Pages.Actas
                 _context.Anexos.Add(anexo);
                 await _context.SaveChangesAsync();
 
-                return RedirectToPage(new { id = IdActa });
+                SuccessMessage = "Archivo subido correctamente";
+                return await OnGetAsync(IdActa);
             }
             catch (Exception ex)
             {
@@ -82,6 +90,7 @@ namespace Almacen_STLCC.Pages.Actas
                 return await OnGetAsync(IdActa);
             }
         }
+
 
         public async Task<IActionResult> OnGetDescargarAsync(int id)
         {

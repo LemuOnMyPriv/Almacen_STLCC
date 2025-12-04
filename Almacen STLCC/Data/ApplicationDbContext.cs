@@ -107,7 +107,7 @@ namespace Almacen_STLCC.Data
 
             if (keyProperty?.CurrentValue != null)
             {
-                return Convert.ToInt32(keyProperty.CurrentValue);
+                return (int)Convert.ToInt64(keyProperty.CurrentValue);
             }
 
             return 0;

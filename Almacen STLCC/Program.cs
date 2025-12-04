@@ -30,12 +30,27 @@ builder.Services.AddScoped<LdapAuthenticationService>();
 builder.Services.AddSingleton<IMinioClient>(sp =>
 {
     var config = builder.Configuration.GetSection("MinIO");
+    var endpoint = config["Endpoint"];
+    var accessKey = config["AccessKey"];
+    var secretKey = config["SecretKey"];
+    var useSSL = bool.Parse(config["UseSSL"] ?? "true");
+    var bucketName = config["BucketName"]?.Trim();
+    if (string.IsNullOrWhiteSpace(bucketName))
+        bucketName = "almacen";
 
-    var client = new MinioClient()
-        .WithEndpoint(config["Endpoint"])
-        .WithCredentials(config["AccessKey"], config["SecretKey"]);
+    Console.WriteLine($"[MinIO] Configurando cliente:");
+    Console.WriteLine($"  Endpoint: {endpoint}");
+    Console.WriteLine($"  UseSSL: {useSSL}");
+    Console.WriteLine($"  Bucket: {config["BucketName"]}");
 
-    return client.Build();
+    var clientBuilder = new MinioClient()
+        .WithEndpoint(endpoint)
+        .WithCredentials(accessKey, secretKey);
+
+    if (useSSL)
+        clientBuilder = clientBuilder.WithSSL();
+
+    return clientBuilder.Build();
 });
 
 // Registrar MinioService

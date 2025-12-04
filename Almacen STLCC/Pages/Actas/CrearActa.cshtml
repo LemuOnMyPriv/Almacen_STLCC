@@ -33,7 +33,7 @@
                     <label asp-for="Input.F01">Código F01:</label>
                     <input asp-for="Input.F01"
                            class="form-control"
-                           placeholder="Ej: F01-2025-001"
+                           placeholder="Ej: 1105"
                            autocomplete="off"
                            autofocus />
                     <span asp-validation-for="Input.F01" class="text-danger"></span>
@@ -43,7 +43,7 @@
                     <label asp-for="Input.Orden_Compra">Orden de Compra:</label>
                     <input asp-for="Input.Orden_Compra"
                            class="form-control"
-                           placeholder="Ej: OC-2025-123"
+                           placeholder="Ej: STLCC-GA-019-2025"
                            autocomplete="off" />
                     <span asp-validation-for="Input.Orden_Compra" class="text-danger"></span>
                 </div>
@@ -52,7 +52,7 @@
                     <label asp-for="Input.Requisicion">Requisición:</label>
                     <input asp-for="Input.Requisicion"
                            class="form-control"
-                           placeholder="Ej: REQ 386 ENERO ONADICI"
+                           placeholder="Ej: REQ 386 ENERO SGRM"
                            autocomplete="off" />
                     <span asp-validation-for="Input.Requisicion" class="text-danger"></span>
                 </div>
@@ -129,7 +129,7 @@
 
                         <div class="form-group btn-eliminar-container">
                             <button type="button" class="btn-eliminar-producto" onclick="eliminarProducto(0)" style="display: none;">
-                                <i class="fa-regular fa-trash-can"></i> Eliminar
+                                Eliminar
                             </button>
                         </div>
                     </div>
@@ -141,7 +141,7 @@
             </button>
 
             <div class="form-actions">
-                <button type="submit" class="btn-guardar"><i class="fa-solid fa-floppy-disk"></i> Guardar Acta</button>
+                <button type="button" class="btn-guardar" id="btnGuardar"><i class="fa-solid fa-floppy-disk"></i> Guardar Acta</button>
                 <button type="button" class="btn-cancelar" id="btnCancelar">Cancelar</button>
             </div>
         </form>
@@ -149,5 +149,6 @@
 </div>
 
 @section Scripts {
-    <script src="~/js/actas/crearActa.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="/js/actas/crearActa.js"></script>
 }

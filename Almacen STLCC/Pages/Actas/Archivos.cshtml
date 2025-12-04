@@ -39,7 +39,7 @@
                     {
                         <tr>
                             <td>@anexo.Nombre_Archivo</td>
-                            <td><span class="badge-formato">@anexo.Tipo_Archivo?.ToUpper() ?? "N/A"</span></td>
+                            <td><span class="badge-formato">@anexo.Tipo_Archivo?.ToUpper()</span></td>
                             <td>@anexo.Tamaño_Kb KB</td>
                             <td>@anexo.Fecha_Subida.ToString("dd/MM/yyyy")</td>
                             <td>
@@ -104,3 +104,4 @@
 </div>
 
 <script src="~/js/actas/archivos.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

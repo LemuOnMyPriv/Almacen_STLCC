@@ -1,4 +1,25 @@
-﻿function mostrarFormulario() {
+﻿document.addEventListener("DOMContentLoaded", function () {
+    var error = '@Model.ErrorMessage';
+    if (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error,
+            confirmButtonText: 'Aceptar'
+        });
+    }
+
+    var success = '@Model.SuccessMessage';
+    if (success) {
+        Swal.fire({
+            icon: 'success',
+            title: 'Éxito',
+            text: success,
+            confirmButtonText: 'Aceptar'
+        });
+    }
+});
+function mostrarFormulario() {
     document.getElementById('formularioSubida').style.display = 'block';
 }
 

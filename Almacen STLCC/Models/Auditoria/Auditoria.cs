@@ -27,7 +27,7 @@ namespace Almacen_STLCC.Models.Auditoria
 
         [Required]
         [Column("id_registro")]
-        public int Id_Registro { get; set; }
+        public long Id_Registro { get; set; }
 
         [Column("descripcion", TypeName = "TEXT")]
         public string? Descripcion { get; set; }

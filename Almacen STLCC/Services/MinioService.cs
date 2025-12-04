@@ -3,27 +3,47 @@ using Minio.DataModel.Args;
 
 namespace Almacen_STLCC.Services
 {
-    public class MinioService(IMinioClient minioClient, IConfiguration configuration)
+    public class MinioService
     {
-        private readonly IMinioClient _minioClient = minioClient;
-        private readonly string _bucketName = configuration["MinIO:BucketName"] ?? "almacen";
+        private readonly IMinioClient _minioClient;
+        private readonly string _bucketName;
 
-        public async Task<string> SubirArchivo(IFormFile archivo, string carpeta)
+        public MinioService(IMinioClient minioClient, IConfiguration configuration)
         {
+            _minioClient = minioClient;
+
+            _bucketName = configuration["MinIO:BucketName"]?.Trim() ?? "almacen";
+
+            if (string.IsNullOrWhiteSpace(_bucketName) || _bucketName.Contains("/"))
+                throw new InvalidOperationException($"Bucket inválido: '{_bucketName}'");
+        }
+
+        public async Task<string> SubirArchivo(IFormFile archivo, string carpeta = "actas")
+        {
+            if (archivo == null || archivo.Length == 0)
+                throw new ArgumentException("Archivo inválido");
+
+            if (string.IsNullOrWhiteSpace(carpeta))
+                carpeta = Path.GetExtension(archivo.FileName)
+                    .TrimStart('.')
+                    .ToLower();
+
             var bucketExists = await _minioClient.BucketExistsAsync(
                 new BucketExistsArgs().WithBucket(_bucketName));
 
             if (!bucketExists)
-            {
-                await _minioClient.MakeBucketAsync(
-                    new MakeBucketArgs().WithBucket(_bucketName));
-            }
+                await _minioClient.MakeBucketAsync(new MakeBucketArgs().WithBucket(_bucketName));
 
             var extension = Path.GetExtension(archivo.FileName);
             var nombreSinExtension = Path.GetFileNameWithoutExtension(archivo.FileName);
             var timestamp = DateTime.Now.ToString("yyyyMMdd_HHmmss");
             var nombreArchivo = $"{nombreSinExtension}_{timestamp}{extension}";
-            var rutaMinio = $"{carpeta}/{DateTime.Now.Year}/{nombreArchivo}".Replace("//", "/");
+            var safeFileName = string.Concat(nombreArchivo.Split(Path.GetInvalidFileNameChars()));
+
+            var rutaMinio = Path.Combine(carpeta, DateTime.Now.Year.ToString(), safeFileName)
+                .Replace("\\", "/");
+
+            Console.WriteLine($"[MinIO] Subiendo archivo a: {_bucketName}/{rutaMinio}");
 
             using (var stream = archivo.OpenReadStream())
             {
@@ -45,24 +65,18 @@ namespace Almacen_STLCC.Services
             await _minioClient.GetObjectAsync(new GetObjectArgs()
                 .WithBucket(_bucketName)
                 .WithObject(rutaMinio)
-                .WithCallbackStream((streamData) =>
-                {
-                    streamData.CopyTo(stream);
-                }));
+                .WithCallbackStream(s => s.CopyTo(stream)));
 
             stream.Position = 0;
             return stream;
         }
 
-        public async Task<string> ObtenerUrlTemporal(string rutaMinio)
+        public async Task<string> ObtenerUrlTemporal(string rutaMinio, int minutosExpiracion = 15)
         {
-            var url = await _minioClient.PresignedGetObjectAsync(
-                new PresignedGetObjectArgs()
-                    .WithBucket(_bucketName)
-                    .WithObject(rutaMinio)
-                    .WithExpiry(60 * 15));
-
-            return url;
+            return await _minioClient.PresignedGetObjectAsync(new PresignedGetObjectArgs()
+                .WithBucket(_bucketName)
+                .WithObject(rutaMinio)
+                .WithExpiry(minutosExpiracion * 60));
         }
 
         public async Task EliminarArchivo(string rutaMinio)
@@ -75,6 +89,12 @@ namespace Almacen_STLCC.Services
         public bool ValidarArchivo(IFormFile archivo, out string mensajeError)
         {
             mensajeError = string.Empty;
+
+            if (archivo == null || archivo.Length == 0)
+            {
+                mensajeError = "No se ha seleccionado ningún archivo";
+                return false;
+            }
 
             var extensionesPermitidas = new[] { ".jpg", ".jpeg", ".png", ".pdf", ".doc", ".docx" };
             var extension = Path.GetExtension(archivo.FileName).ToLower();
