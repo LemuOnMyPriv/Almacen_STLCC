@@ -114,11 +114,11 @@
     cursor: pointer;
     transition: opacity 0.2s ease;
     display: inline-block;
-    background-color: #DB473C;
+    background-color: #ffc107;
 }
 
     .btn-editar:hover {
-        background-color: #c82333;
+        background-color: #e0a800;
     }
 
 .mensaje-vacio {

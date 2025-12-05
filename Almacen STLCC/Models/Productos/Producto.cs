@@ -35,7 +35,6 @@ namespace Almacen_STLCC.Models.Productos
         [Column("id_proveedor")]
         public int? Id_Proveedor { get; set; }
 
-        // Navegación
         [ForeignKey("Id_Categoria")]
         public required Categorias.Categoria Categoria { get; set; }
 

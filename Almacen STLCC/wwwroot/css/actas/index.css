@@ -39,7 +39,7 @@
     }
 
 .btn-crear {
-    background-color: #28a745;
+    background-color: #555;
     color: white;
     border: none;
     padding: 10px 18px;
@@ -52,7 +52,7 @@
 }
 
     .btn-crear:hover {
-        background-color: #218838;
+        background-color: #171717;
     }
 
 .tabla-actas {

@@ -2,7 +2,6 @@ using Almacen_STLCC.Data;
 using Almacen_STLCC.Models.Categorias;
 using Almacen_STLCC.Models.Productos;
 using Almacen_STLCC.Models.Proveedores;
-using Almacen_STLCC.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
@@ -39,7 +38,7 @@ namespace Almacen_STLCC.Pages.Productos
 
             [Required(ErrorMessage = "La categoría es obligatoria")]
             [Display(Name = "Categoría")]
-            public int Id_Categoria { get; set; }
+            public int? Id_Categoria { get; set; }
 
             [Required(ErrorMessage = "La unidad de medida es obligatoria")]
             [StringLength(50, ErrorMessage = "La unidad de medida no puede superar los 50 caracteres")]
@@ -57,7 +56,7 @@ namespace Almacen_STLCC.Pages.Productos
             {
                 Nombre_Producto = string.Empty,
                 Marca = "S/M",
-                Id_Categoria = Categorias.FirstOrDefault(c => c.Nombre_Categoria == "S/C")?.Id_Categoria ?? 0,
+                Id_Categoria = Categorias.FirstOrDefault(c => c.Nombre_Categoria == "S/C")?.Id_Categoria,
                 Unidad_Medida = string.Empty
             };
             return Page();
@@ -68,6 +67,13 @@ namespace Almacen_STLCC.Pages.Productos
             if (!ModelState.IsValid)
             {
                 ErrorMessage = "Por favor corrija los errores en el formulario";
+                await CargarDatosAsync();
+                return Page();
+            }
+
+            if (!Input.Id_Categoria.HasValue)
+            {
+                ErrorMessage = "La categoría es obligatoria.";
                 await CargarDatosAsync();
                 return Page();
             }
@@ -87,7 +93,7 @@ namespace Almacen_STLCC.Pages.Productos
                 Codigo_Producto = Input.Codigo_Producto,
                 Nombre_Producto = Input.Nombre_Producto.Trim(),
                 Marca = Input.Marca?.Trim() ?? "S/M",
-                Id_Categoria = Input.Id_Categoria,
+                Id_Categoria = (int)Input.Id_Categoria,
                 Unidad_Medida = Input.Unidad_Medida.Trim(),
                 Id_Proveedor = Input.Id_Proveedor,
                 Categoria = categoria

@@ -92,8 +92,7 @@
     }
 
 .acciones {
-    display: flex;
-    gap: 8px;
+    gap: 9px;
 }
 
 .btn-editar {
@@ -106,11 +105,11 @@
     cursor: pointer;
     transition: opacity 0.2s ease;
     display: inline-block;
-    background-color: #DB473C;
+    background-color: #ffc107;
 }
 
     .btn-editar:hover {
-        background: #c82333;
+        background: #e0a800;
     }
 
 .mensaje-vacio {

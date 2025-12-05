@@ -1,4 +1,4 @@
-﻿function confirmarGuardado(form, mensaje = '¿Estás seguro de guardar los cambios?') {
+﻿function confirmarGuardado(form, mensaje = '¿Está seguro de guardar los cambios?') {
     Swal.fire({
         title: '¿Confirmar acción?',
         text: mensaje,
