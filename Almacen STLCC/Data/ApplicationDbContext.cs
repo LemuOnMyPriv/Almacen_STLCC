@@ -59,7 +59,10 @@ namespace Almacen_STLCC.Data
                 .Where(e => e.Entity.GetType() != typeof(Auditoria))
                 .ToList();
 
-            var usuario = _httpContextAccessor?.HttpContext?.Session.GetString("Username") ?? "Sistema";
+            var usuario = _httpContextAccessor?.HttpContext?.Session.GetString("DisplayName")
+                       ?? _httpContextAccessor?.HttpContext?.Session.GetString("Username")
+                       ?? "Sistema";
+
             var ipAddress = _httpContextAccessor?.HttpContext?.Connection.RemoteIpAddress?.ToString();
 
             foreach (var entry in entries)
@@ -92,7 +95,10 @@ namespace Almacen_STLCC.Data
                 .Where(e => e.State == EntityState.Unchanged && e.Entity.GetType() != typeof(Auditoria))
                 .ToList();
 
-            var usuario = _httpContextAccessor?.HttpContext?.Session.GetString("Username") ?? "Sistema";
+            var usuario = _httpContextAccessor?.HttpContext?.Session.GetString("DisplayName")
+                       ?? _httpContextAccessor?.HttpContext?.Session.GetString("Username")
+                       ?? "Sistema";
+
             var ipAddress = _httpContextAccessor?.HttpContext?.Connection.RemoteIpAddress?.ToString();
 
             foreach (var entry in entriesCreadas)
@@ -103,7 +109,7 @@ namespace Almacen_STLCC.Data
                 var yaExiste = await Auditorias.AnyAsync(a =>
                     a.Tabla == tabla &&
                     a.Id_Registro == id &&
-                    a.Accion == "CREAR");
+                    a.Accion == "CREAR", cancellationToken);
 
                 if (!yaExiste && id > 0)
                 {
@@ -125,7 +131,6 @@ namespace Almacen_STLCC.Data
 
             return result;
         }
-
 
         private static string ObtenerAccion(EntityState state)
         {

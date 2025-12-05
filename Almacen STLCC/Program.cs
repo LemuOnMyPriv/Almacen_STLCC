@@ -56,6 +56,9 @@ builder.Services.AddSingleton<IMinioClient>(sp =>
 // Registrar MinioService
 builder.Services.AddScoped<MinioService>();
 
+// Registrar el servicio de limpieza automática de auditorías
+builder.Services.AddHostedService<AuditoriaLimpiezaService>();
+
 // Configurar sesiones
 builder.Services.AddSession(options =>
 {

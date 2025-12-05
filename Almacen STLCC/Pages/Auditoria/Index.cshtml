@@ -8,8 +8,15 @@
 
 <div class="contenedor">
     <div class="header">
-        <h1><i class="fa-solid fa-magnifying-glass"></i> Auditoría del Sistema</h1>
-        <p>Registro detallado de todas las acciones realizadas en el sistema</p>
+        <div>
+            <h1><i class="fa-solid fa-magnifying-glass"></i> Auditoría del Sistema</h1>
+            <p>Registro detallado de todas las acciones realizadas en el sistema</p>
+        </div>
+        <form method="post" asp-page-handler="ExportarYLimpiar" style="display: inline;">
+            <button type="submit" class="btn-exportar">
+                <i class="fa-solid fa-file-export"></i> Exportar y Limpiar
+            </button>
+        </form>
     </div>
 
     <form method="get" class="filtros">
@@ -20,7 +27,7 @@
                        name="FiltroUsuario"
                        value="@Model.FiltroUsuario"
                        placeholder="Buscar por usuario"
-                       class="form-control"/>
+                       class="form-control" />
             </div>
 
             <div class="filtro-item">
@@ -147,3 +154,45 @@
         </div>
     }
 </div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="successMessage" data-message="@TempData["SuccessMessage"]" style="display:none;"></div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div id="errorMessage" data-message="@TempData["ErrorMessage"]" style="display:none;"></div>
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const successDiv = document.getElementById('successMessage');
+            if (successDiv) {
+                const message = successDiv.dataset.message;
+                if (message) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Éxito!',
+                        text: message,
+                        confirmButtonText: 'Aceptar'
+                    });
+                }
+            }
+
+            const errorDiv = document.getElementById('errorMessage');
+            if (errorDiv) {
+                const message = errorDiv.dataset.message;
+                if (message) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: message,
+                        confirmButtonText: 'Aceptar'
+                    });
+                }
+            }
+        });
+    </script>
+}
