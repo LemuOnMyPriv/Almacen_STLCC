@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Actas";
 }
-<link rel="stylesheet" href="~/css/actas/index.css" />
+<link rel="stylesheet" href="~/css/actas/Index.css" />
 
 <div class="contenedor">
     <header class="header">
@@ -12,12 +12,12 @@
                 <h1><i class="fa-solid fa-list"></i> Lista de Actas</h1>
                 <p>Consulta y gestiona todas las actas de compra registradas.</p>
             </div>
-            <div>
-                <a asp-page="/Actas/CrearActa" class="btn-crear"><i class="fa-solid fa-circle-plus"></i> Agregar Acta</a>
+            <div class="acta-crear">
+                <a asp-page="/Actas/CrearActa" class="btn-crear">
+                    <i class="fa-solid fa-circle-plus"></i> Agregar Acta</a>
             </div>
         </div>
     </header>
-
     <section class="tabla-actas">
         <table>
             <thead>

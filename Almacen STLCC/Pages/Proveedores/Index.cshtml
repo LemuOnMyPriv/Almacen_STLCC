@@ -7,12 +7,9 @@
 <div class="contenedor">
     <header class="header">
         <div class="titulo-header">
-            <div class="titulo-left">
-                <i class="fa-solid fa-truck fa-lg"></i>
-                <div class="titulo-texto">
-                    <h1>Lista de Proveedores</h1>
-                    <p>Consulta y gestiona todos los proveedores existentes para el inventario.</p>
-                </div>
+            <div>
+                <h1><i class="fa-solid fa-truck"></i> Lista de Proveedores</h1>
+                <p>Consulta y gestiona todos los proveedores existentes para el inventario.</p>
             </div>
             <div class="prov-crear">
                 <a asp-page="/Proveedores/CrearProveedor" class="btn-crear">
@@ -61,9 +58,5 @@
 }
 
 @section Scripts {
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            mostrarMensajeExito();
-        });
-    </script>
+    <script src="~/js/proveedores/index.js"></script>
 }

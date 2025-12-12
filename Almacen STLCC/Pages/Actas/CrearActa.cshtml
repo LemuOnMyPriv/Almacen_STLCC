@@ -5,6 +5,54 @@
 }
 
 <link rel="stylesheet" href="~/css/actas/crearacta.css" />
+<style>
+    .btn-link-crear,
+    .btn-link-crear-destacado {
+        display: inline-block;
+        margin-top: 8px;
+        font-size: 13px;
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .btn-link-crear {
+        color: #007bff;
+    }
+
+        .btn-link-crear:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
+    .btn-link-crear-destacado {
+        background-color: #28a745;
+        color: white;
+        padding: 8px 15px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+        .btn-link-crear-destacado:hover {
+            background-color: #218838;
+            text-decoration: none;
+        }
+
+    .separador-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+        .separador-header > div {
+            flex: 1;
+        }
+</style>
 
 <div class="modal-overlay" id="modalOverlay">
     <div class="modal-container">
@@ -59,7 +107,7 @@
 
                 <div class="form-group">
                     <label asp-for="Input.Id_Proveedor">Proveedor:</label>
-                    <select asp-for="Input.Id_Proveedor" class="form-select">
+                    <select asp-for="Input.Id_Proveedor" class="form-select" id="selectProveedor">
                         <option value="">-- Seleccione un proveedor --</option>
                         @foreach (var proveedor in Model.Proveedores)
                         {
@@ -67,6 +115,9 @@
                         }
                     </select>
                     <span asp-validation-for="Input.Id_Proveedor" class="text-danger"></span>
+                    <button type="button" class="btn-link-crear" id="btnCrearProveedorActa">
+                        <i class="fa-solid fa-plus"></i> Crear nuevo proveedor
+                    </button>
                 </div>
 
                 <div class="form-group">
@@ -79,8 +130,15 @@
             </div>
 
             <div class="separador">
-                <h3>Productos del Acta</h3>
-                <p class="texto-ayuda">Agregue los productos que fueron comprados en esta acta</p>
+                <div class="separador-header">
+                    <div>
+                        <h3>Productos del Acta</h3>
+                        <p class="texto-ayuda">Agregue los productos que fueron comprados en esta acta</p>
+                    </div>
+                    <button type="button" class="btn-link-crear-destacado" onclick="abrirCrearProducto()">
+                        <i class="fa-solid fa-plus"></i> Crear nuevo producto
+                    </button>
+                </div>
             </div>
 
             <div id="productosContainer">
@@ -104,7 +162,7 @@
                                    class="form-control"
                                    min="1"
                                    placeholder="Ej: 10"
-                                   required />
+                                   required/>
                         </div>
 
                         <div class="form-group">
@@ -114,7 +172,7 @@
                                    class="form-control"
                                    step="0.01"
                                    min="0"
-                                   placeholder="Sin ISV" />
+                                   placeholder="Sin ISV"/>
                         </div>
 
                         <div class="form-group">
@@ -124,7 +182,7 @@
                                    class="form-control"
                                    step="0.01"
                                    min="0"
-                                   placeholder="Con ISV incluido" />
+                                   placeholder="Con ISV incluido"/>
                         </div>
 
                         <div class="form-group btn-eliminar-container">

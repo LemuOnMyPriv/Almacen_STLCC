@@ -19,24 +19,16 @@
     margin-bottom: 25px;
 }
 
+    .header h1 {
+        margin: 0;
+    }
+
 .titulo-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 20px;
 }
-
-    .titulo-header h1 {
-        font-size: 29px;
-        color: #2c3e50;
-        margin: 0;
-    }
-
-    .titulo-header p {
-        color: #555;
-        font-size: 16px;
-        margin-top: 8px;
-    }
 
 .prod-crear {
     display: flex;

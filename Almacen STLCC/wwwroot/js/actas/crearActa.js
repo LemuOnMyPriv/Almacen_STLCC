@@ -17,6 +17,8 @@ document.addEventListener("DOMContentLoaded", function () {
         }));
     }
 
+    cargarDatosGuardados();
+
     if (formCrearActa) {
         formCrearActa.addEventListener('input', () => {
             formModificado = true;
@@ -45,7 +47,28 @@ document.addEventListener("DOMContentLoaded", function () {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') cerrarModal();
     });
+
+    configurarBotonesCrear();
 });
+
+function configurarBotonesCrear() {
+    const btnCrearProveedor = document.getElementById('btnCrearProveedorActa');
+    const btnCrearProducto = document.getElementById('btnCrearProductoActa');
+
+    if (btnCrearProveedor) {
+        btnCrearProveedor.addEventListener('click', () => {
+            guardarDatosForm();
+            abrirVentanaYRecargar('/Proveedores/CrearProveedor', 600, 500);
+        });
+    }
+
+    if (btnCrearProducto) {
+        btnCrearProducto.addEventListener('click', () => {
+            guardarDatosForm();
+            abrirVentanaYRecargar('/Productos/CrearP', 800, 600);
+        });
+    }
+}
 
 function agregarProducto() {
     const container = document.getElementById('productosContainer');
@@ -101,10 +124,16 @@ function agregarProducto() {
             </div>
 
             <div class="form-group btn-eliminar-container">
-                <button type="button" class="btn-eliminar-producto" onclick="eliminarProducto(${productoIndex})">Eliminar</button>
+                <button type="button" class="btn-eliminar-producto" data-producto-index="${productoIndex}">Eliminar</button>
             </div>
         </div>
     `;
+
+    const btnEliminar = nuevoProducto.querySelector('.btn-eliminar-producto');
+    const index = productoIndex;
+    btnEliminar.addEventListener('click', () => {
+        eliminarProducto(index);
+    });
 
     container.appendChild(nuevoProducto);
     productoIndex++;
@@ -128,4 +157,64 @@ function actualizarBotonesEliminar() {
     } else {
         botones.forEach(btn => btn.style.display = 'none');
     }
+}
+
+function guardarDatosForm() {
+    const productos = [];
+    document.querySelectorAll('.producto-item').forEach(item => {
+        const selects = item.querySelectorAll('select');
+        const inputs = item.querySelectorAll('input[type="number"]');
+
+        if (selects.length > 0 && inputs.length >= 2) {
+            productos.push({
+                idProducto: selects[0].value,
+                cantidad: inputs[0].value,
+                precioUnitario: inputs[1].value,
+                precioConIsv: inputs[2] ? inputs[2].value : ''
+            });
+        }
+    });
+
+    const datos = {
+        f01: document.querySelector('[name="Input.F01"]')?.value || '',
+        ordenCompra: document.querySelector('[name="Input.Orden_Compra"]')?.value || '',
+        requisicion: document.querySelector('[name="Input.Requisicion"]')?.value || '',
+        proveedor: document.querySelector('#selectProveedor')?.value || '',
+        fecha: document.querySelector('[name="Input.Fecha"]')?.value || '',
+        productos: productos
+    };
+
+    guardarDatosFormulario('formActa', datos);
+}
+
+function cargarDatosGuardados() {
+    const datos = recuperarDatosFormulario('formActa');
+    if (!datos) return;
+
+    if (datos.f01) document.querySelector('[name="Input.F01"]').value = datos.f01;
+    if (datos.ordenCompra) document.querySelector('[name="Input.Orden_Compra"]').value = datos.ordenCompra;
+    if (datos.requisicion) document.querySelector('[name="Input.Requisicion"]').value = datos.requisicion;
+    if (datos.proveedor) document.querySelector('#selectProveedor').value = datos.proveedor;
+    if (datos.fecha) document.querySelector('[name="Input.Fecha"]').value = datos.fecha;
+
+    if (datos.productos && Array.isArray(datos.productos) && datos.productos.length > 0) {
+        datos.productos.forEach((prod, idx) => {
+            if (idx > 0) agregarProducto();
+
+            const items = document.querySelectorAll('.producto-item');
+            const item = items[idx];
+
+            if (item) {
+                const select = item.querySelector('select');
+                const inputs = item.querySelectorAll('input[type="number"]');
+
+                if (select && prod.idProducto) select.value = prod.idProducto;
+                if (inputs[0] && prod.cantidad) inputs[0].value = prod.cantidad;
+                if (inputs[1] && prod.precioUnitario) inputs[1].value = prod.precioUnitario;
+                if (inputs[2] && prod.precioConIsv) inputs[2].value = prod.precioConIsv;
+            }
+        });
+    }
+
+    formModificado = true;
 }

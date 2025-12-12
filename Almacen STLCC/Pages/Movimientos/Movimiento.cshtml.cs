@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Almacen_STLCC.Pages.Movimientos
 {
-    public class MovimientosModel : PageModel
+    public class MovimientoModel : PageModel
     {
         public void OnGet()
         {

@@ -19,6 +19,10 @@
     margin-bottom: 25px;
 }
 
+    .header h1 {
+        margin: 0;
+    }
+
 .titulo-header {
     display: flex;
     justify-content: space-between;
@@ -26,23 +30,6 @@
     margin-bottom: 20px;
 }
 
-.titulo-left {
-    display: flex;
-    align-items: center;
-    gap: 15px;  
-}
-
-    .titulo-texto h1 {
-        font-size: 29px;
-        color: #2c3e50;
-        margin: 0;
-    }
-
-    .titulo-texto p {
-        color: #555;
-        font-size: 16px;
-        margin: 4px 0 0 0;
-    }
 
 .prov-crear {
     display: flex;

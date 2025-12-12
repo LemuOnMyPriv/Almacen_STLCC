@@ -60,7 +60,7 @@
 
                 <div class="form-group">
                     <label asp-for="Input.Id_Categoria">Categoría:</label>
-                    <select asp-for="Input.Id_Categoria" class="form-select">
+                    <select asp-for="Input.Id_Categoria" class="form-select" id="selectCategoria">
                         <option value="">-- Seleccione una categoría --</option>
                         @foreach (var categoria in Model.Categorias)
                         {
@@ -68,6 +68,9 @@
                         }
                     </select>
                     <span asp-validation-for="Input.Id_Categoria" class="text-danger"></span>
+                    <button type="button" class="btn-link-crear" id="btnCrearCategoria">
+                        <i class="fa-solid fa-plus"></i> Crear nueva categoría
+                    </button>
                 </div>
 
                 <div class="form-group">
@@ -80,25 +83,58 @@
                 </div>
 
                 <div class="form-group full-width">
-                    <label asp-for="Input.Id_Proveedor">Proveedor:</label>
-                    <select asp-for="Input.Id_Proveedor" class="form-select">
-                        <option value="">-- Sin proveedor --</option>
-                        @foreach (var proveedor in Model.Proveedores)
-                        {
-                            <option value="@proveedor.Id_Proveedor">@proveedor.Nombre_Proveedor</option>
-                        }
-                    </select>
-                    <span asp-validation-for="Input.Id_Proveedor" class="text-danger"></span>
+                    <label>Proveedor(es):</label>
+                    <div class="proveedores-container">
+                        <div class="proveedores-chips" id="proveedoresChips"></div>
+                        <div class="proveedores-agregar">
+                            <button type="button" class="btn-agregar-proveedor" id="btnAgregarProveedor">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <input type="hidden" id="hiddenProveedores" name="Input.Id_Proveedor" />
+                    <div class="dropdown-proveedores" id="dropdownProveedores" style="display: none;">
+                        <input type="text"
+                               class="search-proveedor"
+                               id="searchProveedor"
+                               placeholder="Buscar proveedor..." />
+                        <div class="lista-proveedores" id="listaProveedores">
+                            @foreach (var proveedor in Model.Proveedores)
+                            {
+                                <div class="proveedor-item"
+                                     data-id="@proveedor.Id_Proveedor"
+                                     data-nombre="@proveedor.Nombre_Proveedor">
+                                    @proveedor.Nombre_Proveedor
+                                </div>
+                            }
+                        </div>
+                        <div class="dropdown-footer">
+                            <button type="button" class="btn-crear-nuevo-proveedor">
+                                <i class="fa-solid fa-plus"></i> Crear nuevo proveedor
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <div class="form-actions">
-                <button type="button" class="btn-guardar" id="btnGuardar"><i class="fa-solid fa-floppy-disk"></i> Guardar Producto</button>
-                <button type="button" class="btn-cancelar" id="btnCancelar"><i class="fa-solid fa-ban"></i> Cancelar</button>
+                <button type="button" class="btn-guardar" id="btnGuardar">
+                    <i class="fa-solid fa-floppy-disk"></i> Guardar Producto
+                </button>
+                <button type="button" class="btn-cancelar" id="btnCancelar">
+                    <i class="fa-solid fa-ban"></i> Cancelar
+                </button>
             </div>
         </form>
     </div>
 </div>
+
+<script>
+    window.proveedoresData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
+                Model.Proveedores.Select(p => new { id = p.Id_Proveedor, nombre = p.Nombre_Proveedor })
+        ));
+</script>
+
 @section Scripts {
     <script src="~/js/productos/crearp.js"></script>
 }

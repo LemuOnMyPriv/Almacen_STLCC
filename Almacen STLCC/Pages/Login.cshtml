@@ -5,6 +5,7 @@
     Layout = null;
 }
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 <link rel="stylesheet" href="~/css/Login.css" />
 
 <div class="login-container">
@@ -36,12 +37,17 @@
 
             <div class="form-group">
                 <label for="Password">Contraseña:</label>
-                <input type="password"
-                       id="Password"
-                       name="Password"
-                       class="form-control"
-                       placeholder="********"
-                       required />
+
+                <div class="password-wrapper">
+                    <input type="password"
+                           id="Password"
+                           name="Password"
+                           class="form-control"
+                           placeholder="********"
+                           required />
+
+                    <i id="togglePassword" class="fa-solid fa-eye"></i>
+                </div>
             </div>
 
             <button type="submit" class="btn-login">Iniciar Sesión</button>
@@ -52,3 +58,5 @@
         </div>
     </div>
 </div>
+
+<script src="~/js/Login.js"></script>

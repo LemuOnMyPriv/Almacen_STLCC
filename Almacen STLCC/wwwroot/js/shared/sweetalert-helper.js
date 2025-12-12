@@ -50,3 +50,31 @@ function cerrarModalConConfirmacion(formId, redirectUrl, formModificado) {
         window.location.href = redirectUrl;
     }
 }
+
+function guardarDatosFormulario(clave, datos) {
+    try {
+        sessionStorage.setItem(clave, JSON.stringify(datos));
+    } catch (error) {
+        console.error('Error al guardar datos en sessionStorage:', error);
+    }
+}
+ 
+function recuperarDatosFormulario(clave) {
+    try {
+        const datos = sessionStorage.getItem(clave);
+        if (datos) {
+            sessionStorage.removeItem(clave);
+            return JSON.parse(datos);
+        }
+    } catch (error) {
+        console.error('Error al recuperar datos de sessionStorage:', error);
+    }
+    return null;
+}
+
+function abrirVentanaYRecargar(url, ancho = 1000, alto = 800) {
+    window.open(url, '_blank');
+    window.addEventListener('focus', () => {
+        setTimeout(() => location.reload(), 500);
+    }, { once: true });
+}

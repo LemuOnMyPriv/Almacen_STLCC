@@ -22,15 +22,7 @@
     align-items: center;
 }
 
-.header-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
     .header h1 {
-        font-size: 29px;
-        color: #2c3e50;
         margin: 0;
     }
 

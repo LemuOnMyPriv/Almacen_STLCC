@@ -65,8 +65,29 @@
         margin-bottom: 8px;
     }
 
+.password-wrapper {
+    position: relative;
+}
+
+    .password-wrapper input {
+        width: 100%;
+        padding-right: 40px;
+        box-sizing: border-box;
+    }
+
+#togglePassword {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 18px;
+    color: #555;
+    z-index: 2;
+}
+
 .form-control {
-    width: 91%;
+    width: 100%;
     padding: 12px;
     border: 2px solid #e0e0e0;
     border-radius: 8px;
