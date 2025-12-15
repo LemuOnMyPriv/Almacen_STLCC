@@ -84,36 +84,29 @@
 
                 <div class="form-group full-width">
                     <label>Proveedor(es):</label>
-                    <div class="proveedores-container">
-                        <div class="proveedores-chips" id="proveedoresChips"></div>
-                        <div class="proveedores-agregar">
-                            <button type="button" class="btn-agregar-proveedor" id="btnAgregarProveedor">
-                                <i class="fa-solid fa-plus"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <input type="hidden" id="hiddenProveedores" name="Input.Id_Proveedor" />
-                    <div class="dropdown-proveedores" id="dropdownProveedores" style="display: none;">
-                        <input type="text"
-                               class="search-proveedor"
-                               id="searchProveedor"
-                               placeholder="Buscar proveedor..." />
-                        <div class="lista-proveedores" id="listaProveedores">
+
+                    <div class="proveedores-chips-container" id="proveedoresChipsContainer"></div>
+
+                    <div id="selectProveedorContainer">
+                        <select class="form-select" id="selectProveedor">
+                            <option value="">-- Seleccione un proveedor --</option>
                             @foreach (var proveedor in Model.Proveedores)
                             {
-                                <div class="proveedor-item"
-                                     data-id="@proveedor.Id_Proveedor"
-                                     data-nombre="@proveedor.Nombre_Proveedor">
+                                <option value="@proveedor.Id_Proveedor" data-nombre="@proveedor.Nombre_Proveedor">
                                     @proveedor.Nombre_Proveedor
-                                </div>
+                                </option>
                             }
-                        </div>
-                        <div class="dropdown-footer">
-                            <button type="button" class="btn-crear-nuevo-proveedor">
-                                <i class="fa-solid fa-plus"></i> Crear nuevo proveedor
-                            </button>
-                        </div>
+                        </select>
+                        <button type="button" class="btn-link-crear" id="btnCrearProveedor">
+                            <i class="fa-solid fa-plus"></i> Crear nuevo proveedor
+                        </button>
                     </div>
+
+                    <button type="button" class="btn-agregar-mas-proveedor" id="btnAgregarMasProveedor" style="display: none;">
+                        <i class="fa-solid fa-plus"></i> Agregar otro proveedor
+                    </button>
+
+                    <input type="hidden" id="hiddenProveedores" name="Input.Id_Proveedor" />
                 </div>
             </div>
 
@@ -128,12 +121,6 @@
         </form>
     </div>
 </div>
-
-<script>
-    window.proveedoresData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(
-                Model.Proveedores.Select(p => new { id = p.Id_Proveedor, nombre = p.Nombre_Proveedor })
-        ));
-</script>
 
 @section Scripts {
     <script src="~/js/productos/crearp.js"></script>

@@ -7,6 +7,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const btnCancelar = document.getElementById('btnCancelar');
     const btnGuardar = document.getElementById('btnGuardar');
     const formCrearProducto = document.getElementById('formCrearProducto');
+    const selectProveedorInicial = document.getElementById('selectProveedorInicial');
+    const btnAgregarOtroProveedor = document.getElementById('btnAgregarOtroProveedor');
+    const btnCrearCategoria = document.getElementById('btnCrearCategoria');
+    const btnCrearProveedor = document.getElementById('btnCrearProveedor');
 
     cargarDatosGuardados();
 
@@ -40,69 +44,41 @@ document.addEventListener("DOMContentLoaded", function () {
         if (e.key === 'Escape') cerrarModal();
     });
 
-    configurarProveedoresDropdown();
-});
+    if (selectProveedorInicial) {
+        selectProveedorInicial.addEventListener('change', function () {
+            const proveedorId = parseInt(this.value);
+            const proveedorNombre = this.options[this.selectedIndex].dataset.nombre;
 
-function configurarProveedoresDropdown() {
-    const btnAgregarProveedor = document.getElementById('btnAgregarProveedor');
-    const dropdown = document.getElementById('dropdownProveedores');
-    const searchInput = document.getElementById('searchProveedor');
-    const listaProveedores = document.getElementById('listaProveedores');
+            if (proveedorId && proveedorNombre) {
+                agregarProveedor(proveedorId, proveedorNombre);
 
-    if (!btnAgregarProveedor || !dropdown) {
-        console.error('No se encontraron elementos necesarios para el dropdown');
-        return;
+                this.style.display = 'none';
+
+                document.getElementById('proveedoresChipsContainer').style.display = 'block';
+            }
+        });
     }
 
-    btnAgregarProveedor.addEventListener('click', (e) => {
-        e.preventDefault();
-        dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
-        if (dropdown.style.display === 'block') {
-            searchInput.focus();
-            filtrarProveedores('');
-        }
-    });
+    if (btnAgregarOtroProveedor) {
+        btnAgregarOtroProveedor.addEventListener('click', function () {
+            mostrarSelectorProveedores();
+        });
+    }
 
-    searchInput.addEventListener('input', (e) => {
-        filtrarProveedores(e.target.value);
-    });
+    if (btnCrearCategoria) {
+        btnCrearCategoria.addEventListener('click', function () {
+            guardarDatosForm();
+            abrirVentanaYRecargar('/Categorias/CrearCategoria', 600, 500);
+        });
+    }
 
-    listaProveedores.addEventListener('click', (e) => {
-        const item = e.target.closest('.proveedor-item');
-        if (item) {
-            const id = parseInt(item.dataset.id);
-            const nombre = item.dataset.nombre;
-            agregarProveedor(id, nombre);
-            dropdown.style.display = 'none';
-            searchInput.value = '';
-            filtrarProveedores('');
-        }
-    });
-
-    document.addEventListener('click', (e) => {
-        if (!e.target.closest('.proveedores-container') && !e.target.closest('#dropdownProveedores')) {
-            dropdown.style.display = 'none';
-        }
-    });
-}
-
-function filtrarProveedores(texto) {
-    const items = document.querySelectorAll('.proveedor-item');
-    const textoLower = texto.toLowerCase();
-
-    items.forEach(item => {
-        const nombre = item.dataset.nombre.toLowerCase();
-        const yaSeleccionado = proveedoresSeleccionados.some(p => p.id === parseInt(item.dataset.id));
-
-        if (yaSeleccionado) {
-            item.style.display = 'none';
-        } else if (nombre.includes(textoLower)) {
-            item.style.display = 'block';
-        } else {
-            item.style.display = 'none';
-        }
-    });
-}
+    if (btnCrearProveedor) {
+        btnCrearProveedor.addEventListener('click', function () {
+            guardarDatosForm();
+            abrirVentanaYRecargar('/Proveedores/CrearProveedor', 600, 500);
+        });
+    }
+});
 
 function agregarProveedor(id, nombre) {
     if (proveedoresSeleccionados.some(p => p.id === id)) {
@@ -112,6 +88,20 @@ function agregarProveedor(id, nombre) {
     proveedoresSeleccionados.push({ id, nombre });
     renderizarProveedores();
     actualizarProveedoresHidden();
+    formModificado = true;
+}
+
+function eliminarProveedor(id) {
+    proveedoresSeleccionados = proveedoresSeleccionados.filter(p => p.id !== id);
+    renderizarProveedores();
+    actualizarProveedoresHidden();
+
+    if (proveedoresSeleccionados.length === 0) {
+        document.getElementById('selectProveedorInicial').style.display = 'block';
+        document.getElementById('selectProveedorInicial').value = '';
+        document.getElementById('proveedoresChipsContainer').style.display = 'none';
+    }
+
     formModificado = true;
 }
 
@@ -126,7 +116,7 @@ function renderizarProveedores() {
         chip.className = 'proveedor-chip';
         chip.innerHTML = `
             <span>${proveedor.nombre}</span>
-            <button type="button" class="btn-eliminar-chip" data-proveedor-id="${proveedor.id}">
+            <button type="button" class="btn-eliminar-chip">
                 <i class="fa-solid fa-times"></i>
             </button>
         `;
@@ -140,11 +130,77 @@ function renderizarProveedores() {
     });
 }
 
-function eliminarProveedor(id) {
-    proveedoresSeleccionados = proveedoresSeleccionados.filter(p => p.id !== id);
-    renderizarProveedores();
-    actualizarProveedoresHidden();
-    formModificado = true;
+function mostrarSelectorProveedores() {
+    const proveedoresDisponibles = window.proveedoresData.filter(
+        p => !proveedoresSeleccionados.some(ps => ps.id === p.id)
+    );
+
+    if (proveedoresDisponibles.length === 0) {
+        alert('No hay más proveedores disponibles');
+        return;
+    }
+
+    const modal = document.createElement('div');
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+    `;
+
+    const contenido = document.createElement('div');
+    contenido.style.cssText = `
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        max-width: 400px;
+        width: 90%;
+    `;
+
+    let selectHTML = `
+        <h3 style="margin-top: 0;">Seleccionar Proveedor</h3>
+        <select id="selectorTemporal" class="form-select" style="width: 100%; padding: 10px; margin-bottom: 15px;">
+            <option value="">-- Seleccione --</option>
+    `;
+
+    proveedoresDisponibles.forEach(p => {
+        selectHTML += `<option value="${p.id}" data-nombre="${p.nombre}">${p.nombre}</option>`;
+    });
+
+    selectHTML += `
+        </select>
+        <div style="display: flex; gap: 10px;">
+            <button id="btnAceptarTemp" class="btn-guardar" style="flex: 1;">Agregar</button>
+            <button id="btnCancelarTemp" class="btn-cancelar" style="flex: 1;">Cancelar</button>
+        </div>
+    `;
+
+    contenido.innerHTML = selectHTML;
+    modal.appendChild(contenido);
+    document.body.appendChild(modal);
+
+    // Event listeners
+    document.getElementById('btnAceptarTemp').addEventListener('click', () => {
+        const select = document.getElementById('selectorTemporal');
+        const proveedorId = parseInt(select.value);
+        const proveedorNombre = select.options[select.selectedIndex].dataset.nombre;
+
+        if (proveedorId && proveedorNombre) {
+            agregarProveedor(proveedorId, proveedorNombre);
+        }
+
+        document.body.removeChild(modal);
+    });
+
+    document.getElementById('btnCancelarTemp').addEventListener('click', () => {
+        document.body.removeChild(modal);
+    });
 }
 
 function actualizarProveedoresHidden() {
@@ -176,21 +232,15 @@ function cargarDatosGuardados() {
     if (datos.categoria) document.querySelector('#selectCategoria').value = datos.categoria;
     if (datos.unidad) document.querySelector('[name="Input.Unidad_Medida"]').value = datos.unidad;
 
-    if (datos.proveedores && Array.isArray(datos.proveedores)) {
+    if (datos.proveedores && Array.isArray(datos.proveedores) && datos.proveedores.length > 0) {
         proveedoresSeleccionados = datos.proveedores;
+
+        document.getElementById('selectProveedorInicial').style.display = 'none';
+        document.getElementById('proveedoresChipsContainer').style.display = 'block';
+
         renderizarProveedores();
         actualizarProveedoresHidden();
     }
 
     formModificado = true;
 }
-
-window.abrirCrearCategoria = function () {
-    guardarDatosForm();
-    abrirVentanaYRecargar('/Categorias/CrearCategoria');
-};
-
-window.abrirCrearProveedor = function () {
-    guardarDatosForm();
-    abrirVentanaYRecargar('/Proveedores/CrearProveedor');
-};
