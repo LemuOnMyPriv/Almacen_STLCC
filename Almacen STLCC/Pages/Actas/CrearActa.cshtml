@@ -5,55 +5,6 @@
 }
 
 <link rel="stylesheet" href="~/css/actas/crearacta.css" />
-<style>
-    .btn-link-crear,
-    .btn-link-crear-destacado {
-        display: inline-block;
-        margin-top: 8px;
-        font-size: 13px;
-        background: none;
-        border: none;
-        padding: 0;
-        cursor: pointer;
-        text-decoration: none;
-        transition: all 0.2s ease;
-    }
-
-    .btn-link-crear {
-        color: #007bff;
-    }
-
-        .btn-link-crear:hover {
-            color: #0056b3;
-            text-decoration: underline;
-        }
-
-    .btn-link-crear-destacado {
-        background-color: #28a745;
-        color: white;
-        padding: 8px 15px;
-        border-radius: 6px;
-        font-size: 14px;
-        font-weight: 600;
-        white-space: nowrap;
-    }
-
-        .btn-link-crear-destacado:hover {
-            background-color: #218838;
-            text-decoration: none;
-        }
-
-    .separador-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-        .separador-header > div {
-            flex: 1;
-        }
-</style>
-
 <div class="modal-overlay" id="modalOverlay">
     <div class="modal-container">
         <div class="modal-header">
@@ -78,7 +29,7 @@
         <form method="post" id="formCrearActa">
             <div class="form-grid">
                 <div class="form-group">
-                    <label asp-for="Input.F01">Código F01:</label>
+                    <label asp-for="Input.F01">F01:</label>
                     <input asp-for="Input.F01"
                            class="form-control"
                            placeholder="Ej: 1105"
@@ -97,7 +48,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="Input.Requisicion">Requisición:</label>
+                    <label asp-for="Input.Requisicion">Requisición(es):</label>
                     <input asp-for="Input.Requisicion"
                            class="form-control"
                            placeholder="Ej: REQ 386 ENERO SGRM"
