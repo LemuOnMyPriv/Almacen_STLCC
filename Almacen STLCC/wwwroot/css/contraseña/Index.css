@@ -142,6 +142,17 @@
         background-color: #e0a800;
     }
 
+.btn-bloqueado {
+    background-color: #adb5bd;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: not-allowed;
+    display: inline-block;
+    opacity: 0.6;
+}
+
 .btn-eliminar {
     background-color: #DB473C;
     color: white;

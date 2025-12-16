@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Almacen_STLCC.Models.Productos;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Almacen_STLCC.Models.Proveedores
@@ -21,7 +22,8 @@ namespace Almacen_STLCC.Models.Proveedores
         public required string Rtn { get; set; }
 
         // Relaciones
-        public ICollection<Productos.Producto> Productos { get; set; } = [];
+
+        public ICollection<Productos.ProductoProveedor> ProductoProveedores { get; set; } = [];
         public ICollection<Actas.Acta> Actas { get; set; } = [];
     }
 }

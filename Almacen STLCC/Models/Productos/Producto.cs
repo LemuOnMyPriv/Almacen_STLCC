@@ -32,16 +32,10 @@ namespace Almacen_STLCC.Models.Productos
         [Column("unidad_medida")]
         public required string Unidad_Medida { get; set; }
 
-        [Column("id_proveedor")]
-        public int? Id_Proveedor { get; set; }
-
         [ForeignKey("Id_Categoria")]
         public required Categorias.Categoria Categoria { get; set; }
 
-        [ForeignKey("Id_Proveedor")]
-        public Proveedores.Proveedor? Proveedor { get; set; }
-
-        // Relaciones
+        public ICollection<ProductoProveedor> ProductoProveedores { get; set; } = [];
         public ICollection<Actas.DetalleActa> DetallesActa { get; set; } = [];
         public ICollection<Movimientos.Movimiento> Movimientos { get; set; } = [];
     }

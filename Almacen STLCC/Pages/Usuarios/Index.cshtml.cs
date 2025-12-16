@@ -29,6 +29,7 @@ namespace Almacen_STLCC.Pages.Usuarios
 
         public async Task<IActionResult> OnPostDeleteAsync(int id)
         {
+            var currentUsername = HttpContext.Session.GetString("Username");
             var rol = HttpContext.Session.GetString("Rol");
 
             if (rol != "ADMINISTRADOR")
@@ -45,10 +46,15 @@ namespace Almacen_STLCC.Pages.Usuarios
                 return RedirectToPage();
             }
 
-            var currentUsername = HttpContext.Session.GetString("Username");
             if (usuario.NombreUsuario == currentUsername)
             {
                 TempData["ErrorMessage"] = "No puedes eliminar tu propio usuario";
+                return RedirectToPage();
+            }
+
+            if (usuario.Rol == "ADMINISTRADOR" && currentUsername != "soporte")
+            {
+                TempData["ErrorMessage"] = "Solo el administrador del sistema puede eliminar a otros administradores";
                 return RedirectToPage();
             }
 

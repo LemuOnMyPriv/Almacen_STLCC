@@ -111,3 +111,19 @@
     padding: 25px;
     font-size: 16px;
 }
+
+.btn-proveedores {
+    background-color: #17a2b8;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: inline-block;
+}
+
+    .btn-proveedores:hover {
+        background-color: #138496;
+    }

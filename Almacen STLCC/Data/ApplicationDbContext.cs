@@ -25,6 +25,7 @@ namespace Almacen_STLCC.Data
         public DbSet<Categoria> Categorias { get; set; }
         public DbSet<Proveedor> Proveedores { get; set; }
         public DbSet<Producto> Productos { get; set; }
+        public DbSet<ProductoProveedor> ProductoProveedores { get; set; }
         public DbSet<Acta> Actas { get; set; }
         public DbSet<DetalleActa> DetallesActa { get; set; }
         public DbSet<Movimiento> Movimientos { get; set; }
@@ -40,6 +41,10 @@ namespace Almacen_STLCC.Data
                 .WithMany(ac => ac.Anexos)
                 .HasForeignKey(a => a.Id_Acta)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<ProductoProveedor>()
+                .HasIndex(pp => new { pp.Id_Producto, pp.Id_Proveedor })
+                .IsUnique();
         }
 
         public override int SaveChanges()
@@ -63,7 +68,7 @@ namespace Almacen_STLCC.Data
                 .Where(e => e.Entity.GetType() != typeof(Auditoria))
                 .ToList();
 
-            if (!entries.Any())
+            if (entries.Count == 0)
                 return;
 
             var usuario = _httpContextAccessor?.HttpContext?.Session.GetString("DisplayName")
@@ -80,7 +85,7 @@ namespace Almacen_STLCC.Data
                     Id_Registro = ObtenerIdRegistro(entry),
                     Descripcion = GenerarDescripcion(entry),
                     Fecha_Hora = DateTime.Now,
-                    Ip_Address = null // Ya no capturamos IP
+                    Ip_Address = null
                 };
 
                 Auditorias.Add(auditoria);
@@ -116,7 +121,7 @@ namespace Almacen_STLCC.Data
             return 0;
         }
 
-        private string GenerarDescripcion(EntityEntry entry)
+        private static string GenerarDescripcion(EntityEntry entry)
         {
             var entityName = entry.Entity.GetType().Name;
 
@@ -169,7 +174,7 @@ namespace Almacen_STLCC.Data
                     if (property.Metadata.Name.ToLower().Contains("contraseña") ||
                         property.Metadata.Name.ToLower().Contains("password"))
                     {
-                        cambios.Add("Cambio de contraseña realizado.");
+                        cambios.Add("Contraseña: modificada");
                         continue;
                     }
 
@@ -178,12 +183,12 @@ namespace Almacen_STLCC.Data
 
                     if (valorAnterior != valorNuevo)
                     {
-                        cambios.Add($"{property.Metadata.Name}: '{valorAnterior}' cambió a -> '{valorNuevo}'");
+                        cambios.Add($"{property.Metadata.Name}: '{valorAnterior}' → '{valorNuevo}'");
                     }
                 }
             }
 
-            return cambios.Any() ? string.Join(", ", cambios) : "Sin cambios detectados";
+            return cambios.Count != 0 ? string.Join(", ", cambios) : "Sin cambios detectados";
         }
     }
 }

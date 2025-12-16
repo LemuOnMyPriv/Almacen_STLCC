@@ -27,9 +27,10 @@
         </a>
     </div>
 
-
     @if (Model.Usuarios.Any())
     {
+        var currentUsername = HttpContext.Session.GetString("Username");
+
         <table class="tabla-usuarios">
             <thead>
                 <tr>
@@ -41,6 +42,10 @@
             <tbody>
                 @foreach (var usuario in Model.Usuarios)
                 {
+                    var esAdminOtro = usuario.Rol == "ADMINISTRADOR" && usuario.NombreUsuario != currentUsername;
+                    var puedeEditar = currentUsername == "soporte" || !esAdminOtro;
+                    var puedeEliminar = puedeEditar && usuario.NombreUsuario != currentUsername;
+
                     <tr>
                         <td>@usuario.NombreUsuario</td>
                         <td>
@@ -54,25 +59,47 @@
                             }
                         </td>
                         <td class="acciones">
-                            <a asp-page="/Usuarios/Edit"
-                               asp-route-id="@usuario.Id_Usuario"
-                               class="btn-editar">
-                                Editar
-                            </a>
-                            <a asp-page="/Usuarios/ChangePassword"
-                               asp-route-username="@usuario.NombreUsuario"
-                               class="btn-cambiar">
-                                Contraseña
-                            </a>
-                            <form method="post"
-                                  asp-page-handler="Delete"
-                                  asp-route-id="@usuario.Id_Usuario"
-                                  style="display: inline;"
-                                  onsubmit="return confirm('¿Estás seguro de eliminar el usuario \'@usuario.NombreUsuario\'?');">
-                                <button type="submit" class="btn-eliminar">
-                                    Eliminar
-                                </button>
-                            </form>
+                            @if (puedeEditar)
+                            {
+                                <a asp-page="/Usuarios/Edit"
+                                   asp-route-id="@usuario.Id_Usuario"
+                                   class="btn-editar">
+                                    Editar
+                                </a>
+                                <a asp-page="/Usuarios/ChangePassword"
+                                   asp-route-username="@usuario.NombreUsuario"
+                                   class="btn-cambiar">
+                                    Contraseña
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="btn-bloqueado" title="Solo el administrador del sistema puede editar a otros administradores">
+                                    <i class="fa-solid fa-lock"></i> Editar
+                                </span>
+                                <span class="btn-bloqueado" title="Solo el administrador del sistema puede cambiar la contraseña de otros administradores">
+                                    <i class="fa-solid fa-lock"></i> Contraseña
+                                </span>
+                            }
+
+                            @if (puedeEliminar)
+                            {
+                                <form method="post"
+                                      asp-page-handler="Delete"
+                                      asp-route-id="@usuario.Id_Usuario"
+                                      style="display: inline;"
+                                      onsubmit="return confirm('¿Estás seguro de eliminar el usuario \'@usuario.NombreUsuario\'?');">
+                                    <button type="submit" class="btn-eliminar">
+                                        Eliminar
+                                    </button>
+                                </form>
+                            }
+                            else if (usuario.NombreUsuario != currentUsername)
+                            {
+                                <span class="btn-bloqueado" title="Solo el administrador del sistema puede eliminar a otros administradores">
+                                    <i class="fa-solid fa-lock"></i> Eliminar
+                                </span>
+                            }
                         </td>
                     </tr>
                 }

@@ -1,32 +1,38 @@
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Almacen_STLCC.Data;
 using Almacen_STLCC.Models.Usuarios;
+using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
 namespace Almacen_STLCC.Pages.Usuarios
 {
-    public class ChangePasswordModel(ApplicationDbContext context) : SecurePageModel
+    public class ChangePasswordModel : SecurePageModel
     {
-        private readonly ApplicationDbContext _context = context;
-        private readonly PasswordHasher<Usuario> _hasher = new();
+        private readonly ApplicationDbContext _context;
+        private readonly PasswordHasher<Usuario> _passwordHasher;
+
+        public ChangePasswordModel(ApplicationDbContext context)
+        {
+            _context = context;
+            _passwordHasher = new PasswordHasher<Usuario>();
+        }
 
         [BindProperty]
-        public required InputModel? Input { get; set; }
+        public required InputModel Input { get; set; }
 
+        public required string TargetUsername { get; set; }
         public required string ErrorMessage { get; set; }
         public required string SuccessMessage { get; set; }
-        public required string TargetUsername { get; set; }
 
         public class InputModel
         {
-            [Required(ErrorMessage = "La nueva contraseña es requerida")]
-            [StringLength(100, MinimumLength = 6, ErrorMessage = "La contraseña debe tener al menos 6 caracteres")]
+            [Required(ErrorMessage = "La nueva contraseña es obligatoria")]
+            [StringLength(20, MinimumLength = 6, ErrorMessage = "La contraseña debe tener entre 6 y 20 caracteres")]
             [DataType(DataType.Password)]
             public required string NuevaContraseña { get; set; }
 
-            [Required(ErrorMessage = "Debes confirmar la nueva contraseña")]
+            [Required(ErrorMessage = "Debe confirmar la contraseña")]
             [DataType(DataType.Password)]
             [Compare("NuevaContraseña", ErrorMessage = "Las contraseñas no coinciden")]
             public required string ConfirmarContraseña { get; set; }
@@ -34,23 +40,27 @@ namespace Almacen_STLCC.Pages.Usuarios
 
         public async Task<IActionResult> OnGetAsync(string username)
         {
-            var rol = HttpContext.Session.GetString("Rol");
+            var currentUsername = HttpContext.Session.GetString("Username");
+            var currentRol = HttpContext.Session.GetString("Rol");
 
-            if (rol != "ADMINISTRADOR")
+            if (currentRol != "ADMINISTRADOR")
             {
                 return RedirectToPage("/Index");
             }
 
-            if (string.IsNullOrEmpty(username))
+            var targetUser = await _context.Usuarios
+                .FirstOrDefaultAsync(u => u.NombreUsuario == username);
+
+            if (targetUser == null)
             {
                 return RedirectToPage("/Usuarios/Index");
             }
 
-            var usuario = await _context.Usuarios
-                .FirstOrDefaultAsync(u => u.NombreUsuario == username);
-
-            if (usuario == null)
+            if (targetUser.Rol == "ADMINISTRADOR" &&
+                targetUser.NombreUsuario != currentUsername &&
+                currentUsername != "soporte")
             {
+                TempData["ErrorMessage"] = "Solo el administrador del sistema puede cambiar las contraseñas de otros administradores";
                 return RedirectToPage("/Usuarios/Index");
             }
 
@@ -60,18 +70,19 @@ namespace Almacen_STLCC.Pages.Usuarios
 
         public async Task<IActionResult> OnPostAsync(string username)
         {
-            var rol = HttpContext.Session.GetString("Rol");
+            var currentUsername = HttpContext.Session.GetString("Username");
+            var currentRol = HttpContext.Session.GetString("Rol");
 
-            if (rol != "ADMINISTRADOR")
+            if (currentRol != "ADMINISTRADOR")
             {
-                ErrorMessage = "No tienes permisos para realizar esta acción";
+                ErrorMessage = "No tienes permisos para cambiar contraseñas";
                 TargetUsername = username;
                 return Page();
             }
 
             if (!ModelState.IsValid)
             {
-                ErrorMessage = "Por favor corrige los errores en el formulario";
+                ErrorMessage = "Por favor corrija los errores en el formulario";
                 TargetUsername = username;
                 return Page();
             }
@@ -81,20 +92,25 @@ namespace Almacen_STLCC.Pages.Usuarios
 
             if (usuario == null)
             {
-                ErrorMessage = "Usuario no encontrado.";
+                ErrorMessage = "Usuario no encontrado";
                 TargetUsername = username;
                 return Page();
             }
 
-            usuario.Contraseña = _hasher.HashPassword(usuario, Input!.NuevaContraseña);
+            if (usuario.Rol == "ADMINISTRADOR" &&
+                usuario.NombreUsuario != currentUsername &&
+                currentUsername != "soporte")
+            {
+                ErrorMessage = "Solo el administrador del sistema puede cambiar las contraseñas de otros administradores";
+                TargetUsername = username;
+                return Page();
+            }
+
+            usuario.Contraseña = _passwordHasher.HashPassword(usuario, Input.NuevaContraseña);
             await _context.SaveChangesAsync();
 
-            SuccessMessage = $"Contraseña de '{username}' actualizada correctamente.";
-            ModelState.Clear();
-            Input = null;
-            TargetUsername = username;
-
-            return Page();
+            TempData["SuccessMessage"] = $"Contraseña de '{usuario.NombreUsuario}' actualizada exitosamente";
+            return RedirectToPage("/Usuarios/Index");
         }
     }
 }

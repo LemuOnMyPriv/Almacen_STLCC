@@ -27,6 +27,7 @@ namespace Almacen_STLCC.Pages.Usuarios
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
+            var currentUsername = HttpContext.Session.GetString("Username");
             var rol = HttpContext.Session.GetString("Rol");
 
             if (rol != "ADMINISTRADOR")
@@ -38,6 +39,14 @@ namespace Almacen_STLCC.Pages.Usuarios
 
             if (usuario == null)
             {
+                return RedirectToPage("/Usuarios/Index");
+            }
+
+            if (usuario.Rol == "ADMINISTRADOR" &&
+                usuario.NombreUsuario != currentUsername &&
+                currentUsername != "soporte")
+            {
+                TempData["ErrorMessage"] = "Solo el administrador del sistema puede editar a otros administradores";
                 return RedirectToPage("/Usuarios/Index");
             }
 
@@ -53,6 +62,7 @@ namespace Almacen_STLCC.Pages.Usuarios
 
         public async Task<IActionResult> OnPostAsync()
         {
+            var currentUsername = HttpContext.Session.GetString("Username");
             var rol = HttpContext.Session.GetString("Rol");
 
             if (rol != "ADMINISTRADOR")
@@ -72,6 +82,14 @@ namespace Almacen_STLCC.Pages.Usuarios
             if (usuario == null)
             {
                 ErrorMessage = "Usuario no encontrado";
+                return Page();
+            }
+
+            if (usuario.Rol == "ADMINISTRADOR" &&
+                usuario.NombreUsuario != currentUsername &&
+                currentUsername != "soporte")
+            {
+                ErrorMessage = "Solo el administrador del sistema puede editar a otros administradores";
                 return Page();
             }
 

@@ -25,7 +25,7 @@
                     <th>Marca</th>
                     <th>Categoría</th>
                     <th>Unidad de Medida</th>
-                    <th>Proveedor</th>
+                    <th>Proveedor(es)</th>
                     <th>Inventario Actual</th>
                     <th>Acciones</th>
                 </tr>
@@ -41,7 +41,22 @@
                             <td>@producto.Marca</td>
                             <td>@(producto.Categoria?.Nombre_Categoria ?? "Sin categoría")</td>
                             <td>@producto.Unidad_Medida</td>
-                            <td>@(producto.Proveedor?.Nombre_Proveedor ?? "Sin proveedor")</td>
+                            <td>
+                                @if (Model.ProveedoresPorProducto.ContainsKey(producto.Id_Producto) &&
+                                                        Model.ProveedoresPorProducto[producto.Id_Producto].Any())
+                                {
+                                    <div style="font-size: 13px;">
+                                        @foreach (var proveedor in Model.ProveedoresPorProducto[producto.Id_Producto])
+                                        {
+                                            <div style="margin-bottom: 3px;">• @proveedor</div>
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span style="color: #999;">Sin proveedores</span>
+                                }
+                            </td>
                             <td>
                                 @if (Model.Inventarios != null && Model.Inventarios.ContainsKey(producto.Id_Producto))
                                 {
@@ -53,7 +68,12 @@
                                 }
                             </td>
                             <td class="acciones">
-                                <a asp-page="/Productos/Editar" asp-route-id="@producto.Id_Producto" class="btn-editar">Editar</a>
+                                <a asp-page="/Productos/Editar"
+                                   asp-route-id="@producto.Id_Producto"
+                                   class="btn-editar">Editar</a>
+                                <a asp-page="/Productos/GestionarProveedores"
+                                   asp-route-id="@producto.Id_Producto"
+                                   class="btn-proveedores">Proveedores</a>
                             </td>
                         </tr>
                     }

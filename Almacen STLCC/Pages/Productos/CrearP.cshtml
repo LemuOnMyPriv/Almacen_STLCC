@@ -60,7 +60,7 @@
 
                 <div class="form-group">
                     <label asp-for="Input.Id_Categoria">Categoría:</label>
-                    <select asp-for="Input.Id_Categoria" class="form-select" id="selectCategoria">
+                    <select asp-for="Input.Id_Categoria" class="form-select">
                         <option value="">-- Seleccione una categoría --</option>
                         @foreach (var categoria in Model.Categorias)
                         {
@@ -68,9 +68,6 @@
                         }
                     </select>
                     <span asp-validation-for="Input.Id_Categoria" class="text-danger"></span>
-                    <button type="button" class="btn-link-crear" id="btnCrearCategoria">
-                        <i class="fa-solid fa-plus"></i> Crear nueva categoría
-                    </button>
                 </div>
 
                 <div class="form-group">
@@ -80,33 +77,6 @@
                            placeholder="Ej: Paquete"
                            autocomplete="off" />
                     <span asp-validation-for="Input.Unidad_Medida" class="text-danger"></span>
-                </div>
-
-                <div class="form-group full-width">
-                    <label>Proveedor(es):</label>
-
-                    <div class="proveedores-chips-container" id="proveedoresChipsContainer"></div>
-
-                    <div id="selectProveedorContainer">
-                        <select class="form-select" id="selectProveedor">
-                            <option value="">-- Seleccione un proveedor --</option>
-                            @foreach (var proveedor in Model.Proveedores)
-                            {
-                                <option value="@proveedor.Id_Proveedor" data-nombre="@proveedor.Nombre_Proveedor">
-                                    @proveedor.Nombre_Proveedor
-                                </option>
-                            }
-                        </select>
-                        <button type="button" class="btn-link-crear" id="btnCrearProveedor">
-                            <i class="fa-solid fa-plus"></i> Crear nuevo proveedor
-                        </button>
-                    </div>
-
-                    <button type="button" class="btn-agregar-mas-proveedor" id="btnAgregarMasProveedor" style="display: none;">
-                        <i class="fa-solid fa-plus"></i> Agregar otro proveedor
-                    </button>
-
-                    <input type="hidden" id="hiddenProveedores" name="Input.Id_Proveedor" />
                 </div>
             </div>
 

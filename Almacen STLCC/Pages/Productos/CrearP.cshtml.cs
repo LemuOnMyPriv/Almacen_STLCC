@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Almacen_STLCC.Data;
 using Almacen_STLCC.Models.Productos;
 using Almacen_STLCC.Models.Categorias;
-using Almacen_STLCC.Models.Proveedores;
 using System.ComponentModel.DataAnnotations;
 
 namespace Almacen_STLCC.Pages.Productos
@@ -19,7 +18,6 @@ namespace Almacen_STLCC.Pages.Productos
         public required string SuccessMessage { get; set; }
 
         public List<Categoria> Categorias { get; set; } = [];
-        public List<Proveedor> Proveedores { get; set; } = [];
 
         public class InputModel
         {
@@ -44,9 +42,6 @@ namespace Almacen_STLCC.Pages.Productos
             [StringLength(50, ErrorMessage = "La unidad de medida no puede superar los 50 caracteres")]
             [Display(Name = "Unidad de Medida")]
             public required string Unidad_Medida { get; set; }
-
-            [Display(Name = "Proveedor")]
-            public string? Id_Proveedor { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -79,7 +74,6 @@ namespace Almacen_STLCC.Pages.Productos
                 Marca = Input.Marca?.Trim(),
                 Id_Categoria = Input.Id_Categoria,
                 Unidad_Medida = Input.Unidad_Medida.Trim(),
-                Id_Proveedor = !string.IsNullOrEmpty(Input.Id_Proveedor) && int.TryParse(Input.Id_Proveedor.Split(',')[0], out int provId) ? provId : null,
                 Categoria = categoria
             };
 
@@ -94,10 +88,6 @@ namespace Almacen_STLCC.Pages.Productos
         {
             Categorias = await _context.Categorias
                 .OrderBy(c => c.Nombre_Categoria)
-                .ToListAsync();
-
-            Proveedores = await _context.Proveedores
-                .OrderBy(p => p.Nombre_Proveedor)
                 .ToListAsync();
         }
     }

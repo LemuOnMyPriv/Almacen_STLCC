@@ -11,12 +11,14 @@ namespace Almacen_STLCC.Pages.Productos
 
         public List<Producto> Productos { get; set; } = [];
         public Dictionary<int, int> Inventarios { get; set; } = [];
+        public Dictionary<int, List<string>> ProveedoresPorProducto { get; set; } = [];
 
         public async Task OnGetAsync()
         {
             Productos = await _context.Productos
                 .Include(p => p.Categoria)
-                .Include(p => p.Proveedor)
+                .Include(p => p.ProductoProveedores)
+                    .ThenInclude(pp => pp.Proveedor)
                 .OrderBy(p => p.Nombre_Producto)
                 .ToListAsync();
 
@@ -32,6 +34,16 @@ namespace Almacen_STLCC.Pages.Productos
                 .ToListAsync();
 
             Inventarios = movimientos.ToDictionary(m => m.IdProducto, m => m.InventarioActual);
+
+            foreach (var producto in Productos)
+            {
+                var proveedores = producto.ProductoProveedores
+                    .OrderByDescending(pp => pp.Es_Principal)
+                    .Select(pp => pp.Proveedor.Nombre_Proveedor)
+                    .ToList();
+
+                ProveedoresPorProducto[producto.Id_Producto] = proveedores;
+            }
         }
     }
 }
