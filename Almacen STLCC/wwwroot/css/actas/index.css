@@ -7,7 +7,7 @@
 }
 
 .contenedor {
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 40px auto;
     padding: 20px;
     background-color: #fff;
@@ -52,6 +52,130 @@
         background-color: #171717;
     }
 
+.filtros-panel {
+    background-color: #f8f9fa;
+    padding: 25px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    border-left: 4px solid #88CFE0;
+}
+
+.filtros-form {
+    width: 100%;
+}
+
+.filtros-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.filtro-item {
+    display: flex;
+    flex-direction: column;
+}
+
+    .filtro-item label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #555;
+        font-size: 14px;
+    }
+
+        .filtro-item label i {
+            color: #88CFE0;
+            margin-right: 5px;
+        }
+
+.form-control {
+    width: 100%;
+    padding: 10px 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box;
+}
+
+    .form-control:focus {
+        outline: none;
+        border-color: #88CFE0;
+        box-shadow: 0 0 0 3px rgba(136, 207, 224, 0.1);
+    }
+
+.filtros-acciones {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-filtrar,
+.btn-limpiar {
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    text-decoration: none;
+}
+
+.btn-filtrar {
+    background-color: #88CFE0;
+    color: white;
+}
+
+    .btn-filtrar:hover {
+        background-color: #6bb8cc;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(136, 207, 224, 0.3);
+    }
+
+.btn-limpiar {
+    background-color: #6c757d;
+    color: white;
+}
+
+    .btn-limpiar:hover {
+        background-color: #5a6268;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+    }
+
+.resumen-busqueda {
+    background-color: #e7f3ff;
+    padding: 15px 20px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    color: #2c3e50;
+}
+
+    .resumen-busqueda strong {
+        color: #88CFE0;
+        font-size: 18px;
+    }
+
+.filtro-activo {
+    background-color: #88CFE0;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: 10px;
+}
+
 .tabla-actas {
     width: 100%;
     overflow-x: auto;
@@ -60,7 +184,7 @@
     .tabla-actas table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 15px;
+        font-size: 14px;
     }
 
     .tabla-actas thead {
@@ -77,11 +201,36 @@
 
     .tabla-actas th {
         font-weight: 600;
+        font-size: 13px;
     }
 
     .tabla-actas tbody tr:hover {
         background-color: #f8f9fa;
     }
+
+.requisiciones-inline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    max-width: 300px;
+}
+
+.badge-requisicion {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    box-shadow: 0 2px 4px rgba(102, 126, 234, 0.2);
+}
+
+.texto-sin-datos {
+    color: #999;
+    font-style: italic;
+    font-size: 13px;
+}
 
 .acciones {
     display: flex;
@@ -94,11 +243,12 @@
     color: white;
     padding: 6px 12px;
     border-radius: 4px;
-    font-size: 14px;
+    font-size: 13px;
     text-decoration: none;
     cursor: pointer;
     transition: background-color 0.2s ease;
     display: inline-block;
+    white-space: nowrap;
 }
 
     .btn-detalles:hover {
@@ -110,11 +260,12 @@
     color: white;
     padding: 6px 12px;
     border-radius: 4px;
-    font-size: 14px;
+    font-size: 13px;
     text-decoration: none;
     cursor: pointer;
     transition: background-color 0.2s ease;
     display: inline-block;
+    white-space: nowrap;
 }
 
     .btn-ver:hover {
@@ -126,11 +277,12 @@
     color: white;
     padding: 6px 12px;
     border-radius: 4px;
-    font-size: 14px;
+    font-size: 13px;
     text-decoration: none;
     cursor: pointer;
     transition: background-color 0.2s ease;
     display: inline-block;
+    white-space: nowrap;
 }
 
     .btn-editar:hover {
@@ -142,5 +294,41 @@
     color: #888;
     font-style: italic;
     padding: 25px;
-    font-size: 16px;
+    font-size: 15px;
+}
+
+@media (max-width: 1200px) {
+    .filtros-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .filtros-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filtros-acciones {
+        flex-direction: column;
+    }
+
+    .btn-filtrar,
+    .btn-limpiar {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .titulo-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .requisiciones-inline {
+        max-width: 100%;
+    }
+
+    .acciones {
+        flex-direction: column;
+    }
 }

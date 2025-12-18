@@ -40,5 +40,6 @@ namespace Almacen_STLCC.Models.Actas
         public ICollection<DetalleActa> DetallesActa { get; set; } = [];
         public ICollection<Movimientos.Movimiento> Movimientos { get; set; } = [];
         public ICollection<Anexo> Anexos { get; set; } = [];
+        public ICollection<ActaRequisicion> Requisiciones { get; set; } = [];
     }
 }

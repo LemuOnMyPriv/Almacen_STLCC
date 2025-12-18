@@ -14,10 +14,130 @@
             </div>
             <div class="acta-crear">
                 <a asp-page="/Actas/CrearActa" class="btn-crear">
-                    <i class="fa-solid fa-circle-plus"></i> Agregar Acta</a>
+                    <i class="fa-solid fa-circle-plus"></i> Agregar Acta
+                </a>
             </div>
         </div>
     </header>
+
+    <section class="filtros-panel">
+        <form method="get" class="filtros-form">
+            <div class="filtros-grid">
+                <div class="filtro-item">
+                    <label for="FiltroNumeroActa">
+                        <i class="fa-solid fa-hashtag"></i> Número de Acta:
+                    </label>
+                    <input type="text"
+                           name="FiltroNumeroActa"
+                           id="FiltroNumeroActa"
+                           value="@Model.FiltroNumeroActa"
+                           placeholder="Ej: 001-2025"
+                           class="form-control" />
+                </div>
+
+                <div class="filtro-item">
+                    <label for="FiltroRequisicion">
+                        <i class="fa-solid fa-file-lines"></i> Requisición:
+                    </label>
+                    <input type="text"
+                           name="FiltroRequisicion"
+                           id="FiltroRequisicion"
+                           value="@Model.FiltroRequisicion"
+                           placeholder="Ej: REQ-2025-001"
+                           class="form-control" />
+                </div>
+
+                <div class="filtro-item">
+                    <label for="FiltroProveedor">
+                        <i class="fa-solid fa-truck"></i> Proveedor:
+                    </label>
+                    <input type="text"
+                           name="FiltroProveedor"
+                           id="FiltroProveedor"
+                           value="@Model.FiltroProveedor"
+                           placeholder="Nombre del proveedor"
+                           class="form-control" />
+                </div>
+
+                <div class="filtro-item">
+                    <label for="FiltroF01">
+                        <i class="fa-solid fa-barcode"></i> F01:
+                    </label>
+                    <input type="text"
+                           name="FiltroF01"
+                           id="FiltroF01"
+                           value="@Model.FiltroF01"
+                           placeholder="Ej: 1105"
+                           class="form-control" />
+                </div>
+
+                <div class="filtro-item">
+                    <label for="FiltroOrdenCompra">
+                        <i class="fa-solid fa-hashtag"></i> Orden de Compra:
+                    </label>
+                    <input type="text"
+                           name="FiltroOrdenCompra"
+                           id="FiltroOrdenCompra"
+                           value="@Model.FiltroOrdenCompra"
+                           placeholder="Ej: STLCC-GA-01-2025"
+                           class="form-control" />
+                </div>
+
+                <div class="filtro-item">
+                    <label for="FechaDesde">
+                        <i class="fa-solid fa-calendar"></i> Desde:
+                    </label>
+                    <input type="date"
+                           name="FechaDesde"
+                           id="FechaDesde"
+                           value="@Model.FechaDesde?.ToString("yyyy-MM-dd")"
+                           class="form-control" />
+                </div>
+
+                <div class="filtro-item">
+                    <label for="FechaHasta">
+                        <i class="fa-solid fa-calendar"></i> Hasta:
+                    </label>
+                    <input type="date"
+                           name="FechaHasta"
+                           id="FechaHasta"
+                           value="@Model.FechaHasta?.ToString("yyyy-MM-dd")"
+                           class="form-control" />
+                </div>
+            </div>
+
+            <div class="filtros-acciones">
+                <button type="submit" class="btn-filtrar">
+                    <i class="fa-solid fa-filter"></i> Filtrar
+                </button>
+                <a href="/Actas/Index" class="btn-limpiar">
+                    <i class="fa-solid fa-broom"></i> Limpiar Filtros
+                </a>
+            </div>
+        </form>
+    </section>
+
+    @if (!string.IsNullOrEmpty(Model.FiltroRequisicion) ||
+        !string.IsNullOrEmpty(Model.FiltroProveedor) ||
+        !string.IsNullOrEmpty(Model.FiltroNumeroActa) ||
+        !string.IsNullOrEmpty(Model.FiltroF01) ||
+        !string.IsNullOrEmpty(Model.FiltroOrdenCompra) ||
+        Model.FechaDesde.HasValue ||
+        Model.FechaHasta.HasValue)
+    {
+        <div class="resumen-busqueda">
+            <i class="fa-solid fa-square-poll-horizontal"></i>
+            <strong>@Model.TotalResultados</strong> resultado(s) encontrado(s)
+            @if (!string.IsNullOrEmpty(Model.FiltroRequisicion))
+            {
+                <span class="filtro-activo">
+                    <i class="fa-solid fa-file-lines"></i>
+                    Requisición: @Model.FiltroRequisicion
+                </span>
+            }
+        </div>
+    }
+
     <section class="tabla-actas">
         <table>
             <thead>
@@ -26,6 +146,7 @@
                     <th>F01</th>
                     <th>Orden de Compra</th>
                     <th>Proveedor</th>
+                    <th>Requisiciones</th>
                     <th>Fecha</th>
                     <th>Acciones</th>
                 </tr>
@@ -33,23 +154,38 @@
             <tbody>
                 @if (Model.Actas != null && Model.Actas.Any())
                 {
-                    @foreach (var acta in Model.Actas)
+                    @foreach (var item in Model.Actas)
                     {
                         <tr>
-                            <td>@acta.Numero_Acta</td>
-                            <td>@acta.F01</td>
-                            <td>@(acta.Orden_Compra ?? "N/A")</td>
-                            <td>@acta.Proveedor.Nombre_Proveedor</td>
-                            <td>@acta.Fecha.ToString("dd/MM/yyyy")</td>
+                            <td>@item.Acta.Numero_Acta</td>
+                            <td>@item.Acta.F01</td>
+                            <td>@(item.Acta.Orden_Compra ?? "N/A")</td>
+                            <td>@item.Acta.Proveedor.Nombre_Proveedor</td>
+                            <td>
+                                @if (item.Requisiciones.Any())
+                                {
+                                    <div class="requisiciones-inline">
+                                        @foreach (var req in item.Requisiciones)
+                                        {
+                                            <span class="badge-requisicion">@req.Requisicion</span>
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="texto-sin-datos">Sin requisiciones</span>
+                                }
+                            </td>
+                            <td>@item.Acta.Fecha.ToString("dd/MM/yyyy")</td>
                             <td class="acciones">
                                 <a asp-page="/Actas/Detalles"
-                                   asp-route-id="@acta.Id_Acta"
+                                   asp-route-id="@item.Acta.Id_Acta"
                                    class="btn-detalles">Ver Detalles</a>
                                 <a asp-page="/Actas/Archivos"
-                                   asp-route-id="@acta.Id_Acta"
+                                   asp-route-id="@item.Acta.Id_Acta"
                                    class="btn-ver">Ver Archivos</a>
                                 <a asp-page="/Actas/Editar"
-                                   asp-route-id="@acta.Id_Acta"
+                                   asp-route-id="@item.Acta.Id_Acta"
                                    class="btn-editar">Editar</a>
                             </td>
                         </tr>
@@ -58,7 +194,18 @@
                 else
                 {
                     <tr>
-                        <td colspan="6" class="mensaje-vacio">No hay actas registradas.</td>
+                        <td colspan="7" class="mensaje-vacio">
+                            @if (!string.IsNullOrEmpty(Model.FiltroRequisicion) ||
+                                                    !string.IsNullOrEmpty(Model.FiltroProveedor) ||
+                                                    !string.IsNullOrEmpty(Model.FiltroNumeroActa))
+                            {
+                                <span>No se encontraron actas con los filtros aplicados</span>
+                            }
+                            else
+                            {
+                                <span>No hay actas registradas.</span>
+                            }
+                        </td>
                     </tr>
                 }
             </tbody>

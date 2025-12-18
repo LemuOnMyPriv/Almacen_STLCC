@@ -11,6 +11,7 @@ namespace Almacen_STLCC.Pages.Actas
 
         public Acta? Acta { get; set; } = null!;
         public List<DetalleActa> Detalles { get; set; } = new();
+        public int CantidadRequisiciones { get; set; } // AGREGAR ESTO
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
@@ -27,6 +28,10 @@ namespace Almacen_STLCC.Pages.Actas
                 .Include(d => d.Producto)
                 .Where(d => d.Id_Acta == id)
                 .ToListAsync();
+
+            CantidadRequisiciones = await _context.ActasRequisiciones
+                .Where(r => r.Id_Acta == id)
+                .CountAsync();
 
             return Page();
         }

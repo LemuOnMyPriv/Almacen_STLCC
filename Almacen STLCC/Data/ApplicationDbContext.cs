@@ -32,6 +32,7 @@ namespace Almacen_STLCC.Data
         public DbSet<ProductoProveedor> ProductoProveedores { get; set; }
         public DbSet<Acta> Actas { get; set; }
         public DbSet<DetalleActa> DetallesActa { get; set; }
+        public DbSet<ActaRequisicion> ActasRequisiciones { get; set; }
         public DbSet<Movimiento> Movimientos { get; set; }
         public DbSet<Anexo> Anexos { get; set; }
         public DbSet<Auditoria> Auditorias { get; set; }
@@ -49,6 +50,11 @@ namespace Almacen_STLCC.Data
             modelBuilder.Entity<ProductoProveedor>()
                 .HasIndex(pp => new { pp.Id_Producto, pp.Id_Proveedor })
                 .IsUnique();
+            modelBuilder.Entity<ActaRequisicion>()
+                .HasOne(ar => ar.Acta)
+                .WithMany(a => a.Requisiciones)
+                .HasForeignKey(ar => ar.Id_Acta)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         public override int SaveChanges()
@@ -173,6 +179,9 @@ namespace Almacen_STLCC.Data
                            entity.GetType().GetProperty("Nombre_Proveedor") ??
                            entity.GetType().GetProperty("Nombre_Categoria") ??
                            entity.GetType().GetProperty("NombreUsuario") ??
+                           entity.GetType().GetProperty("Requisicion") ??
+                           entity.GetType().GetProperty("Nombre_Archivo") ??
+                           entity.GetType().GetProperty("Id_Producto_Proveedor") ??
                            entity.GetType().GetProperty("Numero_Acta");
 
             if (nombreProp != null)

@@ -30,6 +30,15 @@
         <div class="info-item">
             <strong>Fecha:</strong> @Model.Acta.Fecha.ToString("dd/MM/yyyy")
         </div>
+        <div class="info-item info-item-full">
+            <strong>Requisiciones:</strong>
+            <a asp-page="/Actas/Requisiciones"
+               asp-route-id="@Model.Acta.Id_Acta"
+               class="btn-requisiciones">
+                <i class="fa-solid fa-file-lines"></i>
+                Ver Requisiciones (@Model.CantidadRequisiciones)
+            </a>
+        </div>
     </section>
 
     <section class="tabla-productos">
