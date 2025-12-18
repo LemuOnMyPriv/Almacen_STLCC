@@ -19,9 +19,6 @@ namespace Almacen_STLCC.Models.Productos
         [Column("id_proveedor")]
         public int Id_Proveedor { get; set; }
 
-        [Column("es_principal")]
-        public bool Es_Principal { get; set; } = false;
-
         [ForeignKey("Id_Producto")]
         public required Producto Producto { get; set; }
 

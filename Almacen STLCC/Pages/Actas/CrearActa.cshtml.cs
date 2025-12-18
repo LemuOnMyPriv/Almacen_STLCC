@@ -28,15 +28,16 @@ namespace Almacen_STLCC.Pages.Actas
 
         public class InputModel
         {
+            [Required(ErrorMessage = "El Numero de Acta es obligatorio")]
+            [StringLength(100)]
+            public string Numero_Acta { get; set; } = string.Empty;
+
             [Required(ErrorMessage = "El código F01 es obligatorio")]
             [StringLength(100)]
             public string F01 { get; set; } = string.Empty;
 
             [StringLength(100)]
             public string? Orden_Compra { get; set; }
-
-            [StringLength(100)]
-            public string? Requisicion { get; set; }
 
             [Required(ErrorMessage = "Debe seleccionar un proveedor")]
             public int Id_Proveedor { get; set; }
@@ -91,13 +92,19 @@ namespace Almacen_STLCC.Pages.Actas
                 return Page();
             }
 
+            if (await _context.Actas.AnyAsync(u => u.Numero_Acta == Input.Numero_Acta))
+            {
+                ErrorMessage = "El Numero de Acta ya existe";
+                return Page();
+            }
+
             try
             {
                 var acta = new Acta
                 {
+                    Numero_Acta = Input.Numero_Acta.Trim(),
                     F01 = Input.F01.Trim(),
                     Orden_Compra = Input.Orden_Compra?.Trim(),
-                    Requisicion = Input.Requisicion?.Trim(),
                     Id_Proveedor = Input.Id_Proveedor,
                     Fecha = Input.Fecha,
                     Proveedor = null!
@@ -124,7 +131,7 @@ namespace Almacen_STLCC.Pages.Actas
 
                 await _context.SaveChangesAsync();
 
-                TempData["SuccessMessage"] = $"Acta '{acta.F01}' creada exitosamente";
+                TempData["SuccessMessage"] = $"Acta '{acta.Numero_Acta}' creada exitosamente";
                 return RedirectToPage("/Actas/Index");
             }
             catch (Exception ex)

@@ -7,18 +7,22 @@ using Almacen_STLCC.Models.Movimientos;
 using Almacen_STLCC.Models.Auditoria;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.Extensions.Logging;
 
 namespace Almacen_STLCC.Data
 {
     public class ApplicationDbContext : DbContext
     {
         private readonly IHttpContextAccessor? _httpContextAccessor;
+        private readonly ILogger<ApplicationDbContext>? _logger;
 
         public ApplicationDbContext(
             DbContextOptions<ApplicationDbContext> options,
-            IHttpContextAccessor? httpContextAccessor = null) : base(options)
+            IHttpContextAccessor? httpContextAccessor = null,
+            ILogger<ApplicationDbContext>? logger = null) : base(options)
         {
             _httpContextAccessor = httpContextAccessor;
+            _logger = logger;
         }
 
         public DbSet<Usuario> Usuarios { get; set; }
@@ -61,6 +65,11 @@ namespace Almacen_STLCC.Data
 
         private void RegistrarAuditoria()
         {
+            if (_httpContextAccessor?.HttpContext == null)
+            {
+                _logger?.LogWarning("HttpContext no disponible para auditoría. Probablemente ejecutándose en background o migración.");
+                return;
+            }
             var entries = ChangeTracker.Entries()
                 .Where(e => e.State == EntityState.Added ||
                            e.State == EntityState.Modified ||
@@ -75,20 +84,29 @@ namespace Almacen_STLCC.Data
                        ?? _httpContextAccessor?.HttpContext?.Session.GetString("Username")
                        ?? "Sistema";
 
+            _logger?.LogDebug("Registrando {Count} cambios en auditoría por usuario {Usuario}", entries.Count, usuario);
+
             foreach (var entry in entries)
             {
-                var auditoria = new Auditoria
+                try
                 {
-                    Usuario = usuario,
-                    Accion = ObtenerAccion(entry.State),
-                    Tabla = ObtenerNombreTabla(entry.Entity),
-                    Id_Registro = ObtenerIdRegistro(entry),
-                    Descripcion = GenerarDescripcion(entry),
-                    Fecha_Hora = DateTime.Now,
-                    Ip_Address = null
-                };
+                    var auditoria = new Auditoria
+                    {
+                        Usuario = usuario,
+                        Accion = ObtenerAccion(entry.State),
+                        Tabla = ObtenerNombreTabla(entry.Entity),
+                        Id_Registro = ObtenerIdRegistro(entry),
+                        Descripcion = GenerarDescripcion(entry),
+                        Fecha_Hora = DateTime.Now,
+                        Ip_Address = _httpContextAccessor?.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+                    };
 
-                Auditorias.Add(auditoria);
+                    Auditorias.Add(auditoria);
+                }
+                catch (Exception ex)
+                {
+                    _logger?.LogError(ex, "Error al crear registro de auditoría para {Entity}", entry.Entity.GetType().Name);
+                }
             }
         }
 
@@ -110,12 +128,17 @@ namespace Almacen_STLCC.Data
 
         private static int ObtenerIdRegistro(EntityEntry entry)
         {
+            if (entry.State == EntityState.Added)
+            {
+                return 0;
+            }
+
             var keyProperty = entry.Properties
                 .FirstOrDefault(p => p.Metadata.IsPrimaryKey());
 
             if (keyProperty?.CurrentValue != null)
             {
-                return (int)Convert.ToInt64(keyProperty.CurrentValue);
+                return (int)Convert.ToInt32(keyProperty.CurrentValue);
             }
 
             return 0;
@@ -150,7 +173,7 @@ namespace Almacen_STLCC.Data
                            entity.GetType().GetProperty("Nombre_Proveedor") ??
                            entity.GetType().GetProperty("Nombre_Categoria") ??
                            entity.GetType().GetProperty("NombreUsuario") ??
-                           entity.GetType().GetProperty("F01");
+                           entity.GetType().GetProperty("Numero_Acta");
 
             if (nombreProp != null)
             {
@@ -183,7 +206,7 @@ namespace Almacen_STLCC.Data
 
                     if (valorAnterior != valorNuevo)
                     {
-                        cambios.Add($"{property.Metadata.Name}: '{valorAnterior}' → '{valorNuevo}'");
+                        cambios.Add($"{property.Metadata.Name}: '{valorAnterior}' cambió a '{valorNuevo}'");
                     }
                 }
             }

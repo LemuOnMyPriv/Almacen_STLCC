@@ -178,7 +178,7 @@ function guardarDatosForm() {
     const datos = {
         f01: document.querySelector('[name="Input.F01"]')?.value || '',
         ordenCompra: document.querySelector('[name="Input.Orden_Compra"]')?.value || '',
-        requisicion: document.querySelector('[name="Input.Requisicion"]')?.value || '',
+        numeroActa: document.querySelector('[name="Input.Numero_Acta"]')?.value || '',
         proveedor: document.querySelector('#selectProveedor')?.value || '',
         fecha: document.querySelector('[name="Input.Fecha"]')?.value || '',
         productos: productos
@@ -191,9 +191,9 @@ function cargarDatosGuardados() {
     const datos = recuperarDatosFormulario('formActa');
     if (!datos) return;
 
+    if (datos.numeroActa) document.querySelector('[name="Input.Numero_Acta"]').value = datos.numeroActa;
     if (datos.f01) document.querySelector('[name="Input.F01"]').value = datos.f01;
     if (datos.ordenCompra) document.querySelector('[name="Input.Orden_Compra"]').value = datos.ordenCompra;
-    if (datos.requisicion) document.querySelector('[name="Input.Requisicion"]').value = datos.requisicion;
     if (datos.proveedor) document.querySelector('#selectProveedor').value = datos.proveedor;
     if (datos.fecha) document.querySelector('[name="Input.Fecha"]').value = datos.fecha;
 

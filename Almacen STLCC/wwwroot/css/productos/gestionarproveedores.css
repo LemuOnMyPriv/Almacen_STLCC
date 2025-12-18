@@ -103,21 +103,6 @@
         border-color: #88CFE0;
     }
 
-.checkbox-principal {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    font-size: 14px;
-    color: #555;
-}
-
-    .checkbox-principal input[type="checkbox"] {
-        width: 18px;
-        height: 18px;
-        cursor: pointer;
-    }
-
 .btn-agregar {
     background-color: #555;
     color: white;
@@ -174,29 +159,12 @@
     color: #2c3e50;
 }
 
-.badge-principal {
-    background-color: #ffc107;
-    color: white;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 14px;
-}
-
-.badge-secundario {
-    background-color: #6c757d;
-    color: white;
-    padding: 4px 10px;
-    border-radius: 4px;
-    font-size: 14px;
-}
-
 .acciones {
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
 }
 
-.btn-principal,
 .btn-eliminar {
     padding: 6px 12px;
     border-radius: 4px;
@@ -205,18 +173,6 @@
     cursor: pointer;
     transition: background-color 0.2s ease;
     white-space: nowrap;
-}
-
-.btn-principal {
-    background-color: #ffc107;
-    color: white;
-}
-
-    .btn-principal:hover {
-        background-color: #e0a800;
-    }
-
-.btn-eliminar {
     background-color: #dc3545;
     color: white;
 }

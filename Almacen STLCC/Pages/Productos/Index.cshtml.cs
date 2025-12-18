@@ -38,7 +38,7 @@ namespace Almacen_STLCC.Pages.Productos
             foreach (var producto in Productos)
             {
                 var proveedores = producto.ProductoProveedores
-                    .OrderByDescending(pp => pp.Es_Principal)
+                    .OrderByDescending(pp => pp.Proveedor.Nombre_Proveedor)
                     .Select(pp => pp.Proveedor.Nombre_Proveedor)
                     .ToList();
 

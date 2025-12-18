@@ -1,7 +1,7 @@
 ﻿@page "{id:int}"
 @model Almacen_STLCC.Pages.Actas.DetallesModel
 @{
-    ViewData["Title"] = $"Detalles del Acta {Model.Acta.F01}";
+    ViewData["Title"] = $"Detalles del Acta {Model.Acta.Numero_Acta}";
 }
 <link rel="stylesheet" href="~/css/actas/detalles.css" />
 
@@ -16,13 +16,13 @@
 
     <section class="info-acta">
         <div class="info-item">
+            <strong>Numero de Acta:</strong> @Model.Acta.Numero_Acta
+        </div>
+        <div class="info-item">
             <strong>F01:</strong> @Model.Acta.F01
         </div>
         <div class="info-item">
             <strong>Orden de Compra:</strong> @(Model.Acta.Orden_Compra ?? "N/A")
-        </div>
-        <div class="info-item">
-            <strong>Requisición:</strong> @(Model.Acta.Requisicion ?? "N/A")
         </div>
         <div class="info-item">
             <strong>Proveedor:</strong> @Model.Acta.Proveedor.Nombre_Proveedor

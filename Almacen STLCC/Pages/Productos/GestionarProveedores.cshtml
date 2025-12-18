@@ -43,10 +43,6 @@
                         <option value="@proveedor.Id_Proveedor">@proveedor.Nombre_Proveedor</option>
                     }
                 </select>
-                <label class="checkbox-principal">
-                    <input type="checkbox" name="EsPrincipal" />
-                    <span>Marcar como principal</span>
-                </label>
                 <button type="submit" class="btn-agregar">
                     <i class="fa-solid fa-circle-plus"></i> Agregar
                 </button>
@@ -64,7 +60,6 @@
                     <tr>
                         <th>Proveedor</th>
                         <th>RTN</th>
-                        <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -74,27 +69,7 @@
                         <tr>
                             <td class="nombre-proveedor">@pp.Proveedor.Nombre_Proveedor</td>
                             <td>@pp.Proveedor.Rtn</td>
-                            <td>
-                                @if (pp.Es_Principal)
-                                {
-                                    <span class="badge-principal">Principal</span>
-                                }
-                                else
-                                {
-                                    <span class="badge-secundario">Secundario</span>
-                                }
-                            </td>
                             <td class="acciones">
-                                @if (!pp.Es_Principal)
-                                {
-                                    <form method="post" asp-page-handler="MarcarPrincipal" style="display: inline;">
-                                        <input type="hidden" name="IdProductoProveedor" value="@pp.Id_Producto_Proveedor" />
-                                        <button type="submit" class="btn-principal">
-                                            <i class="fa-solid fa-star"></i> Principal
-                                        </button>
-                                    </form>
-                                }
-
                                 <form method="post" asp-page-handler="Eliminar" style="display: inline;">
                                     <input type="hidden" name="IdProductoProveedor" value="@pp.Id_Producto_Proveedor" />
                                     <button type="submit" class="btn-eliminar"

@@ -22,9 +22,9 @@
         <table>
             <thead>
                 <tr>
+                    <th>Numero de Acta</th>
                     <th>F01</th>
                     <th>Orden de Compra</th>
-                    <th>Requisición</th>
                     <th>Proveedor</th>
                     <th>Fecha</th>
                     <th>Acciones</th>
@@ -36,9 +36,9 @@
                     @foreach (var acta in Model.Actas)
                     {
                         <tr>
+                            <td>@acta.Numero_Acta</td>
                             <td>@acta.F01</td>
                             <td>@(acta.Orden_Compra ?? "N/A")</td>
-                            <td>@(acta.Requisicion ?? "N/A")</td>
                             <td>@acta.Proveedor.Nombre_Proveedor</td>
                             <td>@acta.Fecha.ToString("dd/MM/yyyy")</td>
                             <td class="acciones">
@@ -72,9 +72,5 @@
 }
 
 @section Scripts {
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            mostrarMensajeExito();
-        });
-    </script>
+    <script src="~/js/actas/index.js"></script>
 }

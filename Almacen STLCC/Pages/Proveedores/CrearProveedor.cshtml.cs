@@ -42,6 +42,24 @@ namespace Almacen_STLCC.Pages.Proveedores
                 return Page();
             }
 
+            if (await _context.Proveedores.AnyAsync(p => p.Nombre_Proveedor == Input.Nombre_Proveedor && p.Rtn == Input.Rtn))
+            {
+                ErrorMessage = "El nombre del proveedor y el RTN ya existen";
+                return Page();
+            }
+
+            if (await _context.Proveedores.AnyAsync(p => p.Nombre_Proveedor == Input.Nombre_Proveedor))
+            {
+                ErrorMessage = "El nombre del proveedor ya existe";
+                return Page();
+            }
+
+            if (await _context.Proveedores.AnyAsync(p => p.Rtn == Input.Rtn))
+            {
+                ErrorMessage = "El RTN ya existe";
+                return Page();
+            }
+
             var proveedor = new Proveedor
             {
                 Nombre_Proveedor = Input.Nombre_Proveedor.Trim(),

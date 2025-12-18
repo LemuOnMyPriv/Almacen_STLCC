@@ -1,6 +1,5 @@
 using Almacen_STLCC.Data;
 using Almacen_STLCC.Services;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Localization;
 using Minio;
@@ -17,14 +16,18 @@ builder.Services.AddRazorPages()
 builder.Services.AddHttpContextAccessor();
 
 // Configurar MySQL
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseMySql(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))
-    ));
+builder.Services.AddDbContext<ApplicationDbContext>((serviceProvider, options) =>
+{
+    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+    var connectionString = configuration.GetConnectionString("DefaultConnection");
+    options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
+});
 
 // Registrar servicio LDAP
 builder.Services.AddScoped<LdapAuthenticationService>();
+
+// Registrar servicio de auditoría
+builder.Services.AddScoped<AuditoriaService>();
 
 // Configurar MinIO
 builder.Services.AddSingleton<IMinioClient>(sp =>
@@ -35,6 +38,7 @@ builder.Services.AddSingleton<IMinioClient>(sp =>
     var secretKey = config["SecretKey"];
     var useSSL = bool.Parse(config["UseSSL"] ?? "true");
     var bucketName = config["BucketName"]?.Trim();
+
     if (string.IsNullOrWhiteSpace(bucketName))
         bucketName = "almacen";
 
@@ -78,6 +82,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();

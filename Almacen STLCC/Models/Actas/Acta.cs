@@ -10,6 +10,11 @@ namespace Almacen_STLCC.Models.Actas
         [Column("id_acta")]
         public int Id_Acta { get; set; }
 
+        [Required(ErrorMessage = "El Numero de Acta es obligatorio")]
+        [StringLength(100)]
+        [Column("numero_acta")]
+        public required string Numero_Acta { get; set; }
+
         [StringLength(100)]
         [Column("orden_compra")]
         public string? Orden_Compra { get; set; }
@@ -18,10 +23,6 @@ namespace Almacen_STLCC.Models.Actas
         [StringLength(100)]
         [Column("f01")]
         public required string F01 { get; set; }
-
-        [StringLength(100)]
-        [Column("requisicion")]
-        public string? Requisicion { get; set; }
 
         [Required(ErrorMessage = "El proveedor es obligatorio")]
         [Column("id_proveedor")]
