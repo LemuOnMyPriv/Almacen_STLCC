@@ -22,7 +22,7 @@
 
     <div class="header">
         <h1><i class="fa-solid fa-user"></i> Gestión de Usuarios</h1>
-        <a asp-page="/Usuarios/Create" class="btn-crear">
+        <a asp-page="/Usuarios/Create" class="btn-gradient-success">
             <i class="fa-solid fa-circle-plus"></i> Crear Usuario
         </a>
     </div>
@@ -51,11 +51,11 @@
                         <td>
                             @if (usuario.Rol == "ADMINISTRADOR")
                             {
-                                <span class="badge-rol badge-admin">ADMINISTRADOR</span>
+                                <span class="badge-rol badge-gradient-admin">ADMINISTRADOR</span>
                             }
                             else
                             {
-                                <span class="badge-rol badge-usuario">USUARIO</span>
+                                <span class="badge-rol badge-gradient-user">USUARIO</span>
                             }
                         </td>
                         <td class="acciones">
@@ -63,12 +63,12 @@
                             {
                                 <a asp-page="/Usuarios/Edit"
                                    asp-route-id="@usuario.Id_Usuario"
-                                   class="btn-editar">
+                                   class="btn-gradient-warning btn-gradient-sm">
                                     Editar
                                 </a>
                                 <a asp-page="/Usuarios/ChangePassword"
                                    asp-route-username="@usuario.NombreUsuario"
-                                   class="btn-cambiar">
+                                   class="btn-gradient-info btn-gradient-sm">
                                     Contraseña
                                 </a>
                             }
@@ -89,7 +89,7 @@
                                       asp-route-id="@usuario.Id_Usuario"
                                       style="display: inline;"
                                       onsubmit="return confirm('¿Estás seguro de eliminar el usuario \'@usuario.NombreUsuario\'?');">
-                                    <button type="submit" class="btn-eliminar">
+                                    <button type="submit" class="btn-gradient-danger btn-gradient-sm">
                                         Eliminar
                                     </button>
                                 </form>

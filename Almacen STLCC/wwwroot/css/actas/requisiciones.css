@@ -98,6 +98,16 @@
         font-size: 14px;
     }
 
+.requisicion-control {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+    .requisicion-control .form-control {
+        flex: 1;
+    }
+
 .form-control {
     width: 100%;
     padding: 12px;

@@ -12,7 +12,7 @@
                 <p>Consulta y gestiona todos los productos registrados en el inventario.</p>
             </div>
             <div class="prod-crear">
-                <a asp-page="/Productos/CrearP" class="btn-agregar"><i class="fa-solid fa-circle-plus"></i> Producto</a>
+                <a asp-page="/Productos/CrearP" class="btn-gradient-primary"><i class="fa-solid fa-circle-plus"></i> Producto</a>
             </div>
         </div>
     </header>
@@ -70,10 +70,10 @@
                             <td class="acciones">
                                 <a asp-page="/Productos/Editar"
                                    asp-route-id="@producto.Id_Producto"
-                                   class="btn-editar">Editar</a>
+                                   class="btn-gradient-warning btn-gradient-sm">Editar</a>
                                 <a asp-page="/Productos/GestionarProveedores"
                                    asp-route-id="@producto.Id_Producto"
-                                   class="btn-proveedores">Proveedores</a>
+                                   class="btn-gradient-info btn-gradient-sm">Proveedores</a>
                             </td>
                         </tr>
                     }

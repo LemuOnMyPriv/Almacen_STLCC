@@ -11,7 +11,7 @@
             <h1><i class="fa-solid fa-file-lines"></i> Requisiciones del Acta</h1>
             <p>Numero de Acta: <strong>@Model.Acta.Numero_Acta</strong> | Proveedor: <strong>@Model.Acta.Proveedor.Nombre_Proveedor</strong></p>
         </div>
-        <a asp-page="/Actas/Detalles" asp-route-id="@Model.Acta.Id_Acta" class="btn-volver">
+        <a asp-page="/Actas/Detalles" asp-route-id="@Model.Acta.Id_Acta" class="btn-gradient-secondary">
             <i class="fa-solid fa-angle-left"></i> Volver al Acta
         </a>
     </header>
@@ -31,19 +31,24 @@
     <section class="seccion-agregar">
         <h2>Agregar Nueva Requisición</h2>
         <form method="post" asp-page-handler="Agregar" asp-route-id="@Model.Acta.Id_Acta" class="form-agregar">
-            <div class="form-inline">
-                <div class="form-group">
+            <div class="form-group requisicion-inline">
+                <div class="requisicion-field">
                     <label asp-for="Input.Requisicion">Requisición:</label>
-                    <input asp-for="Input.Requisicion"
-                           class="form-control"
-                           placeholder="Ej: REQ-2025-001"
-                           autocomplete="off"
-                           autofocus />
+
+                    <div class="requisicion-control">
+                        <input asp-for="Input.Requisicion"
+                               class="form-control"
+                               placeholder="Ej: REQ-2025-001"
+                               autocomplete="off"
+                               autofocus />
+
+                        <button type="submit" class="btn-gradient-info">
+                            <i class="fa-solid fa-circle-plus"></i> Agregar Requisición
+                        </button>
+                    </div>
+
                     <span asp-validation-for="Input.Requisicion" class="text-danger"></span>
                 </div>
-                <button type="submit" class="btn-agregar">
-                    <i class="fa-solid fa-circle-plus"></i> Agregar Requisición
-                </button>
             </div>
         </form>
     </section>

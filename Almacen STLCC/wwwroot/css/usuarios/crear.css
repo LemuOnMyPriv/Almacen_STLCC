@@ -136,3 +136,9 @@
     color: #155724;
     border: 1px solid #c3e6cb;
 }
+
+.btn-gradient-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

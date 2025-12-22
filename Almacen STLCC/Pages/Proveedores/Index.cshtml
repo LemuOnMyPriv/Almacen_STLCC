@@ -12,7 +12,7 @@
                 <p>Consulta y gestiona todos los proveedores existentes para el inventario.</p>
             </div>
             <div class="prov-crear">
-                <a asp-page="/Proveedores/CrearProveedor" class="btn-crear">
+                <a asp-page="/Proveedores/CrearProveedor" class="btn-gradient-success">
                     <i class="fa-solid fa-circle-plus"></i> Añadir Proveedor
                 </a>
             </div>
@@ -36,7 +36,7 @@
                             <td>@proveedor.Nombre_Proveedor</td>
                             <td>@proveedor.Rtn</td>
                             <td class="acciones">
-                                <a asp-page="/Proveedores/EditarProveedor" asp-route-id="@proveedor.Id_Proveedor" class="btn-editar">Editar</a>
+                                <a asp-page="/Proveedores/EditarProveedor" asp-route-id="@proveedor.Id_Proveedor" class="btn-gradient-warning btn-gradient-sm">Editar</a>
                             </td>
                         </tr>
                     }

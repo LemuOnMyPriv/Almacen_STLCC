@@ -13,7 +13,7 @@
             <p>Registro detallado de todas las acciones realizadas en el sistema</p>
         </div>
         <form method="post" asp-page-handler="ExportarYLimpiar" style="display: inline;">
-            <button type="submit" class="btn-exportar">
+            <button type="submit" class="btn-gradient-info">
                 <i class="fa-solid fa-file-export"></i> Exportar y Limpiar
             </button>
         </form>
@@ -84,8 +84,8 @@
             </div>
 
             <div class="filtro-botones">
-                <button type="submit" class="btn-filtrar"><i class="fa-solid fa-magnifying-glass"></i> Filtrar</button>
-                <a href="/Auditoria/Index" class="btn-limpiar"><i class="fa-solid fa-broom"></i> Limpiar</a>
+                <button type="submit" class="btn-gradient-primary"><i class="fa-solid fa-magnifying-glass"></i> Filtrar</button>
+                <a href="/Auditoria/Index" class="btn-gradient-secondary"><i class="fa-solid fa-broom"></i> Limpiar</a>
             </div>
         </div>
     </form>
@@ -117,15 +117,15 @@
                             <td>
                                 @if (audit.Accion == "CREAR")
                                 {
-                                    <span class="badge-crear">CREAR</span>
+                                    <span class="badge-gradient-crear">CREAR</span>
                                 }
                                 else if (audit.Accion == "EDITAR")
                                 {
-                                    <span class="badge-editar">EDITAR</span>
+                                    <span class="badge-gradient-editar">EDITAR</span>
                                 }
                                 else if (audit.Accion == "ELIMINAR")
                                 {
-                                    <span class="badge-eliminar">ELIMINAR</span>
+                                    <span class="badge-gradient-eliminar">ELIMINAR</span>
                                 }
                                 else
                                 {

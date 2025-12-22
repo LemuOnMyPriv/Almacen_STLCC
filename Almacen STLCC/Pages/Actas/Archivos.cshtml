@@ -12,7 +12,7 @@
             <p>Numero de Acta: @(Model.Acta.Numero_Acta) </p>
             <p>Proveedor: @(Model.Acta?.Proveedor?.Nombre_Proveedor ?? "N/A")</p>
         </div>
-        <a asp-page="/Actas/Index" class="btn-volver"><i class="fa-solid fa-angle-left"></i> Volver a Actas</a>
+        <a asp-page="/Actas/Index" class="btn-gradient-secondary"><i class="fa-solid fa-angle-left"></i> Volver a Actas</a>
     </header>
 
     @if (Model.Anexos != null && Model.Anexos.Any())

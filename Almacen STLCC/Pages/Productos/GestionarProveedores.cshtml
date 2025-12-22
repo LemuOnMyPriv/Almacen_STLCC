@@ -12,7 +12,7 @@
             <h1><i class="fa-solid fa-truck"></i> Gestionar Proveedores</h1>
             <p>Producto: <strong>@Model.Producto?.Nombre_Producto</strong></p>
         </div>
-        <a asp-page="/Productos/Index" class="btn-volver">
+        <a asp-page="/Productos/Index" class="btn-gradient-secondary">
             <i class="fa-solid fa-angle-left"></i> Volver
         </a>
     </div>
@@ -43,7 +43,7 @@
                         <option value="@proveedor.Id_Proveedor">@proveedor.Nombre_Proveedor</option>
                     }
                 </select>
-                <button type="submit" class="btn-agregar">
+                <button type="submit" class="btn-gradient-primary">
                     <i class="fa-solid fa-circle-plus"></i> Agregar
                 </button>
             </div>
@@ -72,7 +72,7 @@
                             <td class="acciones">
                                 <form method="post" asp-page-handler="Eliminar" style="display: inline;">
                                     <input type="hidden" name="IdProductoProveedor" value="@pp.Id_Producto_Proveedor" />
-                                    <button type="submit" class="btn-eliminar"
+                                    <button type="submit" class="btn-gradient-danger btn-gradient-sm"
                                             onclick="return confirm('¿Está seguro de eliminar este proveedor?')">
                                         <i class="fa-solid fa-trash-can"></i> Eliminar
                                     </button>

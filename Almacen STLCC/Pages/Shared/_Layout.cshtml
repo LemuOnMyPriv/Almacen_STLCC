@@ -40,11 +40,11 @@
                             @Context.Session.GetString("DisplayName")
                             @if (rol == "ADMINISTRADOR")
                             {
-                                <span class="badge-admin-layout">ADMIN</span>
+                                <span class="badge-gradient-admin">ADMIN</span>
                             }
                             else
                             {
-                                <span class="badge-usuario-layout">USUARIO</span>
+                                <span class="badge-gradient-user">USUARIO</span>
                             }
                         </span>
                         <a asp-page="/Logout" class="nav-link logout-btn">Cerrar Sesión</a>

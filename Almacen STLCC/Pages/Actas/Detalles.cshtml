@@ -11,7 +11,7 @@
             <h1><i class="fa-solid fa-clipboard-question"></i> Detalles del Acta</h1>
             <p>Productos registrados en esta acta de compra</p>
         </div>
-        <a asp-page="/Actas/Index" class="btn-volver"><i class="fa-solid fa-angle-left"></i> Volver a Actas</a>
+        <a asp-page="/Actas/Index" class="btn-gradient-secondary"><i class="fa-solid fa-angle-left"></i> Volver a Actas</a>
     </header>
 
     <section class="info-acta">
@@ -34,7 +34,7 @@
             <strong>Requisiciones:</strong>
             <a asp-page="/Actas/Requisiciones"
                asp-route-id="@Model.Acta.Id_Acta"
-               class="btn-requisiciones">
+               class="btn-gradient-info">
                 <i class="fa-solid fa-file-lines"></i>
                 Ver Requisiciones (@Model.CantidadRequisiciones)
             </a>
