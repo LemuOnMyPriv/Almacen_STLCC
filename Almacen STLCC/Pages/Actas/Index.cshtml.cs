@@ -8,6 +8,7 @@ namespace Almacen_STLCC.Pages.Actas
     public class IndexModel : SecurePageModel
     {
         private readonly ApplicationDbContext _context;
+        private const int ITEMS_POR_PAGINA = 20;
 
         public IndexModel(ApplicationDbContext context)
         {
@@ -40,7 +41,13 @@ namespace Almacen_STLCC.Pages.Actas
         [BindProperty(SupportsGet = true)]
         public DateTime? FechaHasta { get; set; }
 
+        // Paginación
+        [BindProperty(SupportsGet = true)]
+        public int PaginaActual { get; set; } = 1;
+
+        public int TotalPaginas { get; set; }
         public int TotalResultados { get; set; }
+
         public bool HayFiltrosActivos => !string.IsNullOrWhiteSpace(FiltroRequisicion) ||
                                           !string.IsNullOrWhiteSpace(FiltroProveedor) ||
                                           !string.IsNullOrWhiteSpace(FiltroNumeroActa) ||
@@ -106,8 +113,16 @@ namespace Almacen_STLCC.Pages.Actas
                 query = query.Where(a => a.Fecha <= FechaHasta.Value);
             }
 
+            TotalResultados = await query.CountAsync();
+            TotalPaginas = (int)Math.Ceiling(TotalResultados / (double)ITEMS_POR_PAGINA);
+
+            if (PaginaActual < 1) PaginaActual = 1;
+            if (PaginaActual > TotalPaginas && TotalPaginas > 0) PaginaActual = TotalPaginas;
+
             var actasDb = await query
                 .OrderByDescending(a => a.Fecha)
+                .Skip((PaginaActual - 1) * ITEMS_POR_PAGINA)
+                .Take(ITEMS_POR_PAGINA)
                 .ToListAsync();
 
             Actas = actasDb.Select(a => new ActaConRequisiciones
@@ -116,11 +131,10 @@ namespace Almacen_STLCC.Pages.Actas
                 Requisiciones = a.Requisiciones.OrderBy(r => r.Requisicion).ToList()
             }).ToList();
 
-            TotalResultados = Actas.Count;
-
             if (HayFiltrosActivos)
             {
-                GenerarResumenesAgrupados(actasDb);
+                var todasLasActas = await query.ToListAsync();
+                GenerarResumenesAgrupados(todasLasActas);
             }
         }
 
@@ -132,7 +146,6 @@ namespace Almacen_STLCC.Pages.Actas
             {
                 AgruparPorProducto(actas);
             }
-
             else if (!string.IsNullOrWhiteSpace(FiltroProveedor) ||
                      !string.IsNullOrWhiteSpace(FiltroRequisicion) ||
                      FechaDesde.HasValue || FechaHasta.HasValue)
@@ -246,7 +259,6 @@ namespace Almacen_STLCC.Pages.Actas
             }
         }
 
-        // Clases auxiliares
         public class ActaConRequisiciones
         {
             public required Acta Acta { get; set; }

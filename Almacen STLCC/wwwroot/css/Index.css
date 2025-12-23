@@ -103,3 +103,11 @@
     .btn-negro:hover {
         background: #171717;
     }
+
+.btn-gradient-primary {
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.2s ease;
+    margin-top: auto;
+}

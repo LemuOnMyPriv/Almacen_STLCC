@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Actas";
 }
+<link rel="stylesheet" href="~/css/shared/badges.css" />
 <link rel="stylesheet" href="~/css/actas/Index.css" />
 
 <div class="contenedor">
@@ -119,7 +120,7 @@
             </div>
 
             <div class="filtros-acciones">
-                <button type="submit" class="btn-gradient-primary">
+                <button type="submit" class="btn-gradient-info">
                     <i class="fa-solid fa-filter"></i> Filtrar
                 </button>
                 <a href="/Actas/Index" class="btn-gradient-secondary">
@@ -135,35 +136,39 @@
             <div class="resumen-info">
                 <i class="fa-solid fa-chart-simple"></i>
                 <strong>@Model.TotalResultados</strong> acta(s) encontrada(s)
+                @if (Model.TotalPaginas > 1)
+                {
+                    <span class="texto-pagina">| Página @Model.PaginaActual de @Model.TotalPaginas</span>
+                }
             </div>
             <div class="filtros-activos">
                 @if (!string.IsNullOrEmpty(Model.FiltroProducto))
                 {
-                    <span class="filtro-activo filtro-producto">
+                    <span class="badge-requisicion">
                         <i class="fa-solid fa-box"></i> @Model.FiltroProducto
                     </span>
                 }
                 @if (!string.IsNullOrEmpty(Model.FiltroRequisicion))
                 {
-                    <span class="filtro-activo filtro-requisicion">
+                    <span class="badge-requisicion">
                         <i class="fa-solid fa-file-lines"></i> @Model.FiltroRequisicion
                     </span>
                 }
                 @if (!string.IsNullOrEmpty(Model.FiltroProveedor))
                 {
-                    <span class="filtro-activo filtro-proveedor">
+                    <span class="badge-proveedor">
                         <i class="fa-solid fa-truck"></i> @Model.FiltroProveedor
                     </span>
                 }
                 @if (!string.IsNullOrEmpty(Model.FiltroOrdenCompra))
                 {
-                    <span class="filtro-activo filtro-orden">
+                    <span class="badge-base" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
                         <i class="fa-solid fa-receipt"></i> @Model.FiltroOrdenCompra
                     </span>
                 }
                 @if (Model.FechaDesde.HasValue || Model.FechaHasta.HasValue)
                 {
-                    <span class="filtro-activo filtro-fecha">
+                    <span class="badge-base" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
                         <i class="fa-solid fa-calendar"></i>
                         @if (Model.FechaDesde.HasValue && Model.FechaHasta.HasValue)
                         {
@@ -272,9 +277,20 @@
                                 @if (item.Requisiciones.Any())
                                 {
                                     <div class="requisiciones-inline">
-                                        @foreach (var req in item.Requisiciones)
+                                        @if (item.Requisiciones.Count <= 3)
                                         {
-                                            <span class="badge-requisicion">@req.Requisicion</span>
+                                            foreach (var req in item.Requisiciones)
+                                            {
+                                                <span class="badge-requisicion">@req.Requisicion</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            for (int i = 0; i < 2; i++)
+                                            {
+                                                <span class="badge-requisicion">@item.Requisiciones[i].Requisicion</span>
+                                            }
+                                            <span class="badge-requisicion">+@(item.Requisiciones.Count - 2)</span>
                                         }
                                     </div>
                                 }
@@ -287,13 +303,16 @@
                             <td class="acciones">
                                 <a asp-page="/Actas/Detalles"
                                    asp-route-id="@item.Acta.Id_Acta"
-                                   class="btn-gradient-info btn-gradient-sm">Ver Detalles</a>
+                                   class="btn-gradient-info"
+                                   style="padding: 6px 12px; font-size: 13px;">Ver Detalles</a>
                                 <a asp-page="/Actas/Archivos"
                                    asp-route-id="@item.Acta.Id_Acta"
-                                   class="btn-gradient-success btn-gradient-sm">Ver Archivos</a>
-                                <a asp-page="/Actas/Editar"
+                                   class="btn-gradient-success"
+                                   style="padding: 6px 12px; font-size: 13px;">Ver Archivos</a>
+                                <a asp-page="/Actas/Edit"
                                    asp-route-id="@item.Acta.Id_Acta"
-                                   class="btn-gradient-warning btn-gradient-sm">Editar</a>
+                                   class="btn-gradient-warning"
+                                   style="padding: 6px 12px; font-size: 13px;">Editar</a>
                             </td>
                         </tr>
                     }
@@ -316,6 +335,50 @@
             </tbody>
         </table>
     </section>
+
+    <!-- PAGINACIÓN -->
+    @if (Model.TotalPaginas > 1)
+    {
+        <div class="paginacion">
+            @if (Model.PaginaActual > 1)
+            {
+                <a asp-page="/Actas/Index"
+                   asp-route-pagina="@(Model.PaginaActual - 1)"
+                   asp-route-FiltroProducto="@Model.FiltroProducto"
+                   asp-route-FiltroRequisicion="@Model.FiltroRequisicion"
+                   asp-route-FiltroProveedor="@Model.FiltroProveedor"
+                   asp-route-FiltroNumeroActa="@Model.FiltroNumeroActa"
+                   asp-route-FiltroF01="@Model.FiltroF01"
+                   asp-route-FiltroOrdenCompra="@Model.FiltroOrdenCompra"
+                   asp-route-FechaDesde="@Model.FechaDesde"
+                   asp-route-FechaHasta="@Model.FechaHasta"
+                   class="btn-moderno btn-secundario btn-pag">
+                    <i class="fa-solid fa-angle-left"></i> Anterior
+                </a>
+            }
+
+            <span class="pagina-info">
+                Página <strong>@Model.PaginaActual</strong> de <strong>@Model.TotalPaginas</strong>
+            </span>
+
+            @if (Model.PaginaActual < Model.TotalPaginas)
+            {
+                <a asp-page="/Actas/Index"
+                   asp-route-pagina="@(Model.PaginaActual + 1)"
+                   asp-route-FiltroProducto="@Model.FiltroProducto"
+                   asp-route-FiltroRequisicion="@Model.FiltroRequisicion"
+                   asp-route-FiltroProveedor="@Model.FiltroProveedor"
+                   asp-route-FiltroNumeroActa="@Model.FiltroNumeroActa"
+                   asp-route-FiltroF01="@Model.FiltroF01"
+                   asp-route-FiltroOrdenCompra="@Model.FiltroOrdenCompra"
+                   asp-route-FechaDesde="@Model.FechaDesde"
+                   asp-route-FechaHasta="@Model.FechaHasta"
+                   class="btn-moderno btn-secundario btn-pag">
+                    Siguiente <i class="fa-solid fa-angle-right"></i>
+                </a>
+            }
+        </div>
+    }
 </div>
 
 @if (TempData["SuccessMessage"] != null)

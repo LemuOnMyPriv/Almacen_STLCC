@@ -460,6 +460,71 @@
     font-size: 15px;
 }
 
+.paginacion {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-top: 30px;
+    padding: 20px;
+}
+
+.btn-pag {
+    padding: 10px 20px !important;
+    font-size: 14px !important;
+}
+
+.pagina-info {
+    color: #2c3e50;
+    font-size: 15px;
+}
+
+    .pagina-info strong {
+        color: #88CFE0;
+        font-size: 16px;
+    }
+
+.texto-pagina {
+    color: #666;
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+/* ============================================ */
+/* ACTUALIZAR: wwwroot/css/productos/Index.css */
+/* REEMPLAZAR la sección de proveedores */
+/* ============================================ */
+
+/* Contenedor de proveedores mejorado */
+td .proveedores-lista {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    max-width: 300px;
+}
+
+    /* Aplicar los nuevos estilos de badges a proveedores */
+    td .proveedores-lista .badge-proveedor {
+        /* Ya está definido en badges.css */
+    }
+
+/* Si el proveedor se muestra solo (sin lista) */
+.proveedor-individual {
+    display: inline-flex;
+}
+
+@media (max-width: 768px) {
+    .paginacion {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .btn-pag {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
 @media (max-width: 1200px) {
     .filtros-grid {
         grid-template-columns: repeat(3, 1fr);

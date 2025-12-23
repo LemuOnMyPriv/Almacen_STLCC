@@ -20,7 +20,7 @@
         <section class="tabla-archivos">
             <div class="header-archivos">
                 <h2>Archivos Adjuntos (@Model.Anexos.Count)</h2>
-                <button type="button" class="btn-subir" onclick="mostrarFormulario()">
+                <button type="button" class="btn-gradient-primary" onclick="mostrarFormulario()">
                     <i class="fa-solid fa-circle-plus"></i> Subir Nuevo Archivo
                 </button>
             </div>
@@ -40,18 +40,18 @@
                     {
                         <tr>
                             <td>@anexo.Nombre_Archivo</td>
-                            <td><span class="badge-formato">@anexo.Tipo_Archivo.ToUpper()</span></td>
+                            <td><span class="badge-gradient-warning">@anexo.Tipo_Archivo.ToUpper()</span></td>
                             <td>@anexo.Tamaño_Kb KB</td>
                             <td>@anexo.Fecha_Subida.ToString("dd/MM/yyyy")</td>
                             <td class="acciones-archivos">
                                 <a asp-page-handler="Descargar"
                                    asp-route-id="@anexo.Id_Anexo"
-                                   class="btn-descargar"
+                                   class="btn-gradient-info btn-gradient-sm"
                                    target="_blank">
                                     <i class="fa-solid fa-download"></i> Descargar
                                 </a>
                                 <button type="button"
-                                        class="btn-eliminar"
+                                        class="btn-gradient-danger btn-gradient-sm"
                                         onclick="confirmarEliminar(@anexo.Id_Anexo, '@anexo.Nombre_Archivo')">
                                     <i class="fa-solid fa-trash-can"></i> Eliminar
                                 </button>
@@ -99,8 +99,8 @@
                 </div>
 
                 <div class="form-actions">
-                    <button type="button" class="btn-guardar" onclick="validarYSubir()"><i class="fa-solid fa-floppy-disk"></i> Subir Archivos</button>
-                    <button type="button" class="btn-cancelar" onclick="ocultarFormulario()"><i class="fa-solid fa-ban"></i> Cancelar</button>
+                    <button type="button" class="btn-gradient-success" onclick="validarYSubir()"><i class="fa-solid fa-floppy-disk"></i> Subir Archivos</button>
+                    <button type="button" class="btn-gradient-secondary" onclick="ocultarFormulario()"><i class="fa-solid fa-ban"></i> Cancelar</button>
                 </div>
             </form>
         </div>
