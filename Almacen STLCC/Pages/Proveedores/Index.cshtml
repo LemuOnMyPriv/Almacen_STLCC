@@ -18,8 +18,19 @@
             </div>
         </div>
     </header>
+    <section class="panel-busqueda">
+        <div class="busqueda-grupo">
+            <label for="buscarProveedor">
+                <i class="fa-solid fa-magnifying-glass"></i> Buscar:
+            </label>
+            <input type="text"
+                   id="buscarProveedor"
+                   class="form-control-busqueda"
+                   placeholder="Buscar por nombre de proveedor o RTN">
+        </div>
+    </section>
     <section class="tabla-proveedores">
-        <table>
+        <table class="tabla-gradient" id="tablaProveedores">
             <thead>
                 <tr>
                     <th>Nombre del Proveedor</th>

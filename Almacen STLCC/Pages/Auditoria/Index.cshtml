@@ -33,72 +33,22 @@
         </div>
     }
 
-    <form method="get" class="filtros">
-        <div class="filtros-grid">
-            <div class="filtro-item">
-                <label>Usuario:</label>
-                <input type="text"
-                       name="FiltroUsuario"
-                       value="@Model.FiltroUsuario"
-                       placeholder="Buscar por usuario"
-                       class="form-control" />
-            </div>
-
-            <div class="filtro-item">
-                <label>Tabla:</label>
-                <select name="FiltroTabla" class="form-control">
-                    <option value="">Todas</option>
-                    <option value="producto" selected="@(Model.FiltroTabla == "producto")">Productos</option>
-                    <option value="proveedor" selected="@(Model.FiltroTabla == "proveedor")">Proveedores</option>
-                    <option value="categoria" selected="@(Model.FiltroTabla == "categoria")">Categorías</option>
-                    <option value="acta" selected="@(Model.FiltroTabla == "acta")">Actas</option>
-                    <option value="movimiento" selected="@(Model.FiltroTabla == "movimiento")">Movimientos</option>
-                    <option value="usuario" selected="@(Model.FiltroTabla == "usuario")">Usuarios</option>
-                </select>
-            </div>
-
-            <div class="filtro-item">
-                <label>Acción:</label>
-                <select name="FiltroAccion" class="form-control">
-                    <option value="">Todas</option>
-                    <option value="CREAR" selected="@(Model.FiltroAccion == "CREAR")">Crear</option>
-                    <option value="EDITAR" selected="@(Model.FiltroAccion == "EDITAR")">Editar</option>
-                    <option value="ELIMINAR" selected="@(Model.FiltroAccion == "ELIMINAR")">Eliminar</option>
-                </select>
-            </div>
-
-            <div class="filtro-item">
-                <label>Desde:</label>
-                <input type="date"
-                       name="FechaDesde"
-                       value="@Model.FechaDesde?.ToString("yyyy-MM-dd")"
-                       class="form-control" />
-            </div>
-
-            <div class="filtro-item">
-                <label>Hasta:</label>
-                <input type="date"
-                       name="FechaHasta"
-                       value="@Model.FechaHasta?.ToString("yyyy-MM-dd")"
-                       class="form-control" />
-            </div>
-
-            <div class="filtro-botones">
-                <button type="submit" class="btn-gradient-primary"><i class="fa-solid fa-magnifying-glass"></i> Filtrar</button>
-                <a href="/Auditoria/Index" class="btn-gradient-secondary"><i class="fa-solid fa-broom"></i> Limpiar</a>
-            </div>
+    <section class="panel-busqueda">
+        <div class="busqueda-grupo">
+            <label for="buscarAuditoria">
+                <i class="fa-solid fa-magnifying-glass"></i> Buscar:
+            </label>
+            <input type="text"
+                   id="buscarAuditoria"
+                   class="form-control-busqueda"
+                   placeholder="Buscar por usuario, tabla, acción o descripción...">
         </div>
-    </form>
-
-    <div class="resumen">
-        <span><i class="fa-solid fa-chart-simple"></i> Total de registros: <strong>@Model.TotalRegistros</strong></span>
-        <span><i class="fa-solid fa-file-lines"></i> Mostrando página <strong>@Model.PaginaActual</strong> de <strong>@Model.TotalPaginas</strong></span>
-    </div>
+    </section>
 
     @if (Model.Auditorias.Any())
     {
         <div class="tabla-auditoria">
-            <table>
+            <table class="tabla-gradient" id="tablaAuditoria">
                 <thead>
                     <tr>
                         <th>Fecha y Hora</th>
@@ -139,30 +89,15 @@
                 </tbody>
             </table>
         </div>
-
-        @if (Model.TotalPaginas > 1)
-        {
-            <div class="paginacion">
-                @if (Model.PaginaActual > 1)
-                {
-                    <a href="?pagina=@(Model.PaginaActual - 1)&FiltroUsuario=@Model.FiltroUsuario&FiltroTabla=@Model.FiltroTabla&FiltroAccion=@Model.FiltroAccion&FechaDesde=@Model.FechaDesde&FechaHasta=@Model.FechaHasta"
-                       class="btn-paginacion"> <i class="fa-solid fa-angle-left"></i> Anterior</a>
-                }
-
-                <span class="pagina-actual">Página @Model.PaginaActual de @Model.TotalPaginas</span>
-
-                @if (Model.PaginaActual < Model.TotalPaginas)
-                {
-                    <a href="?pagina=@(Model.PaginaActual + 1)&FiltroUsuario=@Model.FiltroUsuario&FiltroTabla=@Model.FiltroTabla&FiltroAccion=@Model.FiltroAccion&FechaDesde=@Model.FechaDesde&FechaHasta=@Model.FechaHasta"
-                       class="btn-paginacion">Siguiente <i class="fa-solid fa-angle-right"></i></a>
-                }
-            </div>
-        }
     }
     else
     {
         <div class="mensaje-vacio">
-            <i class="fa-regular fa-file-lines"></i> No hay registros de auditoría que coincidan con los filtros seleccionados
+            <i class="fa-regular fa-file-lines"></i> No hay registros de auditoría
         </div>
     }
 </div>
+
+@section Scripts {
+    <script src="~/js/auditoria/index.js"></script>
+}

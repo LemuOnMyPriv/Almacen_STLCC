@@ -461,3 +461,139 @@ body {
         transform: none;
         box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
+
+.panel-busqueda {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    border-left: 4px solid #667eea;
+}
+
+.busqueda-grupo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+    .busqueda-grupo label {
+        font-weight: 600;
+        color: #555;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+        .busqueda-grupo label i {
+            color: #667eea;
+        }
+
+.form-control-busqueda {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+    .form-control-busqueda:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+/* Panel de búsqueda avanzado (múltiple) */
+.panel-busqueda-avanzado {
+    background-color: #f8f9fa;
+    padding: 25px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    border-left: 4px solid #667eea;
+}
+
+    .panel-busqueda-avanzado h3 {
+        margin: 0 0 20px 0;
+        color: #2c3e50;
+        font-size: 18px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .panel-busqueda-avanzado h3 i {
+            color: #667eea;
+        }
+
+.busqueda-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+/* Contador de resultados */
+.contador-resultados {
+    margin: 15px 0;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 6px;
+    font-size: 14px;
+    display: none;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    animation: fadeIn 0.3s ease;
+    width: fit-content;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.contador-resultados strong {
+    font-weight: 700;
+}
+
+/* Fila sin resultados */
+.fila-sin-resultados td {
+    text-align: center;
+    padding: 40px 20px !important;
+    background-color: #f8f9fa !important;
+}
+
+.fila-sin-resultados .mensaje-vacio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    color: #666;
+}
+
+    .fila-sin-resultados .mensaje-vacio i {
+        font-size: 32px;
+        color: #ccc;
+    }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .busqueda-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .panel-busqueda,
+    .panel-busqueda-avanzado {
+        padding: 15px;
+    }
+}

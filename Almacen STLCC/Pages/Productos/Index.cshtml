@@ -4,6 +4,7 @@
     ViewData["Title"] = "Productos - Almacén STLCC";
 }
 <link rel="stylesheet" href="~/css/productos/Index.css" />
+
 <div class="contenedor">
     <header class="header">
         <div class="titulo-header">
@@ -12,12 +13,64 @@
                 <p>Consulta y gestiona todos los productos registrados en el inventario.</p>
             </div>
             <div class="prod-crear">
-                <a asp-page="/Productos/CrearP" class="btn-gradient-primary"><i class="fa-solid fa-circle-plus"></i> Producto</a>
+                <a asp-page="/Productos/CrearP" class="btn-gradient-primary">
+                    <i class="fa-solid fa-circle-plus"></i> Producto
+                </a>
             </div>
         </div>
     </header>
+
+    <section class="panel-busqueda-avanzado">
+        <h3><i class="fa-solid fa-sliders"></i> Filtros de Búsqueda</h3>
+        <div class="busqueda-grid">
+            <div class="busqueda-grupo">
+                <label for="filtroCodigo">
+                    <i class="fa-solid fa-barcode"></i> Código:
+                </label>
+                <input type="text"
+                       id="filtroCodigo"
+                       class="form-control-busqueda"
+                       placeholder="Ej: 330996"
+                       autocomplete="off">
+            </div>
+
+            <div class="busqueda-grupo">
+                <label for="filtroNombre">
+                    <i class="fa-solid fa-tag"></i> Nombre:
+                </label>
+                <input type="text"
+                       id="filtroNombre"
+                       class="form-control-busqueda"
+                       placeholder="Ej: Resma de papel"
+                       autocomplete="off">
+            </div>
+
+            <div class="busqueda-grupo">
+                <label for="filtroMarca">
+                    <i class="fa-solid fa-copyright"></i> Marca:
+                </label>
+                <input type="text"
+                       id="filtroMarca"
+                       class="form-control-busqueda"
+                       placeholder="Ej: HP"
+                       autocomplete="off">
+            </div>
+
+            <div class="busqueda-grupo">
+                <label for="filtroCategoria">
+                    <i class="fa-solid fa-layer-group"></i> Categoría:
+                </label>
+                <input type="text"
+                       id="filtroCategoria"
+                       class="form-control-busqueda"
+                       placeholder="Ej: Papelería"
+                       autocomplete="off">
+            </div>
+        </div>
+    </section>
+
     <section class="tabla-productos">
-        <table>
+        <table class="tabla-gradient" id="tablaProductos">
             <thead>
                 <tr>
                     <th>Código</th>
@@ -70,10 +123,14 @@
                             <td class="acciones">
                                 <a asp-page="/Productos/Editar"
                                    asp-route-id="@producto.Id_Producto"
-                                   class="btn-gradient-warning btn-gradient-sm">Editar</a>
+                                   class="btn-gradient-warning btn-gradient-sm">
+                                    <i class="fa-solid fa-edit"></i> Editar
+                                </a>
                                 <a asp-page="/Productos/GestionarProveedores"
                                    asp-route-id="@producto.Id_Producto"
-                                   class="btn-gradient-info btn-gradient-sm">Proveedores</a>
+                                   class="btn-gradient-info btn-gradient-sm">
+                                    <i class="fa-solid fa-truck"></i> Proveedores
+                                </a>
                             </td>
                         </tr>
                     }

@@ -27,11 +27,23 @@
         </a>
     </div>
 
+    <section class="panel-busqueda">
+        <div class="busqueda-grupo">
+            <label for="buscarUsuario">
+                <i class="fa-solid fa-magnifying-glass"></i> Buscar:
+            </label>
+            <input type="text"
+                   id="buscarUsuario"
+                   class="form-control-busqueda"
+                   placeholder="Buscar por nombre de usuario...">
+        </div>
+    </section>
+
     @if (Model.Usuarios.Any())
     {
         var currentUsername = HttpContext.Session.GetString("Username");
 
-        <table class="tabla-usuarios">
+        <table class="tabla-usuarios tabla-gradient" id="tablaUsuarios">
             <thead>
                 <tr>
                     <th>Usuario</th>
@@ -113,3 +125,6 @@
         </div>
     }
 </div>
+@section Scripts {
+    <script src="~/js/usuarios/index.js"></script>
+}

@@ -21,237 +21,57 @@
         </div>
     </header>
 
-    <section class="filtros-panel">
-        <form method="get" class="filtros-form">
-            <div class="filtros-grid">
-                <div class="filtro-item">
-                    <label for="FiltroProducto">
-                        <i class="fa-solid fa-box"></i> Producto:
-                    </label>
-                    <input type="text"
-                           name="FiltroProducto"
-                           id="FiltroProducto"
-                           value="@Model.FiltroProducto"
-                           placeholder="Ej: Papel carta, lapicero"
-                           class="form-control" />
-                </div>
-
-                <div class="filtro-item">
-                    <label for="FiltroRequisicion">
-                        <i class="fa-solid fa-file-lines"></i> Requisición:
-                    </label>
-                    <input type="text"
-                           name="FiltroRequisicion"
-                           id="FiltroRequisicion"
-                           value="@Model.FiltroRequisicion"
-                           placeholder="Ej: REQ-2025-001"
-                           class="form-control" />
-                </div>
-
-                <div class="filtro-item">
-                    <label for="FiltroProveedor">
-                        <i class="fa-solid fa-truck"></i> Proveedor:
-                    </label>
-                    <input type="text"
-                           name="FiltroProveedor"
-                           id="FiltroProveedor"
-                           value="@Model.FiltroProveedor"
-                           placeholder="Nombre del proveedor"
-                           class="form-control" />
-                </div>
-
-                <div class="filtro-item">
-                    <label for="FiltroNumeroActa">
-                        <i class="fa-solid fa-hashtag"></i> Número de Acta:
-                    </label>
-                    <input type="text"
-                           name="FiltroNumeroActa"
-                           id="FiltroNumeroActa"
-                           value="@Model.FiltroNumeroActa"
-                           placeholder="Ej: 001-2025"
-                           class="form-control" />
-                </div>
-
-                <div class="filtro-item">
-                    <label for="FiltroF01">
-                        <i class="fa-solid fa-barcode"></i> F01:
-                    </label>
-                    <input type="text"
-                           name="FiltroF01"
-                           id="FiltroF01"
-                           value="@Model.FiltroF01"
-                           placeholder="Ej: 1105"
-                           class="form-control" />
-                </div>
-
-                <div class="filtro-item">
-                    <label for="FiltroOrdenCompra">
-                        <i class="fa-solid fa-receipt"></i> Orden de Compra:
-                    </label>
-                    <input type="text"
-                           name="FiltroOrdenCompra"
-                           id="FiltroOrdenCompra"
-                           value="@Model.FiltroOrdenCompra"
-                           placeholder="Ej: OC-2025-001"
-                           class="form-control" />
-                </div>
-
-                <div class="filtro-item">
-                    <label for="FechaDesde">
-                        <i class="fa-solid fa-calendar"></i> Desde:
-                    </label>
-                    <input type="date"
-                           name="FechaDesde"
-                           id="FechaDesde"
-                           value="@Model.FechaDesde?.ToString("yyyy-MM-dd")"
-                           class="form-control" />
-                </div>
-
-                <div class="filtro-item">
-                    <label for="FechaHasta">
-                        <i class="fa-solid fa-calendar"></i> Hasta:
-                    </label>
-                    <input type="date"
-                           name="FechaHasta"
-                           id="FechaHasta"
-                           value="@Model.FechaHasta?.ToString("yyyy-MM-dd")"
-                           class="form-control" />
-                </div>
+    <section class="panel-busqueda-avanzado">
+        <h3><i class="fa-solid fa-sliders"></i> Filtros de Búsqueda</h3>
+        <div class="busqueda-grid">
+            <div class="busqueda-grupo">
+                <label for="filtroNumeroActa">
+                    <i class="fa-solid fa-hashtag"></i> Número de Acta:
+                </label>
+                <input type="text"
+                       id="filtroNumeroActa"
+                       class="form-control-busqueda"
+                       placeholder="Ej: 001-2025"
+                       autocomplete="off">
             </div>
 
-            <div class="filtros-acciones">
-                <button type="submit" class="btn-gradient-info">
-                    <i class="fa-solid fa-filter"></i> Filtrar
-                </button>
-                <a href="/Actas/Index" class="btn-gradient-secondary">
-                    <i class="fa-solid fa-broom"></i> Limpiar Filtros
-                </a>
+            <div class="busqueda-grupo">
+                <label for="filtroF01">
+                    <i class="fa-solid fa-barcode"></i> F01:
+                </label>
+                <input type="text"
+                       id="filtroF01"
+                       class="form-control-busqueda"
+                       placeholder="Ej: 1105"
+                       autocomplete="off">
             </div>
-        </form>
-    </section>
 
-    @if (Model.HayFiltrosActivos)
-    {
-        <div class="resumen-busqueda">
-            <div class="resumen-info">
-                <i class="fa-solid fa-chart-simple"></i>
-                <strong>@Model.TotalResultados</strong> acta(s) encontrada(s)
-                @if (Model.TotalPaginas > 1)
-                {
-                    <span class="texto-pagina">| Página @Model.PaginaActual de @Model.TotalPaginas</span>
-                }
+            <div class="busqueda-grupo">
+                <label for="filtroOrdenCompra">
+                    <i class="fa-solid fa-receipt"></i> Orden de Compra:
+                </label>
+                <input type="text"
+                       id="filtroOrdenCompra"
+                       class="form-control-busqueda"
+                       placeholder="Ej: OC-2025-001"
+                       autocomplete="off">
             </div>
-            <div class="filtros-activos">
-                @if (!string.IsNullOrEmpty(Model.FiltroProducto))
-                {
-                    <span class="badge-requisicion">
-                        <i class="fa-solid fa-box"></i> @Model.FiltroProducto
-                    </span>
-                }
-                @if (!string.IsNullOrEmpty(Model.FiltroRequisicion))
-                {
-                    <span class="badge-requisicion">
-                        <i class="fa-solid fa-file-lines"></i> @Model.FiltroRequisicion
-                    </span>
-                }
-                @if (!string.IsNullOrEmpty(Model.FiltroProveedor))
-                {
-                    <span class="badge-proveedor">
-                        <i class="fa-solid fa-truck"></i> @Model.FiltroProveedor
-                    </span>
-                }
-                @if (!string.IsNullOrEmpty(Model.FiltroOrdenCompra))
-                {
-                    <span class="badge-base" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
-                        <i class="fa-solid fa-receipt"></i> @Model.FiltroOrdenCompra
-                    </span>
-                }
-                @if (Model.FechaDesde.HasValue || Model.FechaHasta.HasValue)
-                {
-                    <span class="badge-base" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
-                        <i class="fa-solid fa-calendar"></i>
-                        @if (Model.FechaDesde.HasValue && Model.FechaHasta.HasValue)
-                        {
-                            <text>@Model.FechaDesde.Value.ToString("dd/MM/yyyy") - @Model.FechaHasta.Value.ToString("dd/MM/yyyy")</text>
-                        }
-                        else if (Model.FechaDesde.HasValue)
-                        {
-                            <text>Desde @Model.FechaDesde.Value.ToString("dd/MM/yyyy")</text>
-                        }
-                        else
-                        {
-                            <text>Hasta @Model.FechaHasta.Value.ToString("dd/MM/yyyy")</text>
-                        }
-                    </span>
-                }
+
+            <div class="busqueda-grupo">
+                <label for="filtroProveedor">
+                    <i class="fa-solid fa-truck"></i> Proveedor:
+                </label>
+                <input type="text"
+                       id="filtroProveedor"
+                       class="form-control-busqueda"
+                       placeholder="Nombre del proveedor"
+                       autocomplete="off">
             </div>
         </div>
-    }
-
-    @if (Model.ResumenAgrupaciones.Any())
-    {
-        <section class="resumen-agrupado">
-            <h3>
-                <i class="fa-solid fa-chart-pie"></i>
-                Resumen por @(Model.ResumenAgrupaciones.First().Value.TipoGrupo)
-            </h3>
-
-            <div class="agrupaciones-cards">
-                @foreach (var grupo in Model.ResumenAgrupaciones.OrderByDescending(g => g.Value.CantidadTotal))
-                {
-                    <div class="agrupacion-card">
-                        <div class="agrupacion-header">
-                            <h4>@grupo.Value.NombreGrupo</h4>
-                            <span class="cantidad-total">
-                                @if (grupo.Value.TipoGrupo == "Producto")
-                                {
-                                    <text>@grupo.Value.CantidadTotal unidades</text>
-                                }
-                                else
-                                {
-                                    <text>@grupo.Value.CantidadTotal acta(s)</text>
-                                }
-                            </span>
-                        </div>
-
-                        @if (grupo.Value.Desglose.Any())
-                        {
-                            <div class="desglose-container">
-                                <strong>Desglose:</strong>
-                                <div class="desglose-lista">
-                                    @foreach (var detalle in grupo.Value.Desglose.OrderByDescending(d => d.Value.Cantidad).Take(10))
-                                    {
-                                        <div class="desglose-item">
-                                            <span class="desglose-label">@detalle.Value.Etiqueta</span>
-                                            <span class="desglose-cantidad">
-                                                @if (grupo.Value.TipoGrupo == "Producto")
-                                                {
-                                                    <text>@detalle.Value.Cantidad u.</text>
-                                                }
-                                                else
-                                                {
-                                                    <text>@detalle.Value.Cantidad</text>
-                                                }
-                                            </span>
-                                        </div>
-                                    }
-                                    @if (grupo.Value.Desglose.Count > 10)
-                                    {
-                                        <div class="desglose-item desglose-mas">
-                                            <span class="desglose-label">Y @(grupo.Value.Desglose.Count - 10) más...</span>
-                                        </div>
-                                    }
-                                </div>
-                            </div>
-                        }
-                    </div>
-                }
-            </div>
-        </section>
-    }
+    </section>
 
     <section class="tabla-actas">
-        <table>
+        <table class="tabla-gradient" id="tablaActas">
             <thead>
                 <tr>
                     <th>Numero de Acta</th>
@@ -303,16 +123,19 @@
                             <td class="acciones">
                                 <a asp-page="/Actas/Detalles"
                                    asp-route-id="@item.Acta.Id_Acta"
-                                   class="btn-gradient-info"
-                                   style="padding: 6px 12px; font-size: 13px;">Ver Detalles</a>
+                                   class="btn-gradient-info btn-gradient-sm">
+                                    <i class="fa-solid fa-eye"></i> Detalles
+                                </a>
                                 <a asp-page="/Actas/Archivos"
                                    asp-route-id="@item.Acta.Id_Acta"
-                                   class="btn-gradient-success"
-                                   style="padding: 6px 12px; font-size: 13px;">Ver Archivos</a>
+                                   class="btn-gradient-success btn-gradient-sm">
+                                    <i class="fa-solid fa-paperclip"></i> Archivos
+                                </a>
                                 <a asp-page="/Actas/Edit"
                                    asp-route-id="@item.Acta.Id_Acta"
-                                   class="btn-gradient-warning"
-                                   style="padding: 6px 12px; font-size: 13px;">Editar</a>
+                                   class="btn-gradient-warning btn-gradient-sm">
+                                    <i class="fa-solid fa-edit"></i> Editar
+                                </a>
                             </td>
                         </tr>
                     }
@@ -321,64 +144,13 @@
                 {
                     <tr>
                         <td colspan="7" class="mensaje-vacio">
-                            @if (Model.HayFiltrosActivos)
-                            {
-                                <span>No se encontraron actas con los filtros aplicados</span>
-                            }
-                            else
-                            {
-                                <span>No hay actas registradas.</span>
-                            }
+                            No hay actas registradas.
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
     </section>
-
-    <!-- PAGINACIÓN -->
-    @if (Model.TotalPaginas > 1)
-    {
-        <div class="paginacion">
-            @if (Model.PaginaActual > 1)
-            {
-                <a asp-page="/Actas/Index"
-                   asp-route-pagina="@(Model.PaginaActual - 1)"
-                   asp-route-FiltroProducto="@Model.FiltroProducto"
-                   asp-route-FiltroRequisicion="@Model.FiltroRequisicion"
-                   asp-route-FiltroProveedor="@Model.FiltroProveedor"
-                   asp-route-FiltroNumeroActa="@Model.FiltroNumeroActa"
-                   asp-route-FiltroF01="@Model.FiltroF01"
-                   asp-route-FiltroOrdenCompra="@Model.FiltroOrdenCompra"
-                   asp-route-FechaDesde="@Model.FechaDesde"
-                   asp-route-FechaHasta="@Model.FechaHasta"
-                   class="btn-moderno btn-secundario btn-pag">
-                    <i class="fa-solid fa-angle-left"></i> Anterior
-                </a>
-            }
-
-            <span class="pagina-info">
-                Página <strong>@Model.PaginaActual</strong> de <strong>@Model.TotalPaginas</strong>
-            </span>
-
-            @if (Model.PaginaActual < Model.TotalPaginas)
-            {
-                <a asp-page="/Actas/Index"
-                   asp-route-pagina="@(Model.PaginaActual + 1)"
-                   asp-route-FiltroProducto="@Model.FiltroProducto"
-                   asp-route-FiltroRequisicion="@Model.FiltroRequisicion"
-                   asp-route-FiltroProveedor="@Model.FiltroProveedor"
-                   asp-route-FiltroNumeroActa="@Model.FiltroNumeroActa"
-                   asp-route-FiltroF01="@Model.FiltroF01"
-                   asp-route-FiltroOrdenCompra="@Model.FiltroOrdenCompra"
-                   asp-route-FechaDesde="@Model.FechaDesde"
-                   asp-route-FechaHasta="@Model.FechaHasta"
-                   class="btn-moderno btn-secundario btn-pag">
-                    Siguiente <i class="fa-solid fa-angle-right"></i>
-                </a>
-            }
-        </div>
-    }
 </div>
 
 @if (TempData["SuccessMessage"] != null)
