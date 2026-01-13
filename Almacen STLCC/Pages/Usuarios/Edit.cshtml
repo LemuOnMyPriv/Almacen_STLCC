@@ -1,0 +1,52 @@
+﻿@page "{id:int}"
+@model Almacen_STLCC.Pages.Usuarios.EditModel
+@{
+    ViewData["Title"] = "Editar Usuario";
+}
+
+<link rel="stylesheet" href="~/css/edit/edit.css" />
+
+<div class="contenedor">
+    <div class="header">
+        <h1>Editar Usuario</h1>
+        <p>Modifica el nombre de usuario o cambia su rol</p>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert-danger">
+            <i class="fa-solid fa-triangle-exclamation"></i> @Model.ErrorMessage
+        </div>
+    }
+
+    <form method="post">
+        <input type="hidden" asp-for="Input.Id_Usuario" />
+
+        <div class="form-group">
+            <label asp-for="Input.NombreUsuario">Nombre de Usuario:</label>
+            <input asp-for="Input.NombreUsuario"
+                   class="form-control"
+                   placeholder="nombre.apellido"
+                   autocomplete="off"
+                   autofocus />
+            <span asp-validation-for="Input.NombreUsuario" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Input.Rol">Rol:</label>
+            <select asp-for="Input.Rol" class="form-select">
+                <option value="USUARIO">USUARIO</option>
+                <option value="ADMINISTRADOR">ADMINISTRADOR</option>
+            </select>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-gradient-success">Guardar Cambios</button>
+            <a asp-page="/Usuarios/Index" class="btn-gradient-secondary">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

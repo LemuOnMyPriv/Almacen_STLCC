@@ -1,0 +1,62 @@
+﻿@page
+@model Almacen_STLCC.Pages.LoginModel
+@{
+    ViewData["Title"] = "Inicie Sesión en Almacén STLCC:";
+    Layout = null;
+}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<link rel="stylesheet" href="~/css/Login.css" />
+
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <img class="logo" src="https://stlcc.gob.hn/wp-content/uploads/2024/09/LOGOS-STLCC-GOBIERNO-CURVAS-04-2000x909.png" alt="Logo STLCC" />
+            <h1> Almacén STLCC</h1>
+            <p>Sistema de Inventario</p>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert alert-danger">
+                <i class="fa-solid fa-triangle-exclamation"></i> @Model.ErrorMessage
+            </div>
+        }
+
+        <form method="post">
+            <div class="form-group">
+                <label for="Username">Usuario:</label>
+                <input type="text"
+                       id="Username"
+                       name="Username"
+                       class="form-control"
+                       placeholder="HN409***"
+                       required
+                       autofocus />
+            </div>
+
+            <div class="form-group">
+                <label for="Password">Contraseña:</label>
+
+                <div class="password-wrapper">
+                    <input type="password"
+                           id="Password"
+                           name="Password"
+                           class="form-control"
+                           placeholder="********"
+                           required />
+
+                    <i id="togglePassword" class="fa-solid fa-eye"></i>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-gradient-success">Iniciar Sesión</button>
+        </form>
+
+        <div class="login-footer">
+            <p>Use sus credenciales del dominio institucional</p>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/Login.js"></script>

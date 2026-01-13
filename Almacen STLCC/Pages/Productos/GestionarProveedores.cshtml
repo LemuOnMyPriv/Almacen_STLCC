@@ -1,0 +1,93 @@
+﻿@page "{id:int}"
+@model Almacen_STLCC.Pages.Productos.GestionarProveedoresModel
+@{
+    ViewData["Title"] = $"Proveedores de {Model.Producto?.Nombre_Producto}";
+}
+
+<link rel="stylesheet" href="~/css/productos/gestionarproveedores.css" />
+
+<div class="contenedor">
+    <div class="header">
+        <div>
+            <h1><i class="fa-solid fa-truck"></i> Gestionar Proveedores</h1>
+            <p>Producto: <strong>@Model.Producto?.Nombre_Producto</strong></p>
+        </div>
+        <a asp-page="/Productos/Index" class="btn-gradient-secondary">
+            <i class="fa-solid fa-angle-left"></i> Volver
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert-success">
+            <i class="fa-solid fa-check"></i> @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert-danger">
+            <i class="fa-solid fa-triangle-exclamation"></i> @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <div class="seccion-agregar">
+        <h2>Agregar Proveedor</h2>
+        <form method="post" asp-page-handler="Agregar" class="form-agregar">
+            <input type="hidden" name="IdProducto" value="@Model.Producto?.Id_Producto" />
+            <div class="form-inline">
+                <select name="IdProveedor" class="form-select" required>
+                    <option value="">-- Seleccione un proveedor --</option>
+                    @foreach (var proveedor in Model.ProveedoresDisponibles)
+                    {
+                        <option value="@proveedor.Id_Proveedor">@proveedor.Nombre_Proveedor</option>
+                    }
+                </select>
+                <button type="submit" class="btn-gradient-primary">
+                    <i class="fa-solid fa-circle-plus"></i> Agregar
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="seccion-lista">
+        <h2>Proveedores Asociados (@Model.ProveedoresProducto.Count)</h2>
+
+        @if (Model.ProveedoresProducto.Any())
+        {
+            <table class="tabla-proveedores tabla-gradient">
+                <thead>
+                    <tr>
+                        <th>Proveedor</th>
+                        <th>RTN</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var pp in Model.ProveedoresProducto)
+                    {
+                        <tr>
+                            <td class="nombre-proveedor">@pp.Proveedor.Nombre_Proveedor</td>
+                            <td>@pp.Proveedor.Rtn</td>
+                            <td class="acciones">
+                                <form method="post" asp-page-handler="Eliminar" style="display: inline;">
+                                    <input type="hidden" name="IdProductoProveedor" value="@pp.Id_Producto_Proveedor" />
+                                    <button type="submit" class="btn-gradient-danger btn-gradient-sm"
+                                            onclick="return confirm('¿Está seguro de eliminar este proveedor?')">
+                                        <i class="fa-solid fa-trash-can"></i> Eliminar
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <div class="mensaje-vacio">
+                <p><i class="fa-regular fa-folder-open"></i> Este producto aún no tiene proveedores asociados</p>
+            </div>
+        }
+    </div>
+</div>

@@ -1,0 +1,178 @@
+﻿body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f8;
+    color: #000;
+    margin: 0;
+    padding: 0;
+}
+
+.contenedor {
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.header {
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .header h1 {
+        margin: 0;
+    }
+
+.btn-crear {
+    background-color: #555;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-size: 15px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: inline-block;
+}
+
+    .btn-crear:hover {
+        background-color: #171717;
+    }
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.tabla-usuarios {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+    table-layout: fixed;
+}
+
+    .tabla-usuarios thead {
+        background-color: #88CFE0;
+        color: white;
+    }
+
+    .tabla-usuarios th,
+    .tabla-usuarios td {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+    }
+
+    .tabla-usuarios th {
+        font-weight: 600;
+    }
+
+    .tabla-usuarios tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+
+.badge-rol {
+    padding:6px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.badge-admin {
+    background-color: #DB473C;
+    color: white;
+}
+
+.badge-usuario {
+    background-color: #6c757d;
+    color: white;
+}
+
+.acciones {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-cambiar {
+    background-color: #007bff;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: none;
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+    .btn-cambiar:hover {
+        background-color: #0056b3;
+    }
+
+.btn-editar {
+    background-color: #f1e60f;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: none;
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+    .btn-editar:hover {
+        background-color: #e0a800;
+    }
+
+.btn-bloqueado {
+    background-color: #adb5bd;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: not-allowed;
+    display: inline-block;
+    opacity: 0.6;
+}
+
+.btn-eliminar {
+    background-color: #DB473C;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: none;
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+    .btn-eliminar:hover {
+        background-color: #c82333;
+    }
+
+.mensaje-vacio {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+    padding: 25px;
+    font-size: 16px;
+}

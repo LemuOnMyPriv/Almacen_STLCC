@@ -1,0 +1,183 @@
+﻿@page "{id:int}"
+@model Almacen_STLCC.Pages.Actas.EditModel
+@{
+    ViewData["Title"] = "Editar Acta";
+}
+
+<link rel="stylesheet" href="~/css/actas/crearacta.css" />
+
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h2>Editar Acta</h2>
+            <button type="button" class="btn-close" id="btnClose">&times;</button>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert alert-danger">
+                <i class="fa-solid fa-triangle-exclamation"></i> @Model.ErrorMessage
+            </div>
+        }
+
+        <form method="post" id="formEditarActa">
+            <input type="hidden" asp-for="Input.Id_Acta" />
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label asp-for="Input.Numero_Acta">Numero de Acta:</label>
+                    <input asp-for="Input.Numero_Acta"
+                           class="form-control"
+                           placeholder="Ej: 001-2026"
+                           autocomplete="off"
+                           autofocus />
+                    <span asp-validation-for="Input.Numero_Acta" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.F01">F01:</label>
+                    <input asp-for="Input.F01"
+                           class="form-control"
+                           placeholder="Ej: 1105"
+                           autocomplete="off" />
+                    <span asp-validation-for="Input.F01" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Orden_Compra">Orden de Compra:</label>
+                    <input asp-for="Input.Orden_Compra"
+                           class="form-control"
+                           placeholder="Ej: STLCC-GA-019-2025"
+                           autocomplete="off" />
+                    <span asp-validation-for="Input.Orden_Compra" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Id_Proveedor">Proveedor:</label>
+                    <select asp-for="Input.Id_Proveedor"
+                            class="form-select searchable-select"
+                            id="selectProveedor">
+                        <option value="">-- Seleccione un proveedor --</option>
+                        @foreach (var proveedor in Model.Proveedores)
+                        {
+                            <option value="@proveedor.Id_Proveedor">@proveedor.Nombre_Proveedor</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Input.Id_Proveedor" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Fecha">Fecha:</label>
+                    <input asp-for="Input.Fecha"
+                           type="date"
+                           class="form-control" />
+                    <span asp-validation-for="Input.Fecha" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="separador">
+                <div class="separador-header">
+                    <div>
+                        <h3>Productos del Acta</h3>
+                        <p class="texto-ayuda">Edite los productos de esta acta</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="productosContainer">
+                @for (int i = 0; i < Model.Input.Detalles.Count; i++)
+                {
+                    <div class="producto-item" data-index="@i">
+                        <input type="hidden" name="Input.Detalles[@i].Id_Detalle" value="@Model.Input.Detalles[i].Id_Detalle" />
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Producto:</label>
+                                <select name="Input.Detalles[@i].Id_Producto"
+                                        class="form-select searchable-select"
+                                        id="selectProducto@(i)"
+                                        required>
+                                    <option value="">-- Seleccione un producto --</option>
+                                    @foreach (var producto in Model.Productos)
+                                    {
+                                        <option value="@producto.Id_Producto"
+                                                selected="@(producto.Id_Producto == Model.Input.Detalles[i].Id_Producto)">
+                                            @producto.Nombre_Producto
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Requisición (Opcional):</label>
+                                <input type="text"
+                                       name="Input.Detalles[@i].Requisicion"
+                                       class="form-control"
+                                       value="@Model.Input.Detalles[i].Requisicion"
+                                       placeholder="Ej: REQ-2025-001"
+                                       autocomplete="off" />
+                            </div>
+
+                            <div class="form-group">
+                                <label>Cantidad:</label>
+                                <input type="number"
+                                       name="Input.Detalles[@i].Cantidad"
+                                       class="form-control"
+                                       value="@Model.Input.Detalles[i].Cantidad"
+                                       min="1"
+                                       required />
+                            </div>
+
+                            <div class="form-group">
+                                <label>Precio Unitario:</label>
+                                <input type="number"
+                                       name="Input.Detalles[@i].Precio_Unitario"
+                                       class="form-control"
+                                       value="@Model.Input.Detalles[i].Precio_Unitario"
+                                       step="0.01"
+                                       min="0" />
+                            </div>
+
+                            <div class="form-group">
+                                <label>Precio con ISV:</label>
+                                <input type="number"
+                                       name="Input.Detalles[@i].Precio_Con_Isv"
+                                       class="form-control"
+                                       value="@Model.Input.Detalles[i].Precio_Con_Isv"
+                                       step="0.01"
+                                       min="0" />
+                            </div>
+
+                            <div class="form-group btn-eliminar-container">
+                                <button type="button" class="btn-eliminar-producto" data-producto-index="@i">
+                                    Eliminar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <button type="button" class="btn-gradient-primary" style="width: 100%; padding: 14px;" onclick="agregarProducto()">
+                <i class="fa-solid fa-circle-plus"></i> Agregar Otro Producto
+            </button>
+
+            <div class="form-actions">
+                <button type="button" class="btn-gradient-success" style="flex: 1; padding: 14px;" id="btnGuardar">
+                    <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
+                </button>
+                <button type="button" class="btn-gradient-secondary" style="flex: 1; padding: 14px;" id="btnCancelar">
+                    <i class="fa-solid fa-ban"></i> Cancelar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Pasar los productos disponibles a JavaScript
+        var productosDisponibles = @Html.Raw(Json.Serialize(Model.Productos.Select(p => new { value = p.Id_Producto, text = p.Nombre_Producto })));
+        var productoIndexInicial = @Model.Input.Detalles.Count;
+    </script>
+    <script src="~/js/actas/editActa.js"></script>
+}

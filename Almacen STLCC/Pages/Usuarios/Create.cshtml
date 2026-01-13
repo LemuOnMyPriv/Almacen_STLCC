@@ -1,0 +1,90 @@
+﻿@page
+@model Almacen_STLCC.Pages.Usuarios.CreateModel
+@{
+    ViewData["Title"] = "Crear Usuario Local";
+}
+<link rel="stylesheet" href="~/css/usuarios/crear.css" />
+
+<div class="crear-container">
+    <div class="crear-card">
+        <div class="crear-header">
+            <h2>Crear Usuario</h2>
+            <p>Registra un nuevo usuario para el acceso al sistema</p>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert alert-danger">
+                <i class="fa-solid fa-triangle-exclamation"></i> @Model.ErrorMessage
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+        {
+            <div class="alert alert-success">
+                <i class="fa-solid fa-check"></i> @Model.SuccessMessage
+            </div>
+        }
+
+        <form method="post">
+            <div class="cajas">
+                <label asp-for="Input.Usuario">Nombre de Usuario:</label>
+                <input asp-for="Input.Usuario"
+                       class="form-control"
+                       placeholder="Nombre"
+                       autocomplete="off" />
+                <span asp-validation-for="Input.Usuario" class="validacion"></span>
+                <small style="color: #666; font-size: 13px; display: block; margin-top: 5px;">
+                    Ej: Juan Carlos Fonseca Alfaro
+                </small>
+            </div>
+
+            <div class="cajas">
+                <label asp-for="Input.Contraseña">Contraseña:</label>
+                <input asp-for="Input.Contraseña"
+                       class="form-control"
+                       type="password"
+                       placeholder="********"
+                       autocomplete="new-password" />
+                <span asp-validation-for="Input.Contraseña" class="validacion"></span>
+                <small style="color: #666; font-size: 13px; display: block; margin-top: 5px;">
+                    Mínimo 6 caracteres
+                </small>
+            </div>
+
+            <div class="cajas">
+                <label asp-for="Input.ConfirmarContraseña">Confirmar Contraseña:</label>
+                <input asp-for="Input.ConfirmarContraseña"
+                       class="form-control"
+                       type="password"
+                       placeholder="********"
+                       autocomplete="new-password" />
+                <span asp-validation-for="Input.ConfirmarContraseña" class="validacion"></span>
+                <small style="color: #666; font-size: 13px; display: block; margin-top: 5px;">
+                    Repita su contraseña
+                </small>
+            </div>
+
+            <button type="submit" class="btn-gradient-info" style="width: 100%; padding: 14px; font-size: 16px; margin-top: 10px; text-align: center;">Crear Usuario</button>
+        </form>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <a asp-page="/Usuarios/Index" class="btn-volver">
+                Volver a la lista de usuarios
+            </a>
+        </div>
+    </div>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="successMessage" data-message="@TempData["SuccessMessage"]" style="display:none;"></div>
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            mostrarMensajeExito();
+        });
+    </script>
+}

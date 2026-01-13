@@ -1,0 +1,50 @@
+﻿@page "{id:int}"
+@model Almacen_STLCC.Pages.Categorias.EditModel
+@{
+    ViewData["Title"] = "Editar Categoría";
+}
+
+<link rel="stylesheet" href="~/css/categorias/crearcategoria.css" />
+
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h2>Editar Categoría</h2>
+            <button type="button" class="btn-close" id="btnClose">&times;</button>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert alert-danger">
+                <i class="fa-solid fa-triangle-exclamation"></i> @Model.ErrorMessage
+            </div>
+        }
+
+        <form method="post" id="formEditarCategoria">
+            <input type="hidden" asp-for="Input.Id_Categoria" />
+
+            <div class="form-group">
+                <label asp-for="Input.Nombre_Categoria">Nombre de Categoría:</label>
+                <input asp-for="Input.Nombre_Categoria"
+                       class="form-control"
+                       placeholder="Ej: Electrónicos"
+                       autocomplete="off"
+                       autofocus />
+                <span asp-validation-for="Input.Nombre_Categoria" class="text-danger"></span>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn-gradient-success" style="flex: 1; padding: 14px;" id="btnGuardar">
+                    <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
+                </button>
+                <button type="button" class="btn-gradient-secondary" style="flex: 1; padding: 14px;" id="btnCancelar">
+                    <i class="fa-solid fa-ban"></i> Cancelar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/categorias/editcategoria.js"></script>
+}

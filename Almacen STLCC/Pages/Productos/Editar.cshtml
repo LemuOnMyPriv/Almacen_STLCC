@@ -1,0 +1,92 @@
+﻿@page "{id:int}"
+@model Almacen_STLCC.Pages.Productos.EditarModel
+@{
+    ViewData["Title"] = "Editar Producto";
+}
+
+<link rel="stylesheet" href="~/css/productos/crearp.css" />
+
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h2>Editar Producto</h2>
+            <button type="button" class="btn-close" id="btnClose">&times;</button>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert alert-danger">
+                <i class="fa-solid fa-triangle-exclamation"></i> @Model.ErrorMessage
+            </div>
+        }
+
+        <form method="post" id="formEditarProducto">
+            <input type="hidden" asp-for="Input.Id_Producto" />
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label asp-for="Input.Codigo_Producto">Código del Producto:</label>
+                    <input asp-for="Input.Codigo_Producto"
+                           class="form-control"
+                           type="number"
+                           placeholder="Ej: 330996"
+                           autocomplete="off"
+                           autofocus />
+                    <span asp-validation-for="Input.Codigo_Producto" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Nombre_Producto">Nombre del Producto:</label>
+                    <input asp-for="Input.Nombre_Producto"
+                           class="form-control"
+                           placeholder="Ej: Resma de papel bond"
+                           autocomplete="off" />
+                    <span asp-validation-for="Input.Nombre_Producto" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Marca">Marca del Producto:</label>
+                    <input asp-for="Input.Marca"
+                           class="form-control"
+                           placeholder="Ej: Chamex"
+                           autocomplete="off" />
+                    <span asp-validation-for="Input.Marca" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Id_Categoria">Categoría:</label>
+                    <select asp-for="Input.Id_Categoria" class="form-select searchable-select" id="selectCategoria">
+                        <option value="">-- Seleccione una categoría --</option>
+                        @foreach (var categoria in Model.Categorias)
+                        {
+                            <option value="@categoria.Id_Categoria">@categoria.Nombre_Categoria</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Input.Id_Categoria" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Unidad_Medida">Unidad de Medida:</label>
+                    <input asp-for="Input.Unidad_Medida"
+                           class="form-control"
+                           placeholder="Ej: Paquete"
+                           autocomplete="off" />
+                    <span asp-validation-for="Input.Unidad_Medida" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn-gradient-success" style="flex: 1; padding: 14px;" id="btnGuardar">
+                    <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
+                </button>
+                <button type="button" class="btn-gradient-secondary" style="flex: 1; padding: 14px;" id="btnCancelar">
+                    <i class="fa-solid fa-ban"></i> Cancelar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/productos/editar.js"></script>
+}

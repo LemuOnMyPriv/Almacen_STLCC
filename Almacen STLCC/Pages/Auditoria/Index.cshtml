@@ -1,0 +1,159 @@
+﻿@page
+@model Almacen_STLCC.Pages.Auditoria.IndexModel
+@{
+    ViewData["Title"] = "Auditoría del Sistema";
+}
+
+<link rel="stylesheet" href="~/css/auditoria/index.css" />
+
+<div class="contenedor">
+    <div class="header">
+        <div>
+            <h1><i class="fa-solid fa-magnifying-glass"></i> Auditoría del Sistema</h1>
+            <p>Registro detallado de todas las acciones realizadas en el sistema</p>
+        </div>
+        <form method="post" asp-page-handler="ExportarYLimpiar" style="display: inline;">
+            <button type="submit" class="btn-gradient-info">
+                <i class="fa-solid fa-file-export"></i> Exportar y Limpiar
+            </button>
+        </form>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert-success">
+            <i class="fa-solid fa-check"></i> @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert-danger">
+            <i class="fa-solid fa-triangle-exclamation"></i> @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <section class="panel-busqueda-avanzado">
+        <h3><i class="fa-solid fa-sliders"></i> Filtros de Búsqueda</h3>
+        <div class="busqueda-grid">
+            <div class="busqueda-grupo">
+                <label for="filtroUsuario">
+                    <i class="fa-solid fa-user"></i> Usuario:
+                </label>
+                <input type="text"
+                       id="filtroUsuario"
+                       class="form-control-busqueda"
+                       placeholder="Ej: admin"
+                       autocomplete="off">
+            </div>
+
+            <div class="busqueda-grupo">
+                <label for="filtroAccion">
+                    <i class="fa-solid fa-bolt"></i> Acción:
+                </label>
+                <select id="filtroAccion" class="form-control-busqueda">
+                    <option value="">Todas</option>
+                    <option value="CREAR">CREAR</option>
+                    <option value="EDITAR">EDITAR</option>
+                    <option value="ELIMINAR">ELIMINAR</option>
+                </select>
+            </div>
+
+            <div class="busqueda-grupo">
+                <label for="filtroTabla">
+                    <i class="fa-solid fa-table"></i> Tabla:
+                </label>
+                <input type="text"
+                       id="filtroTabla"
+                       class="form-control-busqueda"
+                       placeholder="Ej: productos"
+                       autocomplete="off">
+            </div>
+
+            <div class="busqueda-grupo">
+                <label for="filtroDescripcion">
+                    <i class="fa-solid fa-file-lines"></i> Descripción:
+                </label>
+                <input type="text"
+                       id="filtroDescripcion"
+                       class="form-control-busqueda"
+                       placeholder="Buscar en descripción..."
+                       autocomplete="off">
+            </div>
+
+            <div class="busqueda-grupo">
+                <label for="filtroFechaDesde">
+                    <i class="fa-solid fa-calendar-days"></i> Fecha Desde:
+                </label>
+                <input type="date"
+                       id="filtroFechaDesde"
+                       class="form-control-busqueda">
+            </div>
+
+            <div class="busqueda-grupo">
+                <label for="filtroFechaHasta">
+                    <i class="fa-solid fa-calendar-check"></i> Fecha Hasta:
+                </label>
+                <input type="date"
+                       id="filtroFechaHasta"
+                       class="form-control-busqueda">
+            </div>
+        </div>
+    </section>
+
+    @if (Model.Auditorias.Any())
+    {
+        <div class="tabla-auditoria">
+            <table class="tabla-gradient" id="tablaAuditoria">
+                <thead>
+                    <tr>
+                        <th>Fecha y Hora</th>
+                        <th>Usuario</th>
+                        <th>Acción</th>
+                        <th>Tabla</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var audit in Model.Auditorias)
+                    {
+                        <tr>
+                            <td class="fecha">@audit.Fecha_Hora.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                            <td class="usuario">@audit.Usuario</td>
+                            <td>
+                                @if (audit.Accion == "CREAR")
+                                {
+                                    <span class="badge-gradient-crear">CREAR</span>
+                                }
+                                else if (audit.Accion == "EDITAR")
+                                {
+                                    <span class="badge-gradient-editar">EDITAR</span>
+                                }
+                                else if (audit.Accion == "ELIMINAR")
+                                {
+                                    <span class="badge-gradient-eliminar">ELIMINAR</span>
+                                }
+                                else
+                                {
+                                    <span class="badge-otro">@audit.Accion</span>
+                                }
+                            </td>
+                            <td class="tabla">@audit.Tabla</td>
+                            <td class="descripcion">@audit.Descripcion</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="mensaje-vacio">
+            <i class="fa-regular fa-file-lines"></i> No hay registros de auditoría
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="~/js/auditoria/index.js"></script>
+}

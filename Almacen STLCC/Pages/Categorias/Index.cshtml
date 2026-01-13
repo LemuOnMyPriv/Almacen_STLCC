@@ -1,0 +1,80 @@
+﻿@page
+@model Almacen_STLCC.Pages.Categorias.IndexModel
+@{
+    ViewData["Title"] = "Categorías - Almacén STLCC";
+}
+<link rel="stylesheet" href="~/css/categorias/Index.css" />
+
+<div class="contenedor">
+    <header class="header">
+        <div class="titulo-header">
+            <div>
+                <h1><i class="fa-solid fa-tags"></i> Lista de Categorías</h1>
+                <p>Consulta y gestiona todas las categorías de productos.</p>
+            </div>
+            <div class="cat-crear">
+                <a asp-page="/Categorias/Create" class="btn-gradient-primary">
+                    <i class="fa-solid fa-circle-plus"></i> Categoría
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="panel-busqueda">
+            <div class="busqueda-grupo">
+                <label for="buscarCategoria">
+                    <i class="fa-solid fa-magnifying-glass"></i> Buscar:
+                </label>
+                <input type="text"
+                       id="buscarCategoria"
+                       class="form-control-busqueda"
+                       placeholder="Buscar por nombre de categoría..."
+                       autocomplete="off">
+
+        </div>
+    </section>
+
+    <section class="tabla-categorias">
+        <table class="tabla-gradient" id="tablaCategorias">
+            <thead>
+                <tr>
+                    <th>Nombre de la Categoría</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Categorias != null && Model.Categorias.Any())
+                {
+                    foreach (var categoria in Model.Categorias)
+                    {
+                        <tr>
+                            <td>@categoria.Nombre_Categoria</td>
+                            <td class="acciones">
+                                <a asp-page="/Categorias/Edit"
+                                   asp-route-id="@categoria.Id_Categoria"
+                                   class="btn-gradient-warning btn-gradient-sm">
+                                    <i class="fa-solid fa-edit"></i> Editar
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="2" class="mensaje-vacio">No hay categorías registradas.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </section>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="successMessage" data-message="@TempData["SuccessMessage"]" style="display:none;"></div>
+}
+
+@section Scripts {
+    <script src="~/js/categorias/index.js"></script>
+}

@@ -1,0 +1,127 @@
+﻿.contenedor {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.header {
+    margin-bottom: 30px;
+}
+
+    .header h1 {
+        color: #2c3e50;
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
+
+    .header p {
+        color: #666;
+        font-size: 15px;
+    }
+
+.alert {
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.alert-danger {
+    background-color: #fee;
+    color: #c33;
+    border: 1px solid #fcc;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.info-box {
+    background-color: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 12px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    color: #856404;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #949699;
+    }
+
+.form-control {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: border-color 0.3s;
+}
+
+    .form-control:focus {
+        outline: none;
+        border-color: #88CFE0;
+    }
+
+.text-danger {
+    color: #DB473C;
+    font-size: 13px;
+    margin-top: 5px;
+    display: block;
+}
+
+.form-text {
+    font-size: 13px;
+    color: #666;
+    margin-top: 5px;
+    display: block;
+}
+
+.form-actions {
+    margin-top: 25px;
+    display: flex;
+    gap: 10px;
+}
+
+.btn-azul {
+    background-color: #007bff;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 6px;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+    .btn-azul:hover {
+        background-color: #0056b3;
+    }
+
+.btn-gris {
+    background-color: #6c757d;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.2s;
+    display: inline-block;
+}
+
+    .btn-gris:hover {
+        background-color: #5a6268;
+    }

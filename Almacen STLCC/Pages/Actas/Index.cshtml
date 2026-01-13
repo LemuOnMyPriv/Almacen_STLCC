@@ -1,0 +1,186 @@
+﻿@page
+@model Almacen_STLCC.Pages.Actas.IndexModel
+@{
+    ViewData["Title"] = "Actas";
+}
+<link rel="stylesheet" href="~/css/shared/badges.css" />
+<link rel="stylesheet" href="~/css/actas/Index.css" />
+
+<div class="contenedor">
+    <header class="header">
+        <div class="titulo-header">
+            <div>
+                <h1><i class="fa-solid fa-list"></i> Lista de Actas</h1>
+                <p>Consulta y gestiona todas las actas de compra registradas.</p>
+            </div>
+            <div class="acta-crear">
+                <a asp-page="/Actas/CrearActa" class="btn-gradient-primary">
+                    <i class="fa-solid fa-circle-plus"></i> Agregar Acta
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="panel-busqueda-avanzado">
+        <h3><i class="fa-solid fa-sliders"></i> Filtros de Búsqueda</h3>
+        <div class="busqueda-grid">
+            <div class="busqueda-grupo">
+                <label for="filtroNumeroActa">
+                    <i class="fa-solid fa-hashtag"></i> Número de Acta:
+                </label>
+                <input type="text"
+                       id="filtroNumeroActa"
+                       class="form-control-busqueda"
+                       placeholder="Ej: 001-2025"
+                       autocomplete="off">
+            </div>
+
+            <div class="busqueda-grupo">
+                <label for="filtroF01">
+                    <i class="fa-solid fa-barcode"></i> F01:
+                </label>
+                <input type="text"
+                       id="filtroF01"
+                       class="form-control-busqueda"
+                       placeholder="Ej: 1105"
+                       autocomplete="off">
+            </div>
+
+            <div class="busqueda-grupo">
+                <label for="filtroOrdenCompra">
+                    <i class="fa-solid fa-receipt"></i> Orden de Compra:
+                </label>
+                <input type="text"
+                       id="filtroOrdenCompra"
+                       class="form-control-busqueda"
+                       placeholder="Ej: OC-2025-001"
+                       autocomplete="off">
+            </div>
+
+            <div class="busqueda-grupo">
+                <label for="filtroProveedor">
+                    <i class="fa-solid fa-truck"></i> Proveedor:
+                </label>
+                <input type="text"
+                       id="filtroProveedor"
+                       class="form-control-busqueda"
+                       placeholder="Nombre del proveedor"
+                       autocomplete="off">
+            </div>
+
+            <div class="busqueda-grupo">
+                <label for="filtroFechaDesde">
+                    <i class="fa-solid fa-calendar-days"></i> Fecha Desde:
+                </label>
+                <input type="date"
+                       id="filtroFechaDesde"
+                       class="form-control-busqueda">
+            </div>
+
+            <div class="busqueda-grupo">
+                <label for="filtroFechaHasta">
+                    <i class="fa-solid fa-calendar-check"></i> Fecha Hasta:
+                </label>
+                <input type="date"
+                       id="filtroFechaHasta"
+                       class="form-control-busqueda">
+            </div>
+        </div>
+    </section>
+
+    <!-- Resumen Agrupado -->
+    <div id="resumenAgrupado" class="resumen-agrupado" style="display: none;">
+        <!-- Se llenará dinámicamente con JavaScript -->
+    </div>
+
+    <section class="tabla-actas">
+        <table class="tabla-gradient" id="tablaActas">
+            <thead>
+                <tr>
+                    <th>Numero de Acta</th>
+                    <th>F01</th>
+                    <th>Orden de Compra</th>
+                    <th>Proveedor</th>
+                    <th>Requisiciones</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Actas != null && Model.Actas.Any())
+                {
+                    @foreach (var item in Model.Actas)
+                    {
+                        <tr>
+                            <td>@item.Acta.Numero_Acta</td>
+                            <td>@item.Acta.F01</td>
+                            <td>@(item.Acta.Orden_Compra ?? "N/A")</td>
+                            <td>@item.Acta.Proveedor.Nombre_Proveedor</td>
+                            <td>
+                                @if (item.Requisiciones.Any())
+                                {
+                                    <div class="requisiciones-inline">
+                                        @if (item.Requisiciones.Count <= 3)
+                                        {
+                                            foreach (var req in item.Requisiciones)
+                                            {
+                                                <span class="badge-requisicion">@req.Requisicion</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            for (int i = 0; i < 2; i++)
+                                            {
+                                                <span class="badge-requisicion">@item.Requisiciones[i].Requisicion</span>
+                                            }
+                                            <span class="badge-requisicion">+@(item.Requisiciones.Count - 2)</span>
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="texto-sin-datos">Sin requisiciones</span>
+                                }
+                            </td>
+                            <td>@item.Acta.Fecha.ToString("dd/MM/yyyy")</td>
+                            <td class="acciones">
+                                <a asp-page="/Actas/Detalles"
+                                   asp-route-id="@item.Acta.Id_Acta"
+                                   class="btn-gradient-info btn-gradient-sm">
+                                    <i class="fa-solid fa-eye"></i> Detalles
+                                </a>
+                                <a asp-page="/Actas/Archivos"
+                                   asp-route-id="@item.Acta.Id_Acta"
+                                   class="btn-gradient-success btn-gradient-sm">
+                                    <i class="fa-solid fa-paperclip"></i> Archivos
+                                </a>
+                                <a asp-page="/Actas/Edit"
+                                   asp-route-id="@item.Acta.Id_Acta"
+                                   class="btn-gradient-warning btn-gradient-sm">
+                                    <i class="fa-solid fa-edit"></i> Editar
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="7" class="mensaje-vacio">
+                            No hay actas registradas.
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </section>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="successMessage" data-message="@TempData["SuccessMessage"]" style="display:none;"></div>
+}
+
+@section Scripts {
+    <script src="~/js/actas/index.js"></script>
+}

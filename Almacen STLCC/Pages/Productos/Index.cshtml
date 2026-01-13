@@ -1,0 +1,209 @@
+﻿@page
+@model Almacen_STLCC.Pages.Productos.IndexModel
+@{
+    ViewData["Title"] = "Productos - Almacén STLCC";
+}
+<link rel="stylesheet" href="~/css/shared/badges.css" />
+<link rel="stylesheet" href="~/css/productos/Index.css" />
+
+<div class="contenedor">
+    <header class="header">
+        <div class="titulo-header">
+            <div>
+                <h1><i class="fa-solid fa-clipboard-list"></i> Lista de Productos</h1>
+                <p>Consulta y gestiona todos los productos registrados en el inventario.</p>
+            </div>
+            <div class="prod-crear">
+                <a asp-page="/Productos/CrearP" class="btn-gradient-primary">
+                    <i class="fa-solid fa-circle-plus"></i> Producto
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="panel-busqueda-avanzado">
+        <h3><i class="fa-solid fa-sliders"></i> Filtros de Búsqueda</h3>
+        <div class="busqueda-grid">
+            <div class="busqueda-grupo">
+                <label for="filtroCodigo">
+                    <i class="fa-solid fa-barcode"></i> Código:
+                </label>
+                <input type="text"
+                       id="filtroCodigo"
+                       class="form-control-busqueda"
+                       placeholder="Ej: 330996"
+                       autocomplete="off">
+            </div>
+
+            <div class="busqueda-grupo">
+                <label for="filtroNombre">
+                    <i class="fa-solid fa-tag"></i> Nombre:
+                </label>
+                <input type="text"
+                       id="filtroNombre"
+                       class="form-control-busqueda"
+                       placeholder="Ej: Resma de papel"
+                       autocomplete="off">
+            </div>
+
+            <div class="busqueda-grupo">
+                <label for="filtroMarca">
+                    <i class="fa-solid fa-copyright"></i> Marca:
+                </label>
+                <input type="text"
+                       id="filtroMarca"
+                       class="form-control-busqueda"
+                       placeholder="Ej: HP"
+                       autocomplete="off">
+            </div>
+
+            <div class="busqueda-grupo">
+                <label for="filtroCategoria">
+                    <i class="fa-solid fa-layer-group"></i> Categoría:
+                </label>
+                <input type="text"
+                       id="filtroCategoria"
+                       class="form-control-busqueda"
+                       placeholder="Ej: Papelería"
+                       autocomplete="off">
+            </div>
+
+            <div class="busqueda-grupo">
+                <label for="filtroUnidadMedida">
+                    <i class="fa-solid fa-ruler"></i> Unidad de Medida:
+                </label>
+                <input type="text"
+                       id="filtroUnidadMedida"
+                       class="form-control-busqueda"
+                       placeholder="Ej: Paquete, Unidad"
+                       autocomplete="off">
+            </div>
+
+            <div class="busqueda-grupo">
+                <label for="filtroProveedor">
+                    <i class="fa-solid fa-truck"></i> Proveedor:
+                </label>
+                <input type="text"
+                       id="filtroProveedor"
+                       class="form-control-busqueda"
+                       placeholder="Ej: INVERSIONES E & M"
+                       autocomplete="off">
+            </div>
+
+            <div class="busqueda-grupo">
+                <label for="filtroFechaDesde">
+                    <i class="fa-solid fa-calendar-days"></i> Fecha Desde:
+                </label>
+                <input type="date"
+                       id="filtroFechaDesde"
+                       class="form-control-busqueda">
+            </div>
+
+            <div class="busqueda-grupo">
+                <label for="filtroFechaHasta">
+                    <i class="fa-solid fa-calendar-check"></i> Fecha Hasta:
+                </label>
+                <input type="date"
+                       id="filtroFechaHasta"
+                       class="form-control-busqueda">
+            </div>
+        </div>
+    </section>
+
+    <section class="tabla-productos">
+        <table class="tabla-gradient" id="tablaProductos">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Nombre</th>
+                    <th>Marca</th>
+                    <th>Categoría</th>
+                    <th>Unidad de Medida</th>
+                    <th>Proveedor(es)</th>
+                    <th>Inventario Actual</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Productos != null && Model.Productos.Any())
+                {
+                    @foreach (var producto in Model.Productos)
+                    {
+                        <tr>
+                            <td>@producto.Codigo_Producto</td>
+                            <td>@producto.Nombre_Producto</td>
+                            <td>@producto.Marca</td>
+                            <td>@(producto.Categoria?.Nombre_Categoria ?? "Sin categoría")</td>
+                            <td>@producto.Unidad_Medida</td>
+                            <td>
+                                @if (Model.ProveedoresPorProducto.ContainsKey(producto.Id_Producto) &&
+                                                        Model.ProveedoresPorProducto[producto.Id_Producto].Any())
+                                {
+                                    var proveedores = Model.ProveedoresPorProducto[producto.Id_Producto];
+                                    <div class="proveedores-inline">
+                                        @if (proveedores.Count <= 3)
+                                        {
+                                            @foreach (var proveedor in proveedores)
+                                            {
+                                                <span class="badge-proveedor">@proveedor</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            @for (int i = 0; i < 2; i++)
+                                            {
+                                                <span class="badge-proveedor">@proveedores[i]</span>
+                                            }
+                                            <span class="badge-proveedor">+@(proveedores.Count - 2)</span>
+                                        }
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="texto-sin-datos">Sin proveedores</span>
+                                }
+                            </td>
+                            <td>
+                                @if (Model.Inventarios != null && Model.Inventarios.ContainsKey(producto.Id_Producto))
+                                {
+                                    <span>@Model.Inventarios[producto.Id_Producto]</span>
+                                }
+                                else
+                                {
+                                    <span>0</span>
+                                }
+                            </td>
+                            <td class="acciones">
+                                <a asp-page="/Productos/Editar"
+                                   asp-route-id="@producto.Id_Producto"
+                                   class="btn-gradient-warning btn-gradient-sm">
+                                    <i class="fa-solid fa-edit"></i> Editar
+                                </a>
+                                <a asp-page="/Productos/GestionarProveedores"
+                                   asp-route-id="@producto.Id_Producto"
+                                   class="btn-gradient-info btn-gradient-sm">
+                                    <i class="fa-solid fa-truck"></i> Proveedores
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8" class="mensaje-vacio">No hay productos registrados.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </section>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="successMessage" data-message="@TempData["SuccessMessage"]" style="display:none;"></div>
+}
+
+@section Scripts {
+    <script src="~/js/productos/index.js"></script>
+}

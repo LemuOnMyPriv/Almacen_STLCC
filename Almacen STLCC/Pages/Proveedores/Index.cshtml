@@ -1,0 +1,95 @@
+﻿@page
+@model Almacen_STLCC.Pages.Proveedores.IndexModel
+@{
+    ViewData["Title"] = "Proveedores - Almacén STLCC";
+}
+<link rel="stylesheet" href="~/css/proveedores/Index.css" />
+
+<div class="contenedor">
+    <header class="header">
+        <div class="titulo-header">
+            <div>
+                <h1><i class="fa-solid fa-truck"></i> Lista de Proveedores</h1>
+                <p>Consulta y gestiona todos los proveedores existentes para el inventario.</p>
+            </div>
+            <div class="prov-crear">
+                <a asp-page="/Proveedores/CrearProveedor" class="btn-gradient-success">
+                    <i class="fa-solid fa-circle-plus"></i> Añadir Proveedor
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="panel-busqueda-avanzado">
+        <h3><i class="fa-solid fa-sliders"></i> Filtros de Búsqueda</h3>
+        <div class="busqueda-grid">
+            <div class="busqueda-grupo">
+                <label for="filtroNombreProveedor">
+                    <i class="fa-solid fa-building"></i> Nombre:
+                </label>
+                <input type="text"
+                       id="filtroNombreProveedor"
+                       class="form-control-busqueda"
+                       placeholder="Ej: INVERSIONES E & M"
+                       autocomplete="off">
+            </div>
+
+            <div class="busqueda-grupo">
+                <label for="filtroRTN">
+                    <i class="fa-solid fa-id-card"></i> RTN:
+                </label>
+                <input type="text"
+                       id="filtroRTN"
+                       class="form-control-busqueda"
+                       placeholder="Ej: 08011234567890"
+                       autocomplete="off">
+            </div>
+        </div>
+    </section>
+
+    <section class="tabla-proveedores">
+        <table class="tabla-gradient" id="tablaProveedores">
+            <thead>
+                <tr>
+                    <th>Nombre del Proveedor</th>
+                    <th>RTN</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Proveedores != null && Model.Proveedores.Any())
+                {
+                    @foreach (var proveedor in Model.Proveedores)
+                    {
+                        <tr>
+                            <td>@proveedor.Nombre_Proveedor</td>
+                            <td>@proveedor.Rtn</td>
+                            <td class="acciones">
+                                <a asp-page="/Proveedores/EditarProveedor"
+                                   asp-route-id="@proveedor.Id_Proveedor"
+                                   class="btn-gradient-warning btn-gradient-sm">
+                                    <i class="fa-solid fa-edit"></i> Editar
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3" class="mensaje-vacio">No hay proveedores registrados.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </section>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="successMessage" data-message="@TempData["SuccessMessage"]" style="display:none;"></div>
+}
+
+@section Scripts {
+    <script src="~/js/proveedores/index.js"></script>
+}

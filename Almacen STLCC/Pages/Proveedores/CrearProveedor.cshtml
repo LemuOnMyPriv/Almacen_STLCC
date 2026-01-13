@@ -1,0 +1,58 @@
+﻿@page
+@model Almacen_STLCC.Pages.Proveedores.CrearProveedorModel
+@{
+    ViewData["Title"] = "Crear Proveedor";
+}
+
+<link rel="stylesheet" href="~/css/proveedores/crearproveedor.css" />
+
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h2>Crear Nuevo Proveedor</h2>
+            <button type="button" class="btn-close" id="btnClose">&times;</button>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert alert-danger">
+                <i class="fa-solid fa-triangle-exclamation"></i> @Model.ErrorMessage
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+        {
+            <div class="alert alert-success">
+                <i class="fa-solid fa-check"></i> @Model.SuccessMessage
+            </div>
+        }
+
+        <form method="post" id="formCrearProveedor">
+                <div class="form-group">
+                    <label asp-for="Input.Nombre_Proveedor">Nombre del Proveedor:</label>
+                    <input asp-for="Input.Nombre_Proveedor"
+                           class="form-control"
+                       placeholder="Ej: INVERSIONES E & M"
+                           autocomplete="off" />
+                    <span asp-validation-for="Input.Nombre_Proveedor" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Rtn">RTN del Proveedor:</label>
+                    <input asp-for="Input.Rtn"
+                           class="form-control"
+                           type="number"
+                           placeholder="Ej: 012345678901234"
+                           autocomplete="off" />
+                    <span asp-validation-for="Input.Rtn" class="text-danger"></span>
+                </div>
+            <div class="form-actions">
+                <button type="button" class="btn-gradient-success" style="flex: 1; padding: 14px;" id="btnGuardar"><i class="fa-solid fa-floppy-disk"></i> Guardar Proveedor</button>
+                <button type="button" class="btn-gradient-secondary" style="flex: 1; padding: 14px;" id="btnCancelar"><i class="fa-solid fa-ban"></i> Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts {
+    <script src="~/js/proveedores/crearproveedor.js"></script>
+}

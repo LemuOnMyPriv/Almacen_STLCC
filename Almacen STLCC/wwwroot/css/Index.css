@@ -1,0 +1,113 @@
+﻿body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background-color: #f5f6fa;
+    margin: 0;
+    padding: 0;
+}
+
+.contenedor {
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 20px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 30px 20px;
+}
+
+    .header h1 {
+        color: #88CFE0;
+        font-size: 32px;
+        margin-bottom: 10px;
+    }
+
+    .header p {
+        color: #949699;
+        font-size: 18px;
+        line-height: 1.5;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+
+.paneles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    justify-items: center;
+}
+
+.tarjetas {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    height: 88%;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    width: 80%;
+    max-width: 320px;
+    gap: 15px;
+}
+
+    .tarjetas:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+.icono {
+    font-size: 48px;
+    margin-bottom: 15px;
+}
+
+.tarjetas h3 {
+    margin: 10px 0;
+    color: #949699;
+    font-size: 20px;
+}
+
+.tarjetas p {
+    color: #666;
+    font-size: 15px;
+    margin: 0;
+}
+
+.btn-rojo,
+.btn-negro {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin-top: auto;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background 0.2s ease;
+}
+
+.btn-rojo {
+    background: #DB473C;
+}
+
+    .btn-rojo:hover {
+        background: #c82333;
+    }
+
+.btn-negro {
+    background: #555;
+}
+
+    .btn-negro:hover {
+        background: #171717;
+    }
+
+.btn-gradient-primary {
+    display: inline-block;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.2s ease;
+    margin-top: auto;
+}

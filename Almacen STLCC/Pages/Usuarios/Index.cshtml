@@ -1,0 +1,146 @@
+﻿@page
+@model Almacen_STLCC.Pages.Usuarios.IndexModel
+@{
+    ViewData["Title"] = "Gestión de Usuarios";
+}
+<link rel="stylesheet" href="~/css/contraseña/Index.css" />
+
+<div class="contenedor">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    <div class="header">
+        <h1><i class="fa-solid fa-user"></i> Gestión de Usuarios</h1>
+        <a asp-page="/Usuarios/Create" class="btn-gradient-success">
+            <i class="fa-solid fa-circle-plus"></i> Crear Usuario
+        </a>
+    </div>
+
+    <section class="panel-busqueda-avanzado">
+        <h3><i class="fa-solid fa-sliders"></i> Filtros de Búsqueda</h3>
+        <div class="busqueda-grid">
+            <div class="busqueda-grupo">
+                <label for="filtroNombreUsuario">
+                    <i class="fa-solid fa-user"></i> Nombre de Usuario:
+                </label>
+                <input type="text"
+                       id="filtroNombreUsuario"
+                       class="form-control-busqueda"
+                       placeholder="Ej: Juan Fonseca"
+                       autocomplete="off">
+            </div>
+
+            <div class="busqueda-grupo">
+                <label for="filtroRol">
+                    <i class="fa-solid fa-user-shield"></i> Rol:
+                </label>
+                <select id="filtroRol" class="form-control-busqueda">
+                    <option value="">Todos</option>
+                    <option value="ADMINISTRADOR">ADMINISTRADOR</option>
+                    <option value="USUARIO">USUARIO</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    @if (Model.Usuarios.Any())
+    {
+        var currentUsername = HttpContext.Session.GetString("Username");
+
+        <table class="tabla-gradient" id="tablaUsuarios">
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Rol</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var usuario in Model.Usuarios)
+                {
+                    var esAdminOtro = usuario.Rol == "ADMINISTRADOR" && usuario.NombreUsuario != currentUsername;
+                    var puedeEditar = currentUsername == "soporte" || !esAdminOtro;
+                    var puedeEliminar = puedeEditar && usuario.NombreUsuario != currentUsername;
+
+                    <tr>
+                        <td>@usuario.NombreUsuario</td>
+                        <td>
+                            @if (usuario.Rol == "ADMINISTRADOR")
+                            {
+                                <span class="badge-gradient-admin">ADMINISTRADOR</span>
+                            }
+                            else
+                            {
+                                <span class="badge-gradient-user">USUARIO</span>
+                            }
+                        </td>
+                        <td class="acciones">
+                            @if (puedeEditar)
+                            {
+                                <a asp-page="/Usuarios/Edit"
+                                   asp-route-id="@usuario.Id_Usuario"
+                                   class="btn-gradient-warning btn-gradient-sm">
+                                    <i class="fa-solid fa-edit"></i> Editar
+                                </a>
+                                <a asp-page="/Usuarios/ChangePassword"
+                                   asp-route-username="@usuario.NombreUsuario"
+                                   class="btn-gradient-info btn-gradient-sm">
+                                    <i class="fa-solid fa-key"></i> Contraseña
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="btn-bloqueado" title="Solo el administrador del sistema puede editar a otros administradores">
+                                    <i class="fa-solid fa-lock"></i> Editar
+                                </span>
+                                <span class="btn-bloqueado" title="Solo el administrador del sistema puede cambiar la contraseña de otros administradores">
+                                    <i class="fa-solid fa-lock"></i> Contraseña
+                                </span>
+                            }
+
+                            @if (puedeEliminar)
+                            {
+                                <form method="post"
+                                      asp-page-handler="Delete"
+                                      asp-route-id="@usuario.Id_Usuario"
+                                      style="display: inline;"
+                                      onsubmit="return confirm('¿Estás seguro de eliminar el usuario \'@usuario.NombreUsuario\'?');">
+                                    <button type="submit" class="btn-gradient-danger btn-gradient-sm">
+                                        <i class="fa-solid fa-trash"></i> Eliminar
+                                    </button>
+                                </form>
+                            }
+                            else if (usuario.NombreUsuario != currentUsername)
+                            {
+                                <span class="btn-bloqueado" title="Solo el administrador del sistema puede eliminar a otros administradores">
+                                    <i class="fa-solid fa-lock"></i> Eliminar
+                                </span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <div class="mensaje-vacio">
+            No hay usuarios registrados en el sistema
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script src="~/js/usuarios/index.js"></script>
+}

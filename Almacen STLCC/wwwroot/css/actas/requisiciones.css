@@ -1,0 +1,244 @@
+﻿body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f8;
+    color: #000;
+    margin: 0;
+    padding: 0;
+}
+
+.contenedor {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+    .header h1 {
+        font-size: 28px;
+        color: #2c3e50;
+        margin: 0 0 8px 0;
+    }
+
+    .header p {
+        color: #666;
+        font-size: 15px;
+        margin: 0;
+    }
+
+.btn-volver {
+    background-color: #6c757d;
+    color: white;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-size: 15px;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+    .btn-volver:hover {
+        background-color: #5a6268;
+    }
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.seccion-agregar {
+    background-color: #f8f9fa;
+    padding: 25px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    border-left: 4px solid #17a2b8;
+}
+
+    .seccion-agregar h2 {
+        font-size: 20px;
+        color: #2c3e50;
+        margin: 0 0 20px 0;
+    }
+
+.form-agregar {
+    width: 100%;
+}
+
+.form-inline {
+    display: flex;
+    gap: 15px;
+    align-items: end;
+}
+
+.form-group {
+    flex: 1;
+}
+
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #555;
+        font-size: 14px;
+    }
+
+.requisicion-control {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+    .requisicion-control .form-control {
+        flex: 1;
+    }
+
+.form-control {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    box-sizing: border-box;
+}
+
+    .form-control:focus {
+        outline: none;
+        border-color: #17a2b8;
+        box-shadow: 0 0 0 3px rgba(23, 162, 184, 0.1);
+    }
+
+.text-danger {
+    color: #DB473C;
+    font-size: 13px;
+    margin-top: 5px;
+    display: block;
+}
+
+.btn-agregar {
+    background-color: #17a2b8;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+    .btn-agregar:hover {
+        background-color: #138496;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(23, 162, 184, 0.3);
+    }
+
+.seccion-lista {
+    margin-top: 30px;
+}
+
+    .seccion-lista h2 {
+        font-size: 20px;
+        color: #2c3e50;
+        margin: 0 0 20px 0;
+    }
+
+.lista-requisiciones {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 15px;
+}
+
+.requisicion-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+    .requisicion-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+    }
+
+.requisicion-icono {
+    font-size: 32px;
+    opacity: 0.9;
+}
+
+.requisicion-texto {
+    flex: 1;
+}
+
+    .requisicion-texto strong {
+        font-size: 16px;
+        display: block;
+        word-break: break-word;
+    }
+
+.mensaje-vacio {
+    text-align: center;
+    padding: 80px 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    border: 2px dashed #ccc;
+}
+
+    .mensaje-vacio i {
+        font-size: 64px;
+        color: #ccc;
+        display: block;
+        margin-bottom: 20px;
+    }
+
+    .mensaje-vacio p {
+        color: #666;
+        font-size: 16px;
+        margin: 10px 0;
+    }
+
+.texto-ayuda {
+    color: #999 !important;
+    font-size: 14px !important;
+}
+
+@media (max-width: 768px) {
+    .form-inline {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .btn-agregar {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .lista-requisiciones {
+        grid-template-columns: 1fr;
+    }
+}

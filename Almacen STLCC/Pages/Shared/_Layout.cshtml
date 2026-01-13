@@ -1,0 +1,83 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] Almacén STLCC</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="~/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="~/favicon-16x16.png" />
+
+</head>
+<body>
+    @if (!string.IsNullOrEmpty(Context.Session.GetString("Username")))
+    {
+        var rol = Context.Session.GetString("Rol");
+        var esAdmin = rol == "ADMINISTRADOR";
+
+        <header class="layout-header">
+            <div class="layout-contenedor">
+                <nav class="layout-nav">
+                    <div class="nav-left">
+                        <a asp-page="/Index" class="nav-link">Inicio</a>
+                        <a asp-page="/Productos/Index" class="nav-link">Productos</a>
+                        <a asp-page="/Proveedores/Index" class="nav-link">Proveedores</a>
+                        <a asp-page="/Categorias/Index" class="nav-link">Categorias</a>
+                        <a asp-page="/Actas/Index" class="nav-link">Actas</a>
+                        <a asp-page="/Historial/Index" class="nav-link">Historial</a>
+
+                        @if (esAdmin)
+                        {
+                            <a asp-page="/Usuarios/Index" class="nav-link">Usuarios</a>
+                            <a asp-page="/Auditoria/Index" class="nav-link">Auditoría</a>
+                        }
+                    </div>
+
+                    <div class="nav-right">
+                        <span class="nav-link nav-user">
+                            @Context.Session.GetString("DisplayName")
+                            @if (rol == "ADMINISTRADOR")
+                            {
+                                <span class="badge-gradient-admin">ADMIN</span>
+                            }
+                            else
+                            {
+                                <span class="badge-gradient-user">USUARIO</span>
+                            }
+                        </span>
+                        <a asp-page="/Logout" class="nav-link logout-btn">Cerrar Sesión</a>
+                    </div>
+                </nav>
+            </div>
+        </header>
+    }
+    <main class="layout-main">
+        <div class="layout-content">
+            <img class="logo" src="https://stlcc.gob.hn/wp-content/uploads/2024/09/LOGOS-STLCC-GOBIERNO-CURVAS-04-2000x909.png" alt="Logo STLCC"/>
+            @RenderBody()
+        </div>
+    </main>
+    @if (!string.IsNullOrEmpty(Context.Session.GetString("Username")))
+    {
+        <footer class="layout-footer">
+            <p>&copy; 2025 Almacén STLCC | Sistema de Inventario</p>
+        </footer>
+    }
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="~/js/shared/sweetalert-helper.js"></script>
+    <script src="~/js/shared/filtro-tabla.js"></script>
+    <script src="~/js/shared/paginacion.js"></script>
+<<<<<<< HEAD
+    <script src="~/js/shared/searchable-select.js"></script>
+    <script src="~/js/shared/init-searchable-selects.js"></script>
+=======
+>>>>>>> parent of 7a13c5a (Cambios 09/01/2026)
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

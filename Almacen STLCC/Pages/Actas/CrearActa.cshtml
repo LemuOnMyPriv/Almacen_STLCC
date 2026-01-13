@@ -1,0 +1,163 @@
+﻿@page
+@model Almacen_STLCC.Pages.Actas.CrearActaModel
+@{
+    ViewData["Title"] = "Crear Acta";
+}
+
+<link rel="stylesheet" href="~/css/actas/crearacta.css" />
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h2>Crear Nueva Acta</h2>
+            <button type="button" class="btn-close" id="btnClose">&times;</button>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert alert-danger">
+                <i class="fa-solid fa-triangle-exclamation"></i> @Model.ErrorMessage
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+        {
+            <div class="alert alert-success">
+                <i class="fa-solid fa-check"></i> @Model.SuccessMessage
+            </div>
+        }
+
+        <form method="post" id="formCrearActa">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label asp-for="Input.Numero_Acta">Numero de Acta:</label>
+                    <input asp-for="Input.Numero_Acta"
+                           class="form-control"
+                           placeholder="Ej: 001-2026"
+                           autocomplete="off"
+                           autofocus />
+                    <span asp-validation-for="Input.Numero_Acta" class="text-danger"></span>
+                </div>
+            
+                <div class="form-group">
+                    <label asp-for="Input.F01">F01:</label>
+                    <input asp-for="Input.F01"
+                           class="form-control"
+                           placeholder="Ej: 1105"
+                           autocomplete="off"
+                           autofocus />
+                    <span asp-validation-for="Input.F01" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Orden_Compra">Orden de Compra:</label>
+                    <input asp-for="Input.Orden_Compra"
+                           class="form-control"
+                           placeholder="Ej: STLCC-GA-019-2025"
+                           autocomplete="off" />
+                    <span asp-validation-for="Input.Orden_Compra" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Id_Proveedor">Proveedor:</label>
+                    <select asp-for="Input.Id_Proveedor" class="form-select" id="selectProveedor">
+                        <option value="">-- Seleccione un proveedor --</option>
+                        @foreach (var proveedor in Model.Proveedores)
+                        {
+                            <option value="@proveedor.Id_Proveedor">@proveedor.Nombre_Proveedor</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Input.Id_Proveedor" class="text-danger"></span>
+                    <button type="button" class="btn-link-crear" id="btnCrearProveedorActa">
+                        <i class="fa-solid fa-plus"></i> Crear nuevo proveedor
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Fecha">Fecha:</label>
+                    <input asp-for="Input.Fecha"
+                           type="date"
+                           class="form-control" />
+                    <span asp-validation-for="Input.Fecha" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="separador">
+                <div class="separador-header">
+                    <div>
+                        <h3>Productos del Acta</h3>
+                        <p class="texto-ayuda">Agregue los productos que fueron comprados en esta acta</p>
+                    </div>
+                    <button type="button" class="btn-gradient-primary" onclick="abrirCrearProducto()">
+                        <i class="fa-solid fa-plus"></i> Crear nuevo producto
+                    </button>
+                </div>
+            </div>
+
+            <div id="productosContainer">
+                <div class="producto-item" data-index="0">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Producto:</label>
+                            <select name="Input.Detalles[0].Id_Producto" class="form-select" required>
+                                <option value="">-- Seleccione un producto --</option>
+                                @foreach (var producto in Model.Productos)
+                                {
+                                    <option value="@producto.Id_Producto">@producto.Nombre_Producto</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Cantidad:</label>
+                            <input type="number"
+                                   name="Input.Detalles[0].Cantidad"
+                                   class="form-control"
+                                   min="1"
+                                   placeholder="Ej: 10"
+                                   required/>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Precio Unitario:</label>
+                            <input type="number"
+                                   name="Input.Detalles[0].Precio_Unitario"
+                                   class="form-control"
+                                   step="0.01"
+                                   min="0"
+                                   placeholder="Sin ISV"/>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Precio con ISV:</label>
+                            <input type="number"
+                                   name="Input.Detalles[0].Precio_Con_Isv"
+                                   class="form-control"
+                                   step="0.01"
+                                   min="0"
+                                   placeholder="Con ISV incluido"/>
+                        </div>
+
+                        <div class="form-group btn-eliminar-container">
+                            <button type="button" class="btn-eliminar-producto" onclick="eliminarProducto(0)" style="display: none;">
+                                Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="btn-gradient-primary" style="width: 100%; padding: 14px;" onclick="agregarProducto()">
+                <i class="fa-solid fa-circle-plus"></i> Agregar Otro Producto
+            </button>
+
+            <div class="form-actions">
+                <button type="button" class="btn-gradient-success" style="flex: 1; padding: 14px;" id="btnGuardar"><i class="fa-solid fa-floppy-disk"></i> Guardar Acta</button>
+                <button type="button" class="btn-gradient-secondary" style="flex: 1; padding: 14px;" id="btnCancelar"><i class="fa-solid fa-ban"></i> Cancelar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="/js/actas/crearActa.js"></script>
+}
