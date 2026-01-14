@@ -443,6 +443,42 @@ body {
     box-shadow: 0 2px 8px rgba(235, 51, 73, 0.3);
 }
 
+.badge-gradient-entrada {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    white-space: nowrap;
+    box-shadow: 0 2px 4px rgba(56, 239, 125, 0.3);
+}
+
+.badge-gradient-salida {
+    background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    white-space: nowrap;
+    box-shadow: 0 2px 4px rgba(244, 92, 67, 0.3);
+}
+
+.badge-gradient-ajuste {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    white-space: nowrap;
+    box-shadow: 0 2px 4px rgba(0, 242, 254, 0.3);
+}
+
 .badge-proveedor {
     background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
     color: white;

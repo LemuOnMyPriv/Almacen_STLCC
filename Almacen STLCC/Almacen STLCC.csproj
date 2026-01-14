@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="publish\wwwroot\lib\bootstrap\**" />
+    <Content Remove="publish\wwwroot\lib\bootstrap\**" />
+    <EmbeddedResource Remove="publish\wwwroot\lib\bootstrap\**" />
+    <None Remove="publish\wwwroot\lib\bootstrap\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.10">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

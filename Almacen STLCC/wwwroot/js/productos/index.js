@@ -13,7 +13,7 @@
         inputHasta: 'filtroFechaHasta'
     });
 
-    inicializarPaginacion('tablaProductos', 25);
+    inicializarPaginacion('tablaProductos', 10);
 
     // Mostrar mensaje de éxito si existe
     mostrarMensajeExito();

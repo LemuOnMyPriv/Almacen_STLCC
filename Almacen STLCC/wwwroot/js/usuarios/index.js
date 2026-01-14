@@ -6,4 +6,4 @@
     }, 'tablaUsuarios');
 });
 
-inicializarPaginacion('tablaUsuarios', 25);
+inicializarPaginacion('tablaUsuarios', 10);

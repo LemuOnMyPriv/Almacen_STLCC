@@ -14,6 +14,11 @@
         <a asp-page="/Actas/Index" class="btn-gradient-secondary"><i class="fa-solid fa-angle-left"></i> Volver a Actas</a>
     </header>
 
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div id="successMessage" data-message="@TempData["SuccessMessage"]" style="display:none;"></div>
+    }
+
     <section class="info-acta">
         <div class="info-item">
             <strong>Numero de Acta:</strong> @Model.Acta.Numero_Acta
@@ -48,6 +53,7 @@
                 <tr>
                     <th>Código</th>
                     <th>Producto</th>
+                    <th>Requisición</th>
                     <th>Cantidad</th>
                     <th>Precio Unitario</th>
                     <th>Precio con ISV</th>
@@ -69,6 +75,16 @@
                         <tr>
                             <td>@detalle.Producto.Codigo_Producto</td>
                             <td>@detalle.Producto.Nombre_Producto</td>
+                            <td>
+                                @if (!string.IsNullOrWhiteSpace(detalle.Requisicion))
+                                {
+                                    <span class="badge-requisicion">@detalle.Requisicion</span>
+                                }
+                                else
+                                {
+                                    <span class="texto-sin-datos">Sin requisición</span>
+                                }
+                            </td>
                             <td>@detalle.Cantidad</td>
                             <td>
                                 @if (detalle.Precio_Unitario.HasValue)
@@ -92,9 +108,9 @@
                             </td>
                             <td><strong>L. @subtotal.ToString("N2")</strong></td>
                             <td>
-                                <button type="button"
-                                        class="btn-agregar-req"
-                                        onclick="abrirModalRequisicion(@detalle.Id_Detalle, '@detalle.Producto.Nombre_Producto', '@(detalle.Requisicion ?? "")')">
+                                <a asp-page="/Actas/EditRequisicion"
+                                   asp-route-id="@detalle.Id_Detalle"
+                                   class="btn-gradient-warning btn-gradient-sm">
                                     <i class="fa-solid fa-tag"></i>
                                     @if (string.IsNullOrWhiteSpace(detalle.Requisicion))
                                     {
@@ -104,100 +120,31 @@
                                     {
                                         <span>Editar</span>
                                     }
-                                </button>
+                                </a>
                             </td>
                         </tr>
                     }
                     <tr class="fila-total">
-<<<<<<< HEAD
-                        <td colspan="7" style="text-align: right;"><strong>TOTAL:</strong></td>
-=======
-                        <td colspan="5" style="text-align: right;"><strong>TOTAL:</strong></td>
->>>>>>> parent of 7a13c5a (Cambios 09/01/2026)
+                        <td colspan="6" style="text-align: right;"><strong>TOTAL:</strong></td>
                         <td><strong>L. @total.ToString("N2")</strong></td>
+                        <td></td>
                     </tr>
                 }
                 else
                 {
                     <tr>
-<<<<<<< HEAD
                         <td colspan="8" class="mensaje-vacio">No hay productos registrados en esta acta.</td>
-=======
-                        <td colspan="6" class="mensaje-vacio">No hay productos registrados en esta acta.</td>
->>>>>>> parent of 7a13c5a (Cambios 09/01/2026)
                     </tr>
                 }
             </tbody>
         </table>
     </section>
-<<<<<<< HEAD
-
-    @if (Model.ProductosPorRequisicion.Any())
-    {
-        <section class="agrupacion-requisiciones">
-            <h2><i class="fa-solid fa-layer-group"></i> Productos Agrupados por Requisición</h2>
-            <div class="requisiciones-cards">
-                @foreach (var grupo in Model.ProductosPorRequisicion)
-                {
-                    <div class="requisicion-card">
-                        <div class="requisicion-header">
-                            <h3>@grupo.Key</h3>
-                            <span class="cantidad-productos">@grupo.Value.Count producto(s)</span>
-                        </div>
-                        <div class="requisicion-productos">
-                            <ul>
-                                @foreach (var detalle in grupo.Value)
-                                {
-                                    <li>
-                                        <strong>@detalle.Producto.Nombre_Producto</strong>
-                                        <span class="producto-cantidad">Cantidad: @detalle.Cantidad</span>
-                                    </li>
-                                }
-                            </ul>
-                        </div>
-                    </div>
-                }
-            </div>
-        </section>
-    }
-</div>
-
-<div id="modalRequisicion" class="modal-requisicion" style="display: none;">
-    <div class="modal-requisicion-content">
-        <div class="modal-requisicion-header">
-            <h3><i class="fa-solid fa-tag"></i> <span id="tituloModal">Agregar Requisición</span></h3>
-            <button type="button" class="btn-close-modal" onclick="cerrarModalRequisicion()">&times;</button>
-        </div>
-        <div class="modal-requisicion-body">
-            <p><strong>Producto:</strong> <span id="nombreProducto"></span></p>
-            <form method="post" asp-page-handler="ActualizarRequisicion" id="formRequisicion">
-                <input type="hidden" name="idDetalle" id="idDetalle" />
-                <div class="form-group-modal">
-                    <label for="requisicion">Requisición:</label>
-                    <input type="text"
-                           name="requisicion"
-                           id="requisicion"
-                           class="form-control-modal"
-                           placeholder="Ej: REQ-2025-001"
-                           maxlength="100" />
-                    <small class="form-text-modal">Deje vacío para remover la requisición</small>
-                </div>
-                <div class="modal-requisicion-actions">
-                    <button type="submit" class="btn-gradient-success">
-                        <i class="fa-solid fa-floppy-disk"></i> Guardar
-                    </button>
-                    <button type="button" class="btn-gradient-secondary" onclick="cerrarModalRequisicion()">
-                        <i class="fa-solid fa-ban"></i> Cancelar
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
 </div>
 
 @section Scripts {
-    <script src="~/js/actas/detalles.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            mostrarMensajeExito();
+        });
+    </script>
 }
-=======
-</div>
->>>>>>> parent of 7a13c5a (Cambios 09/01/2026)

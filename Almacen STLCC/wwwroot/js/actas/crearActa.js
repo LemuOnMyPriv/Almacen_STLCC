@@ -17,13 +17,10 @@ document.addEventListener("DOMContentLoaded", function () {
         }));
     }
 
-<<<<<<< HEAD
     // Inicializar searchable selects
     inicializarSearchableSelect('selectProveedor');
     inicializarSearchableSelect('selectProducto0');
 
-=======
->>>>>>> parent of 7a13c5a (Cambios 09/01/2026)
     cargarDatosGuardados();
 
     if (formCrearActa) {
@@ -95,9 +92,22 @@ function agregarProducto() {
         <div class="form-grid">
             <div class="form-group">
                 <label>Producto:</label>
-                <select name="Input.Detalles[${productoIndex}].Id_Producto" class="form-select" required>
+                <select name="Input.Detalles[${productoIndex}].Id_Producto" 
+                        class="form-select searchable-select" 
+                        id="selectProducto${productoIndex}"
+                        required>
                     ${optionsHTML}
                 </select>
+            </div>
+
+            <div class="form-group">
+                <label>Requisición (Opcional):</label>
+                <input type="text" 
+                       name="Input.Detalles[${productoIndex}].Requisicion" 
+                       class="form-control" 
+                       placeholder="Ej: REQ-2025-001"
+                       autocomplete="off" />
+                <small class="form-text">Puede dejarlo vacío si no aplica</small>
             </div>
 
             <div class="form-group">
@@ -143,6 +153,10 @@ function agregarProducto() {
     });
 
     container.appendChild(nuevoProducto);
+
+    // Inicializar searchable select para el nuevo producto
+    inicializarSearchableSelect(`selectProducto${productoIndex}`);
+
     productoIndex++;
     actualizarBotonesEliminar();
 }
@@ -227,14 +241,15 @@ function guardarDatosForm() {
     const productos = [];
     document.querySelectorAll('.producto-item').forEach(item => {
         const selects = item.querySelectorAll('select');
-        const inputs = item.querySelectorAll('input[type="number"]');
+        const inputs = item.querySelectorAll('input[type="number"], input[type="text"]');
 
-        if (selects.length > 0 && inputs.length >= 2) {
+        if (selects.length > 0) {
             productos.push({
                 idProducto: selects[0].value,
-                cantidad: inputs[0].value,
-                precioUnitario: inputs[1].value,
-                precioConIsv: inputs[2] ? inputs[2].value : ''
+                requisicion: inputs[0]?.value || '',
+                cantidad: inputs[1]?.value || '',
+                precioUnitario: inputs[2]?.value || '',
+                precioConIsv: inputs[3]?.value || ''
             });
         }
     });
@@ -270,12 +285,13 @@ function cargarDatosGuardados() {
 
             if (item) {
                 const select = item.querySelector('select');
-                const inputs = item.querySelectorAll('input[type="number"]');
+                const inputs = item.querySelectorAll('input');
 
                 if (select && prod.idProducto) select.value = prod.idProducto;
-                if (inputs[0] && prod.cantidad) inputs[0].value = prod.cantidad;
-                if (inputs[1] && prod.precioUnitario) inputs[1].value = prod.precioUnitario;
-                if (inputs[2] && prod.precioConIsv) inputs[2].value = prod.precioConIsv;
+                if (inputs[0] && prod.requisicion) inputs[0].value = prod.requisicion;
+                if (inputs[1] && prod.cantidad) inputs[1].value = prod.cantidad;
+                if (inputs[2] && prod.precioUnitario) inputs[2].value = prod.precioUnitario;
+                if (inputs[3] && prod.precioConIsv) inputs[3].value = prod.precioConIsv;
             }
         });
     }

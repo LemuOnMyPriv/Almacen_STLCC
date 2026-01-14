@@ -1,4 +1,115 @@
 ﻿@page
 @model Almacen_STLCC.Pages.Movimientos.MovimientoModel
 @{
+    ViewData["Title"] = "Registrar Movimiento";
+}
+
+<link rel="stylesheet" href="~/css/movimientos/movimiento.css" />
+
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h2>Registrar Nuevo Movimiento</h2>
+            <button type="button" class="btn-close" id="btnClose">&times;</button>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert alert-danger">
+                <i class="fa-solid fa-triangle-exclamation"></i> @Model.ErrorMessage
+            </div>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+        {
+            <div class="alert alert-success">
+                <i class="fa-solid fa-check"></i> @Model.SuccessMessage
+            </div>
+        }
+
+        <form method="post" id="formRegistrarMovimiento">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label asp-for="Input.Id_Producto">Producto:</label>
+                    <select asp-for="Input.Id_Producto" class="form-select searchable-select" id="selectProducto" required>
+                        <option value="">-- Seleccione un producto --</option>
+                        @foreach (var producto in Model.Productos)
+                        {
+                            <option value="@producto.Id_Producto">@producto.Nombre_Producto</option>
+                        }
+                    </select>
+                    <span asp-validation-for="Input.Id_Producto" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Tipo_Movimiento">Tipo de Movimiento:</label>
+                    <select asp-for="Input.Tipo_Movimiento" class="form-select" required>
+                        <option value="">-- Seleccione un tipo --</option>
+                        <option value="entrada">Entrada</option>
+                        <option value="salida">Salida</option>
+                        <option value="ajuste">Ajuste</option>
+                    </select>
+                    <span asp-validation-for="Input.Tipo_Movimiento" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Cantidad">Cantidad:</label>
+                    <input asp-for="Input.Cantidad"
+                           class="movimiento-control"
+                           type="number"
+                           min="1"
+                           placeholder="Ej: 10"
+                           autocomplete="off"
+                           required />
+                    <span asp-validation-for="Input.Cantidad" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Input.Fecha">Fecha:</label>
+                    <input asp-for="Input.Fecha"
+                           type="date"
+                           class="movimiento-control"
+                           required />
+                    <span asp-validation-for="Input.Fecha" class="text-danger"></span>
+                </div>
+
+                <div class="form-group full-width">
+                    <label asp-for="Input.Id_Acta">Acta Asociada (Opcional):</label>
+                    <select asp-for="Input.Id_Acta" class="form-select searchable-select" id="selectActa">
+                        <option value="">-- Sin acta asociada --</option>
+                        @foreach (var acta in Model.Actas)
+                        {
+                            <option value="@acta.Id_Acta">
+                                @acta.Numero_Acta - @acta.Proveedor.Nombre_Proveedor - @acta.Fecha.ToString("dd/MM/yyyy")
+                            </option>
+                        }
+                    </select>
+                    <span asp-validation-for="Input.Id_Acta" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <i class="fa-solid fa-circle-info"></i>
+                <strong>Información:</strong>
+                <ul>
+                    <li><strong>Entrada:</strong> Aumenta el inventario de un producto</li>
+                    <li><strong>Salida:</strong> Disminuye el inventario de un producto</li>
+                    <li><strong>Ajuste:</strong> Corrige el inventario de un producto</li>
+                </ul>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn-gradient-success" style="flex: 1; padding: 14px;" id="btnGuardar">
+                    <i class="fa-solid fa-floppy-disk"></i> Registrar Movimiento
+                </button>
+                <button type="button" class="btn-gradient-secondary" style="flex: 1; padding: 14px;" id="btnCancelar">
+                    <i class="fa-solid fa-ban"></i> Cancelar
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/movimientos/movimiento.js"></script>
 }

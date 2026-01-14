@@ -60,7 +60,7 @@ namespace Almacen_STLCC.Pages.Actas
                 return Page();
             }
 
-            var existe = await _context.ActasRequisiciones
+            var existe = await _context.ActaRequisiciones
                 .AnyAsync(r => r.Id_Acta == id && r.Requisicion == Input.Requisicion.Trim());
 
             if (existe)
@@ -77,7 +77,7 @@ namespace Almacen_STLCC.Pages.Actas
                 Acta = null!
             };
 
-            _context.ActasRequisiciones.Add(nuevaRequisicion);
+            _context.ActaRequisiciones.Add(nuevaRequisicion);
             await _context.SaveChangesAsync();
 
             TempData["SuccessMessage"] = $"Requisición '{Input.Requisicion}' agregada exitosamente";
@@ -86,7 +86,7 @@ namespace Almacen_STLCC.Pages.Actas
 
         private async Task CargarRequisicionesAsync(int idActa)
         {
-            Requisiciones = await _context.ActasRequisiciones
+            Requisiciones = await _context.ActaRequisiciones
                 .Where(r => r.Id_Acta == idActa)
                 .OrderBy(r => r.Requisicion)
                 .ToListAsync();

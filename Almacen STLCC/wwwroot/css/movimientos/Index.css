@@ -1,0 +1,93 @@
+﻿body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f6f8;
+    color: #000;
+    margin: 0;
+    padding: 0;
+}
+
+.contenedor {
+    max-width: 1400px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.header {
+    margin-bottom: 25px;
+}
+
+    .header h1 {
+        margin: 0;
+    }
+
+.titulo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.mov-crear {
+    display: flex;
+    align-items: center;
+}
+
+.tabla-movimientos {
+    width: 100%;
+    overflow-x: auto;
+}
+
+    .tabla-movimientos table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 15px;
+    }
+
+    .tabla-movimientos thead {
+        background-color: #88CFE0;
+        color: white;
+    }
+
+    .tabla-movimientos th,
+    .tabla-movimientos td {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+        text-align: left;
+    }
+
+    .tabla-movimientos th {
+        font-weight: 600;
+    }
+
+    .tabla-movimientos tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+
+.cantidad-positiva {
+    color: #28a745;
+    font-weight: 600;
+}
+
+.cantidad-negativa {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+.mensaje-vacio {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+    padding: 25px;
+    font-size: 16px;
+}
+
+@media (max-width: 768px) {
+    .titulo-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+}

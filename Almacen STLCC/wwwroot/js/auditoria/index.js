@@ -12,4 +12,4 @@
     });
 });
 
-inicializarPaginacion('tablaAuditoria', 25);
+inicializarPaginacion('tablaAuditoria', 10);

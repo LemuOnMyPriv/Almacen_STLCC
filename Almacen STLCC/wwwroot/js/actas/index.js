@@ -14,7 +14,7 @@
     // Inicializar sistema de agrupación
     inicializarAgrupacionActas();
 
-    inicializarPaginacion('tablaActas', 25);
+    inicializarPaginacion('tablaActas', 10);
 
     // Mostrar mensaje de éxito si existe
     mostrarMensajeExito();

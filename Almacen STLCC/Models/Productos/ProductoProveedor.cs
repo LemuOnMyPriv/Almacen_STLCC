@@ -23,6 +23,6 @@ namespace Almacen_STLCC.Models.Productos
         public required Producto Producto { get; set; }
 
         [ForeignKey("Id_Proveedor")]
-        public required Proveedores.Proveedor Proveedor { get; set; }
+        public required Proveedor Proveedor { get; set; }
     }
 }

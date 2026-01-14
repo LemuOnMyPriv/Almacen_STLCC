@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Almacen_STLCC.Models.Productos;
 
 namespace Almacen_STLCC.Models.Actas
 {
@@ -28,11 +29,15 @@ namespace Almacen_STLCC.Models.Actas
         [Column("precio_con_isv", TypeName = "decimal(20,2)")]
         public decimal? Precio_Con_Isv { get; set; }
 
+        [StringLength(100)]
+        [Column("requisicion")]
+        public string? Requisicion { get; set; }
+
         // Navegación
         [ForeignKey("Id_Acta")]
         public required Acta Acta { get; set; }
 
         [ForeignKey("Id_Producto")]
-        public required Productos.Producto Producto { get; set; }
+        public required Producto Producto { get; set; }
     }
 }

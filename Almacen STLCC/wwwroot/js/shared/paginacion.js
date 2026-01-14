@@ -19,6 +19,10 @@ function inicializarPaginacion(tableId, registrosPorPaginaInicial = 25) {
     let paginaActual = 1;
     let registrosPorPagina = registrosPorPaginaInicial;
 
+    // Variable para evitar bucles infinitos
+    let actualizandoPaginacion = false;
+    let totalRegistrosAnterior = 0;
+
     // Crear controles de paginación
     const seccionTabla = table.closest('.tabla-productos, .tabla-proveedores, .tabla-categorias, .tabla-actas, .tabla-auditoria') || table.parentElement;
 
@@ -63,25 +67,44 @@ function inicializarPaginacion(tableId, registrosPorPaginaInicial = 25) {
     const btnAnterior = document.getElementById(`btnAnterior-${tableId}`);
     const btnSiguiente = document.getElementById(`btnSiguiente-${tableId}`);
 
-    // Función para obtener todas las filas visibles (sin contar mensajes)
-    function obtenerFilasVisibles() {
+    // Función para obtener todas las filas disponibles (sin contar mensajes)
+    // NO filtrar por display:none porque la paginación usa eso
+    function obtenerTodasLasFilas() {
         const filas = Array.from(tbody.getElementsByTagName('tr'));
         return filas.filter(fila =>
             !fila.classList.contains('mensaje-vacio') &&
-            !fila.classList.contains('fila-sin-resultados') &&
-            fila.style.display !== 'none'
+            !fila.classList.contains('fila-sin-resultados')
         );
+    }
+
+    // Función para obtener solo filas visibles por filtros (no por paginación)
+    function obtenerFilasVisiblesPorFiltro() {
+        const filas = Array.from(tbody.getElementsByTagName('tr'));
+        return filas.filter(fila => {
+            if (fila.classList.contains('mensaje-vacio') ||
+                fila.classList.contains('fila-sin-resultados')) {
+                return false;
+            }
+
+            // Si tiene el atributo data-oculto-filtro, está oculta por filtro
+            return !fila.hasAttribute('data-oculto-filtro');
+        });
     }
 
     // Función para actualizar la paginación
     function actualizarPaginacion() {
-        const filasVisibles = obtenerFilasVisibles();
+        actualizandoPaginacion = true; // Activar flag
+
+        const filasVisibles = obtenerFilasVisiblesPorFiltro();
         const totalRegistros = filasVisibles.length;
         const totalPaginas = Math.ceil(totalRegistros / registrosPorPagina) || 1;
 
         // Ajustar página actual si es necesario
         if (paginaActual > totalPaginas) {
             paginaActual = totalPaginas;
+        }
+        if (paginaActual < 1) {
+            paginaActual = 1;
         }
 
         // Calcular índices
@@ -97,15 +120,17 @@ function inicializarPaginacion(tableId, registrosPorPaginaInicial = 25) {
             }
         });
 
-        // Actualizar información
-        const registrosMostrados = Math.min(totalRegistros, fin) - inicio;
-        infoRegistros.textContent = `Mostrando ${inicio + 1}-${Math.min(fin, totalRegistros)} de ${totalRegistros} registros`;
+        // Actualizar información con el cálculo correcto
+        const registroInicio = totalRegistros === 0 ? 0 : inicio + 1;
+        const registroFin = Math.min(fin, totalRegistros);
+
+        infoRegistros.textContent = `Mostrando ${registroInicio}-${registroFin} de ${totalRegistros} registros`;
         paginaActualSpan.textContent = paginaActual;
         totalPaginasSpan.textContent = totalPaginas;
 
         // Actualizar estado de botones
         btnAnterior.disabled = paginaActual === 1;
-        btnSiguiente.disabled = paginaActual === totalPaginas;
+        btnSiguiente.disabled = paginaActual >= totalPaginas;
 
         // Mostrar/ocultar contenedor de paginación
         if (totalRegistros === 0) {
@@ -113,6 +138,14 @@ function inicializarPaginacion(tableId, registrosPorPaginaInicial = 25) {
         } else {
             paginacionContainer.style.display = 'flex';
         }
+
+        // Guardar el total actual para el observer
+        totalRegistrosAnterior = totalRegistros;
+
+        // Desactivar flag después de un breve delay
+        setTimeout(() => {
+            actualizandoPaginacion = false;
+        }, 100);
     }
 
     // Event listeners
@@ -130,18 +163,41 @@ function inicializarPaginacion(tableId, registrosPorPaginaInicial = 25) {
     });
 
     btnSiguiente.addEventListener('click', function () {
-        const filasVisibles = obtenerFilasVisibles();
+        console.log('🔵 Clic en Siguiente');
+        console.log('Página actual:', paginaActual);
+        console.log('Registros por página:', registrosPorPagina);
+
+        const filasVisibles = obtenerFilasVisiblesPorFiltro();
+        console.log('Filas visibles:', filasVisibles.length);
+
         const totalPaginas = Math.ceil(filasVisibles.length / registrosPorPagina);
+        console.log('Total páginas:', totalPaginas);
+        console.log('Botón deshabilitado?', btnSiguiente.disabled);
+
         if (paginaActual < totalPaginas) {
+            console.log('✅ Incrementando página');
             paginaActual++;
             actualizarPaginacion();
+        } else {
+            console.log('❌ No se puede avanzar');
         }
     });
 
     // Observar cambios en la tabla (cuando se aplican filtros)
-    const observer = new MutationObserver(function () {
-        paginaActual = 1; // Reiniciar a página 1 cuando cambien los filtros
-        actualizarPaginacion();
+    const observer = new MutationObserver(function (mutations) {
+        // Ignorar cambios causados por la propia paginación
+        if (actualizandoPaginacion) return;
+
+        // Obtener el total de filas visibles actual
+        const totalFilasActual = obtenerFilasVisiblesPorFiltro().length;
+
+        // Solo reiniciar si cambió el TOTAL de filas (filtros aplicados)
+        // NO si solo cambiaron las filas mostradas (paginación)
+        if (totalFilasActual !== totalRegistrosAnterior) {
+            totalRegistrosAnterior = totalFilasActual;
+            paginaActual = 1;
+            actualizarPaginacion();
+        }
     });
 
     observer.observe(tbody, {

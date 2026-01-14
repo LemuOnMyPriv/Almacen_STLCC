@@ -124,14 +124,14 @@
                                         {
                                             foreach (var req in item.Requisiciones)
                                             {
-                                                <span class="badge-requisicion">@req.Requisicion</span>
+                                                <span class="badge-requisicion">@req</span>
                                             }
                                         }
                                         else
                                         {
                                             for (int i = 0; i < 2; i++)
                                             {
-                                                <span class="badge-requisicion">@item.Requisiciones[i].Requisicion</span>
+                                                <span class="badge-requisicion">@item.Requisiciones[i]</span>
                                             }
                                             <span class="badge-requisicion">+@(item.Requisiciones.Count - 2)</span>
                                         }

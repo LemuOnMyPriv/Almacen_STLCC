@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Almacen_STLCC.Models.Movimientos;
 
 namespace Almacen_STLCC.Models.Actas
 {
@@ -38,7 +39,7 @@ namespace Almacen_STLCC.Models.Actas
 
         // Relaciones
         public ICollection<DetalleActa> DetallesActa { get; set; } = [];
-        public ICollection<Movimientos.Movimiento> Movimientos { get; set; } = [];
+        public ICollection<Movimiento> Movimientos { get; set; } = [];
         public ICollection<Anexo> Anexos { get; set; } = [];
         public ICollection<ActaRequisicion> Requisiciones { get; set; } = [];
     }

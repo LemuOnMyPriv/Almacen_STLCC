@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Almacen_STLCC.Models.Actas;
 
 namespace Almacen_STLCC.Models.Productos
 {
@@ -36,7 +37,7 @@ namespace Almacen_STLCC.Models.Productos
         public required Categorias.Categoria Categoria { get; set; }
 
         public ICollection<ProductoProveedor> ProductoProveedores { get; set; } = [];
-        public ICollection<Actas.DetalleActa> DetallesActa { get; set; } = [];
+        public ICollection<DetalleActa> DetallesActa { get; set; } = [];
         public ICollection<Movimientos.Movimiento> Movimientos { get; set; } = [];
     }
 }

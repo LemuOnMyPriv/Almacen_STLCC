@@ -1,4 +1,157 @@
 ﻿@page
 @model Almacen_STLCC.Pages.Movimientos.IndexModel
 @{
+    ViewData["Title"] = "Movimientos - Almacén STLCC";
+}
+<link rel="stylesheet" href="~/css/shared/badges.css" />
+<link rel="stylesheet" href="~/css/movimientos/Index.css" />
+
+<div class="contenedor">
+    <header class="header">
+        <div class="titulo-header">
+            <div>
+                <h1><i class="fa-solid fa-arrows-rotate"></i> Historial de Movimientos</h1>
+                <p>Consulta todas las entradas, salidas y ajustes de inventario realizados.</p>
+            </div>
+            <div class="mov-crear">
+                <a asp-page="/Movimientos/Movimiento" class="btn-gradient-primary">
+                    <i class="fa-solid fa-circle-plus"></i> Registrar Movimiento
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section class="panel-busqueda-avanzado">
+        <h3><i class="fa-solid fa-sliders"></i> Filtros de Búsqueda</h3>
+        <div class="busqueda-grid">
+            <div class="busqueda-grupo">
+                <label for="filtroProducto">
+                    <i class="fa-solid fa-box"></i> Producto:
+                </label>
+                <input type="text"
+                       id="filtroProducto"
+                       class="form-control-busqueda"
+                       placeholder="Nombre del producto"
+                       autocomplete="off">
+            </div>
+
+            <div class="busqueda-grupo">
+                <label for="filtroTipo">
+                    <i class="fa-solid fa-tag"></i> Tipo de Movimiento:
+                </label>
+                <select id="filtroTipo" class="form-control-busqueda">
+                    <option value="">Todos</option>
+                    <option value="entrada">Entrada</option>
+                    <option value="salida">Salida</option>
+                    <option value="ajuste">Ajuste</option>
+                </select>
+            </div>
+
+            <div class="busqueda-grupo">
+                <label for="filtroActa">
+                    <i class="fa-solid fa-file-lines"></i> Número de Acta:
+                </label>
+                <input type="text"
+                       id="filtroActa"
+                       class="form-control-busqueda"
+                       placeholder="Ej: 001-2025"
+                       autocomplete="off">
+            </div>
+
+            <div class="busqueda-grupo">
+                <label for="filtroCantidad">
+                    <i class="fa-solid fa-hashtag"></i> Cantidad:
+                </label>
+                <input type="number"
+                       id="filtroCantidad"
+                       class="form-control-busqueda"
+                       placeholder="Filtrar por cantidad"
+                       autocomplete="off">
+            </div>
+
+            <div class="busqueda-grupo">
+                <label for="filtroFechaDesde">
+                    <i class="fa-solid fa-calendar-days"></i> Fecha Desde:
+                </label>
+                <input type="date"
+                       id="filtroFechaDesde"
+                       class="form-control-busqueda">
+            </div>
+
+            <div class="busqueda-grupo">
+                <label for="filtroFechaHasta">
+                    <i class="fa-solid fa-calendar-check"></i> Fecha Hasta:
+                </label>
+                <input type="date"
+                       id="filtroFechaHasta"
+                       class="form-control-busqueda">
+            </div>
+        </div>
+    </section>
+
+    <section class="tabla-movimientos">
+        <table class="tabla-gradient" id="tablaMovimientos">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Producto</th>
+                    <th>Tipo de Movimiento</th>
+                    <th>Cantidad</th>
+                    <th>Acta Asociada</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Movimientos != null && Model.Movimientos.Any())
+                {
+                    @foreach (var item in Model.Movimientos)
+                    {
+                        <tr>
+                            <td>@item.Movimiento.Fecha.ToString("dd/MM/yyyy")</td>
+                            <td>@item.NombreProducto</td>
+                            <td>
+                                @if (item.Movimiento.Tipo_Movimiento == "entrada")
+                                {
+                                    <span class="badge-gradient-entrada">ENTRADA</span>
+                                }
+                                else if (item.Movimiento.Tipo_Movimiento == "salida")
+                                {
+                                    <span class="badge-gradient-salida">SALIDA</span>
+                                }
+                                else
+                                {
+                                    <span class="badge-gradient-ajuste">AJUSTE</span>
+                                }
+                            </td>
+                            <td>
+                                @if (item.Movimiento.Tipo_Movimiento == "entrada" || item.Movimiento.Tipo_Movimiento == "ajuste")
+                                {
+                                    <span class="cantidad-positiva">+@item.Movimiento.Cantidad</span>
+                                }
+                                else
+                                {
+                                    <span class="cantidad-negativa">-@item.Movimiento.Cantidad</span>
+                                }
+                            </td>
+                            <td>@item.NumeroActa</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5" class="mensaje-vacio">No hay movimientos registrados.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </section>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="successMessage" data-message="@TempData["SuccessMessage"]" style="display:none;"></div>
+}
+
+@section Scripts {
+    <script src="~/js/movimientos/index.js"></script>
 }

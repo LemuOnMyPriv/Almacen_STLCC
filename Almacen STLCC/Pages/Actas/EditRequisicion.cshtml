@@ -1,0 +1,54 @@
+﻿@page "{id:int}"
+@model Almacen_STLCC.Pages.Actas.EditRequisicionModel
+@{
+    ViewData["Title"] = "Editar Requisición";
+}
+
+<link rel="stylesheet" href="~/css/edit/edit.css" />
+
+<div class="contenedor">
+    <div class="header">
+        <h1>Editar Requisición del Producto</h1>
+        <p>Acta: <strong>@Model.NumeroActa</strong> | Producto: <strong>@Model.NombreProducto</strong></p>
+    </div>
+
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert-danger">
+            <i class="fa-solid fa-triangle-exclamation"></i> @Model.ErrorMessage
+        </div>
+    }
+
+    <form method="post">
+        <input type="hidden" asp-for="Input.Id_Detalle" />
+        <input type="hidden" asp-for="Input.Id_Acta" />
+
+        <div class="form-group">
+            <label asp-for="Input.Requisicion">Requisición:</label>
+            <input asp-for="Input.Requisicion"
+                   class="form-control"
+                   placeholder="Ej: REQ-2025-001"
+                   autocomplete="off"
+                   autofocus />
+            <span asp-validation-for="Input.Requisicion" class="text-danger"></span>
+            <small class="form-text">
+                Deje vacío para remover la requisición
+            </small>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn-guardar">
+                <i class="fa-solid fa-floppy-disk"></i> Guardar Cambios
+            </button>
+            <a asp-page="/Actas/Detalles"
+               asp-route-id="@Model.Input.Id_Acta"
+               class="btn-cancelar">
+                <i class="fa-solid fa-ban"></i> Cancelar
+            </a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

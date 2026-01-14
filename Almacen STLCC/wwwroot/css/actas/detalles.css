@@ -70,6 +70,33 @@
         margin-bottom: 5px;
     }
 
+.info-item-full {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.btn-requisiciones {
+    background-color: #17a2b8;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+}
+
+    .btn-requisiciones:hover {
+        background-color: #138496;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(23, 162, 184, 0.3);
+    }
+
 .tabla-productos {
     margin-top: 30px;
 }
@@ -106,6 +133,23 @@
         background-color: #f8f9fa;
     }
 
+.badge-requisicion {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    box-shadow: 0 2px 4px rgba(102, 126, 234, 0.2);
+}
+
+.texto-sin-datos {
+    color: #999;
+    font-style: italic;
+    font-size: 13px;
+}
+
 .fila-total {
     background-color: #e7f3ff;
     font-weight: bold;
@@ -124,200 +168,8 @@
     font-size: 16px;
 }
 
-.info-item-full {
-    grid-column: 1 / -1;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.btn-requisiciones {
-    background-color: #17a2b8;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 14px;
-    text-decoration: none;
-    transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    font-weight: 600;
-}
-
-<<<<<<< HEAD
 @media (max-width: 768px) {
-    .requisiciones-cards {
-        grid-template-columns: 1fr;
-    }
-
     .info-acta {
         grid-template-columns: 1fr;
     }
 }
-
-/* Botón de agregar requisición */
-.btn-agregar-req {
-    background-color: #17a2b8;
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 4px;
-    font-size: 13px;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-}
-
-    .btn-agregar-req:hover {
-        background-color: #138496;
-    }
-
-/* Modal de requisición */
-.modal-requisicion {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-    animation: fadeIn 0.2s ease;
-}
-
-.modal-requisicion-content {
-    background: white;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 500px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    animation: slideUp 0.3s ease;
-}
-
-.modal-requisicion-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 25px;
-    border-bottom: 2px solid #e0e0e0;
-    background-color: #f8f9fa;
-    border-radius: 12px 12px 0 0;
-}
-
-    .modal-requisicion-header h3 {
-        margin: 0;
-        color: #2c3e50;
-        font-size: 20px;
-        font-weight: 600;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-        .modal-requisicion-header h3 i {
-            color: #17a2b8;
-        }
-
-.btn-close-modal {
-    background: none;
-    border: none;
-    font-size: 28px;
-    color: #666;
-    cursor: pointer;
-    transition: color 0.2s ease, transform 0.1s ease;
-    padding: 0;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 6px;
-}
-
-    .btn-close-modal:hover {
-        color: #DB473C;
-        background-color: rgba(219, 71, 60, 0.1);
-        transform: scale(1.1);
-    }
-
-.modal-requisicion-body {
-    padding: 25px;
-}
-
-    .modal-requisicion-body p {
-        margin-bottom: 20px;
-        color: #555;
-        font-size: 15px;
-    }
-
-        .modal-requisicion-body p strong {
-            color: #2c3e50;
-        }
-
-.form-group-modal {
-    margin-bottom: 20px;
-}
-
-    .form-group-modal label {
-        display: block;
-        font-weight: 600;
-        margin-bottom: 8px;
-        color: #555;
-        font-size: 14px;
-    }
-
-.form-control-modal {
-    width: 100%;
-    padding: 12px;
-    border: 2px solid #e0e0e0;
-    border-radius: 6px;
-    font-size: 15px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    box-sizing: border-box;
-}
-
-    .form-control-modal:focus {
-        outline: none;
-        border-color: #88CFE0;
-        box-shadow: 0 0 0 3px rgba(136, 207, 224, 0.1);
-    }
-
-.form-text-modal {
-    font-size: 13px;
-    color: #666;
-    margin-top: 5px;
-    display: block;
-}
-
-.modal-requisicion-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 25px;
-}
-
-    .modal-requisicion-actions button {
-        flex: 1;
-        padding: 12px;
-        border: none;
-        border-radius: 6px;
-        font-size: 15px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-    }
-=======
-    .btn-requisiciones:hover {
-        background-color: #138496;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(23, 162, 184, 0.3);
-    }
->>>>>>> parent of 7a13c5a (Cambios 09/01/2026)

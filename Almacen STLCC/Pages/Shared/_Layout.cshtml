@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] Almacén STLCC</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/shared/searchable-select.css" asp-append-version="true" />
     <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
     <link rel="icon" type="image/png" sizes="32x32" href="~/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="~/favicon-16x16.png" />
@@ -26,7 +27,7 @@
                         <a asp-page="/Proveedores/Index" class="nav-link">Proveedores</a>
                         <a asp-page="/Categorias/Index" class="nav-link">Categorias</a>
                         <a asp-page="/Actas/Index" class="nav-link">Actas</a>
-                        <a asp-page="/Historial/Index" class="nav-link">Historial</a>
+                        <a asp-page="/Movimientos/Index" class="nav-link">Movimientos</a>
 
                         @if (esAdmin)
                         {
@@ -72,11 +73,7 @@
     <script src="~/js/shared/sweetalert-helper.js"></script>
     <script src="~/js/shared/filtro-tabla.js"></script>
     <script src="~/js/shared/paginacion.js"></script>
-<<<<<<< HEAD
     <script src="~/js/shared/searchable-select.js"></script>
-    <script src="~/js/shared/init-searchable-selects.js"></script>
-=======
->>>>>>> parent of 7a13c5a (Cambios 09/01/2026)
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

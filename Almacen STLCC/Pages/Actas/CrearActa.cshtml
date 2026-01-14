@@ -59,7 +59,9 @@
 
                 <div class="form-group">
                     <label asp-for="Input.Id_Proveedor">Proveedor:</label>
-                    <select asp-for="Input.Id_Proveedor" class="form-select" id="selectProveedor">
+                    <select asp-for="Input.Id_Proveedor"
+                            class="form-select searchable-select"
+                            id="selectProveedor">
                         <option value="">-- Seleccione un proveedor --</option>
                         @foreach (var proveedor in Model.Proveedores)
                         {
@@ -98,7 +100,10 @@
                     <div class="form-grid">
                         <div class="form-group">
                             <label>Producto:</label>
-                            <select name="Input.Detalles[0].Id_Producto" class="form-select" required>
+                            <select name="Input.Detalles[0].Id_Producto"
+                                    class="form-select searchable-select"
+                                    id="selectProducto0"
+                                    required>
                                 <option value="">-- Seleccione un producto --</option>
                                 @foreach (var producto in Model.Productos)
                                 {
@@ -108,13 +113,23 @@
                         </div>
 
                         <div class="form-group">
+                            <label>Requisición (Opcional):</label>
+                            <input type="text"
+                                   name="Input.Detalles[0].Requisicion"
+                                   class="form-control"
+                                   placeholder="Ej: REQ-2025-001"
+                                   autocomplete="off" />
+                            <small class="form-text">Puede dejarlo vacío si no aplica</small>
+                        </div>
+
+                        <div class="form-group">
                             <label>Cantidad:</label>
                             <input type="number"
                                    name="Input.Detalles[0].Cantidad"
                                    class="form-control"
                                    min="1"
                                    placeholder="Ej: 10"
-                                   required/>
+                                   required />
                         </div>
 
                         <div class="form-group">
@@ -124,7 +139,7 @@
                                    class="form-control"
                                    step="0.01"
                                    min="0"
-                                   placeholder="Sin ISV"/>
+                                   placeholder="Sin ISV" />
                         </div>
 
                         <div class="form-group">
@@ -134,7 +149,7 @@
                                    class="form-control"
                                    step="0.01"
                                    min="0"
-                                   placeholder="Con ISV incluido"/>
+                                   placeholder="Con ISV incluido" />
                         </div>
 
                         <div class="form-group btn-eliminar-container">

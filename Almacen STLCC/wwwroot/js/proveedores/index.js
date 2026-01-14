@@ -5,7 +5,7 @@
         'filtroRTN': 1                // Columna 1: RTN
     }, 'tablaProveedores');
 
-    inicializarPaginacion('tablaProveedores', 25);
+    inicializarPaginacion('tablaProveedores', 10);
 
     // Mostrar mensaje de éxito si existe
     mostrarMensajeExito();
