@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Movimientos - Almacén STLCC";
 }
-<link rel="stylesheet" href="~/css/shared/badges.css" />
+<link rel="stylesheet" href="~/css/site.css" />
 <link rel="stylesheet" href="~/css/movimientos/Index.css" />
 
 <div class="contenedor">
@@ -111,15 +111,19 @@
                             <td>
                                 @if (item.Movimiento.Tipo_Movimiento == "entrada")
                                 {
-                                    <span class="badge-gradient-entrada">ENTRADA</span>
+                                    <span class="badge-gradient-success">ENTRADA</span>
                                 }
                                 else if (item.Movimiento.Tipo_Movimiento == "salida")
                                 {
-                                    <span class="badge-gradient-salida">SALIDA</span>
+                                    <span class="badge-gradient-danger">SALIDA</span>
                                 }
                                 else if (item.Movimiento.Tipo_Movimiento == "ajuste")
                                 {
-                                    <span class="badge-gradient-ajuste">AJUSTE</span>
+                                    <span class="badge-gradient-warning">AJUSTE</span>
+                                }
+                                else
+                                {
+                                    <span class="badge-gradient-secondary">@item.Movimiento.Tipo_Movimiento.ToUpper()</span>
                                 }
                             </td>
                             <td>

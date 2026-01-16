@@ -1,0 +1,222 @@
+﻿@page
+@model Almacen_STLCC.Pages.Reportes.CrearModel
+@{
+    ViewData["Title"] = "Generar Reporte Personalizado";
+}
+
+<link rel="stylesheet" href="~/css/reportes/crear.css" />
+
+<div class="contenedor-reportes">
+    <div class="header-reportes">
+        <h1><i class="fa-solid fa-chart-bar"></i> Generador de Reportes Personalizados</h1>
+        <p>Cree reportes dinámicos seleccionando las tablas y columnas que necesite</p>
+    </div>
+
+    <!-- Progreso -->
+    <div class="progreso-container">
+        <div class="progreso-steps">
+            <div class="step activo" id="step1">
+                <div class="step-circle">1</div>
+                <span>Tablas</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" id="step2">
+                <div class="step-circle">2</div>
+                <span>Columnas</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" id="step3">
+                <div class="step-circle">3</div>
+                <span>Filtros</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" id="step4">
+                <div class="step-circle">4</div>
+                <span>Exportar</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Panel Principal -->
+    <div class="panel-reportes">
+        <!-- Pregunta 1: Tablas -->
+        <div class="pregunta-section activa" id="pregunta1">
+            <div class="pregunta-titulo">
+                <i class="fa-solid fa-table"></i>
+                <div>
+                    <h2>Paso 1: Seleccione las tablas</h2>
+                    <p>Elija una o más tablas para incluir en su reporte</p>
+                </div>
+            </div>
+
+            <div class="opciones-grid">
+                <label class="opcion-card">
+                    <input type="checkbox" name="tabla" value="productos" />
+                    <div class="opcion-content">
+                        <i class="fa-solid fa-box"></i>
+                        <span class="opcion-nombre">Productos</span>
+                        <small>Inventario completo</small>
+                    </div>
+                </label>
+                <label class="opcion-card">
+                    <input type="checkbox" name="tabla" value="proveedores" />
+                    <div class="opcion-content">
+                        <i class="fa-solid fa-truck"></i>
+                        <span class="opcion-nombre">Proveedores</span>
+                        <small>Listado de proveedores</small>
+                    </div>
+                </label>
+                <label class="opcion-card">
+                    <input type="checkbox" name="tabla" value="actas" />
+                    <div class="opcion-content">
+                        <i class="fa-solid fa-file-lines"></i>
+                        <span class="opcion-nombre">Actas</span>
+                        <small>Actas de compra</small>
+                    </div>
+                </label>
+                <label class="opcion-card">
+                    <input type="checkbox" name="tabla" value="movimientos" />
+                    <div class="opcion-content">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                        <span class="opcion-nombre">Movimientos</span>
+                        <small>Historial de cambios</small>
+                    </div>
+                </label>
+            </div>
+
+            <div class="pregunta-footer">
+                <button type="button" class="btn-gradient-primary btn-lg" id="btnSiguiente1" disabled>
+                    Continuar <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Pregunta 2: Columnas -->
+        <div class="pregunta-section" id="pregunta2">
+            <div class="pregunta-titulo">
+                <i class="fa-solid fa-columns"></i>
+                <div>
+                    <h2>Paso 2: Seleccione las columnas</h2>
+                    <p>Elija qué información incluir de cada tabla</p>
+                </div>
+            </div>
+
+            <div id="columnasContainer"></div>
+
+            <div class="pregunta-footer">
+                <button type="button" class="btn-gradient-secondary" id="btnAtras2">
+                    <i class="fa-solid fa-arrow-left"></i> Atrás
+                </button>
+                <button type="button" class="btn-gradient-primary btn-lg" id="btnSiguiente2" disabled>
+                    Continuar <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Pregunta 3: Filtros -->
+        <div class="pregunta-section" id="pregunta3">
+            <div class="pregunta-titulo">
+                <i class="fa-solid fa-filter"></i>
+                <div>
+                    <h2>Paso 3: Filtros opcionales</h2>
+                    <p>Puede filtrar por rango de fechas o incluir todos los registros</p>
+                </div>
+            </div>
+
+            <div class="filtros-box">
+                <div class="filtro-row">
+                    <div class="filtro-item">
+                        <label>
+                            <i class="fa-solid fa-calendar-days"></i>
+                            Fecha Desde:
+                        </label>
+                        <input type="date" id="fechaDesde" class="form-control-filtro" />
+                    </div>
+                    <div class="filtro-item">
+                        <label>
+                            <i class="fa-solid fa-calendar-check"></i>
+                            Fecha Hasta:
+                        </label>
+                        <input type="date" id="fechaHasta" class="form-control-filtro" />
+                    </div>
+                </div>
+                <div class="filtro-nota">
+                    <i class="fa-solid fa-info-circle"></i>
+                    Si no selecciona fechas, se incluirán todos los registros disponibles
+                </div>
+            </div>
+
+            <div class="pregunta-footer">
+                <button type="button" class="btn-gradient-secondary" id="btnAtras3">
+                    <i class="fa-solid fa-arrow-left"></i> Atrás
+                </button>
+                <button type="button" class="btn-gradient-primary btn-lg" id="btnSiguiente3">
+                    Continuar <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Pregunta 4: Exportar -->
+        <div class="pregunta-section" id="pregunta4">
+            <div class="pregunta-titulo">
+                <i class="fa-solid fa-file-export"></i>
+                <div>
+                    <h2>Paso 4: Formato de exportación</h2>
+                    <p>Seleccione el formato en que desea descargar su reporte</p>
+                </div>
+            </div>
+
+            <div class="formatos-grid">
+                <label class="formato-card">
+                    <input type="radio" name="formato" value="excel" checked />
+                    <div class="formato-content">
+                        <i class="fa-solid fa-file-excel"></i>
+                        <span>Excel</span>
+                        <small>Archivo editable .xlsx</small>
+                    </div>
+                </label>
+                <label class="formato-card">
+                    <input type="radio" name="formato" value="pdf" />
+                    <div class="formato-content">
+                        <i class="fa-solid fa-file-pdf"></i>
+                        <span>PDF</span>
+                        <small>Documento portable</small>
+                    </div>
+                </label>
+                <label class="formato-card">
+                    <input type="radio" name="formato" value="word" />
+                    <div class="formato-content">
+                        <i class="fa-solid fa-file-word"></i>
+                        <span>Word</span>
+                        <small>Documento editable .docx</small>
+                    </div>
+                </label>
+            </div>
+
+            <!-- Resumen -->
+            <div class="resumen-panel">
+                <h3><i class="fa-solid fa-clipboard-check"></i> Resumen del Reporte</h3>
+                <div id="resumenContenido"></div>
+            </div>
+
+            <div class="pregunta-footer">
+                <button type="button" class="btn-gradient-secondary" id="btnAtras4">
+                    <i class="fa-solid fa-arrow-left"></i> Atrás
+                </button>
+                <button type="button" class="btn-gradient-success btn-lg" id="btnGenerar">
+                    <i class="fa-solid fa-file-download"></i> Generar Reporte
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+        <div class="loading-spinner"></div>
+        <p>Generando su reporte personalizado...</p>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/reportes/crear.js"></script>
+}

@@ -25,7 +25,8 @@ builder.Services.AddDbContext<ApplicationDbContext>((serviceProvider, options) =
 
 // Registrar servicio LDAP
 builder.Services.AddScoped<LdapAuthenticationService>();
-
+//Registrar servicio de reportes
+builder.Services.AddScoped<ReporteService>();
 // Registrar servicio de auditoría
 builder.Services.AddScoped<AuditoriaService>();
 
