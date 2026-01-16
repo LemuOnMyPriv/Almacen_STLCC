@@ -30,7 +30,7 @@ namespace Almacen_STLCC.Pages.Movimientos
             public required string Tipo_Movimiento { get; set; }
 
             [Required(ErrorMessage = "La cantidad es obligatoria")]
-            [Range(1, int.MaxValue, ErrorMessage = "La cantidad debe ser mayor a 0")]
+            [Range(0, int.MaxValue, ErrorMessage = "La cantidad debe ser mayor o igual a 0")]
             public int Cantidad { get; set; }
 
             [Required(ErrorMessage = "La fecha es obligatoria")]
@@ -51,6 +51,16 @@ namespace Almacen_STLCC.Pages.Movimientos
                 .ToListAsync();
 
             return Page();
+        }
+
+        // Handler para obtener inventario (llamado por AJAX)
+        public async Task<IActionResult> OnGetInventarioAsync(int id)
+        {
+            var inventarioActual = await _context.Movimientos
+                .Where(m => m.Id_Producto == id)
+                .SumAsync(m => m.Cantidad);
+
+            return new JsonResult(new { cantidad = inventarioActual });
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -81,20 +91,36 @@ namespace Almacen_STLCC.Pages.Movimientos
                 return Page();
             }
 
-            // Verificar inventario disponible para salidas
-            if (Input.Tipo_Movimiento == "salida")
-            {
-                var inventarioActual = await _context.Movimientos
-                    .Where(m => m.Id_Producto == Input.Id_Producto)
-                    .SumAsync(m => m.Tipo_Movimiento == "entrada" ? m.Cantidad :
-                                  m.Tipo_Movimiento == "salida" ? -m.Cantidad : 0);
+            // Calcular inventario actual
+            var inventarioActual = await _context.Movimientos
+                .Where(m => m.Id_Producto == Input.Id_Producto)
+                .SumAsync(m => m.Cantidad);
 
-                if (inventarioActual < Input.Cantidad)
-                {
-                    ErrorMessage = $"Inventario insuficiente. Disponible: {inventarioActual}";
-                    await CargarDatos();
-                    return Page();
-                }
+            // Validar y procesar según el tipo de movimiento
+            int cantidadMovimiento = 0;
+
+            switch (Input.Tipo_Movimiento)
+            {
+                case "entrada":
+                    // Entrada: suma directamente la cantidad
+                    cantidadMovimiento = Input.Cantidad;
+                    break;
+
+                case "salida":
+                    // Salida: verifica inventario y resta
+                    if (inventarioActual < Input.Cantidad)
+                    {
+                        ErrorMessage = $"Inventario insuficiente. Disponible: {inventarioActual}";
+                        await CargarDatos();
+                        return Page();
+                    }
+                    cantidadMovimiento = -Input.Cantidad;
+                    break;
+
+                case "ajuste":
+                    // Ajuste: calcula la diferencia entre inventario actual y nueva cantidad
+                    cantidadMovimiento = Input.Cantidad - inventarioActual;
+                    break;
             }
 
             // Crear el movimiento
@@ -102,7 +128,7 @@ namespace Almacen_STLCC.Pages.Movimientos
             {
                 Id_Producto = Input.Id_Producto,
                 Tipo_Movimiento = Input.Tipo_Movimiento,
-                Cantidad = Input.Cantidad,
+                Cantidad = cantidadMovimiento, // Esta es la cantidad que se guardará
                 Fecha = Input.Fecha,
                 Id_Acta = Input.Id_Acta,
                 Producto = producto
@@ -111,7 +137,15 @@ namespace Almacen_STLCC.Pages.Movimientos
             _context.Movimientos.Add(movimiento);
             await _context.SaveChangesAsync();
 
-            TempData["SuccessMessage"] = $"Movimiento de {Input.Tipo_Movimiento} registrado exitosamente";
+            var mensaje = Input.Tipo_Movimiento switch
+            {
+                "entrada" => $"Entrada de {Input.Cantidad} unidades registrada",
+                "salida" => $"Salida de {Input.Cantidad} unidades registrada",
+                "ajuste" => $"Ajuste registrado: Antes había: {inventarioActual}, ahora hay: {Input.Cantidad}",
+                _ => "Movimiento registrado"
+            };
+
+            TempData["SuccessMessage"] = mensaje;
             return RedirectToPage("/Movimientos/Index");
         }
 

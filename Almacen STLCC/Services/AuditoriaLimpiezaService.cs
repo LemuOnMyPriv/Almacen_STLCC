@@ -31,7 +31,7 @@ namespace Almacen_STLCC.Services
 
                     var tiempoEspera = proximaEjecucion - ahora;
 
-                    _logger.LogInformation("Próxima limpieza automática de auditorías: {Fecha}", proximaEjecucion);
+                    _logger.LogInformation("Próxima limpieza automática de auditorías: {Fecha:dd/MM/yyyy}", proximaEjecucion);
 
                     await Task.Delay(tiempoEspera, stoppingToken);
 

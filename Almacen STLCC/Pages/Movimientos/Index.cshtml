@@ -117,20 +117,18 @@
                                 {
                                     <span class="badge-gradient-salida">SALIDA</span>
                                 }
-                                else
+                                else if (item.Movimiento.Tipo_Movimiento == "ajuste")
                                 {
                                     <span class="badge-gradient-ajuste">AJUSTE</span>
                                 }
                             </td>
                             <td>
-                                @if (item.Movimiento.Tipo_Movimiento == "entrada" || item.Movimiento.Tipo_Movimiento == "ajuste")
-                                {
-                                    <span class="cantidad-positiva">+@item.Movimiento.Cantidad</span>
+                                @{
+                                    var cantidad = item.Movimiento.Cantidad;
+                                    var signo = cantidad >= 0 ? "+" : "";
+                                    var clase = cantidad >= 0 ? "cantidad-positiva" : "cantidad-negativa";
                                 }
-                                else
-                                {
-                                    <span class="cantidad-negativa">-@item.Movimiento.Cantidad</span>
-                                }
+                                <span class="@clase">@signo@cantidad</span>
                             </td>
                             <td>@item.NumeroActa</td>
                         </tr>

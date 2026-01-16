@@ -43,7 +43,7 @@
 
                 <div class="form-group">
                     <label asp-for="Input.Tipo_Movimiento">Tipo de Movimiento:</label>
-                    <select asp-for="Input.Tipo_Movimiento" class="form-select" required>
+                    <select asp-for="Input.Tipo_Movimiento" class="movimiento-control" id="selectTipoMovimiento" required>
                         <option value="">-- Seleccione un tipo --</option>
                         <option value="entrada">Entrada</option>
                         <option value="salida">Salida</option>
@@ -53,15 +53,21 @@
                 </div>
 
                 <div class="form-group">
-                    <label asp-for="Input.Cantidad">Cantidad:</label>
+                    <label asp-for="Input.Cantidad">
+                        <span id="labelCantidad">Cantidad:</span>
+                    </label>
                     <input asp-for="Input.Cantidad"
                            class="movimiento-control"
                            type="number"
-                           min="1"
+                           min="0"
                            placeholder="Ej: 10"
                            autocomplete="off"
+                           id="inputCantidad"
                            required />
                     <span asp-validation-for="Input.Cantidad" class="text-danger"></span>
+                    <small class="form-text" id="hintInventario" style="display: none; color: #88CFE0; font-weight: 600;">
+                        <i class="fa-solid fa-info-circle"></i> <span id="textoInventario"></span>
+                    </small>
                 </div>
 
                 <div class="form-group">
@@ -92,9 +98,9 @@
                 <i class="fa-solid fa-circle-info"></i>
                 <strong>Información:</strong>
                 <ul>
-                    <li><strong>Entrada:</strong> Aumenta el inventario de un producto</li>
-                    <li><strong>Salida:</strong> Disminuye el inventario de un producto</li>
-                    <li><strong>Ajuste:</strong> Corrige el inventario de un producto</li>
+                    <li><strong>Entrada:</strong> Suma la cantidad especificada al inventario</li>
+                    <li><strong>Salida:</strong> Resta la cantidad especificada del inventario</li>
+                    <li><strong>Ajuste:</strong> Establece el inventario a la cantidad exacta especificada</li>
                 </ul>
             </div>
 
