@@ -364,7 +364,7 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
-    margin-bottom: 35px;
+    margin-bottom: 30px;
 }
 
 .formato-card {
@@ -442,7 +442,6 @@
     border: 2px solid #88CFE0;
     border-radius: 12px;
     padding: 25px;
-    margin-bottom: 35px;
 }
 
     .resumen-panel h3 {
@@ -500,12 +499,41 @@
         color: #88CFE0;
     }
 
+/* Filtros por tabla */
+.filtros-tabla {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    border-left: 4px solid #88CFE0;
+}
+
+    .filtros-tabla h3 {
+        color: #2c3e50;
+        font-size: 20px;
+        margin: 0 0 20px 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .filtros-tabla h3 i {
+            color: #88CFE0;
+        }
+
+.filtros-tabla-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+}
+
 /* Footer */
 .pregunta-footer {
     display: flex;
     gap: 15px;
     justify-content: flex-end;
     padding-top: 25px;
+    margin-top: 30px;
     border-top: 2px solid #f0f0f0;
 }
 

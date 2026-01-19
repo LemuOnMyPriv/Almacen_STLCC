@@ -32,7 +32,12 @@
             <div class="step-line"></div>
             <div class="step" id="step4">
                 <div class="step-circle">4</div>
-                <span>Exportar</span>
+                <span>Formato</span>
+            </div>
+            <div class="step-line"></div>
+            <div class="step" id="step5">
+                <div class="step-circle">5</div>
+                <span>Confirmar</span>
             </div>
         </div>
     </div>
@@ -119,32 +124,11 @@
                 <i class="fa-solid fa-filter"></i>
                 <div>
                     <h2>Paso 3: Filtros opcionales</h2>
-                    <p>Puede filtrar por rango de fechas o incluir todos los registros</p>
+                    <p>Filtre los datos por los campos que seleccionó</p>
                 </div>
             </div>
 
-            <div class="filtros-box">
-                <div class="filtro-row">
-                    <div class="filtro-item">
-                        <label>
-                            <i class="fa-solid fa-calendar-days"></i>
-                            Fecha Desde:
-                        </label>
-                        <input type="date" id="fechaDesde" class="form-control-filtro" />
-                    </div>
-                    <div class="filtro-item">
-                        <label>
-                            <i class="fa-solid fa-calendar-check"></i>
-                            Fecha Hasta:
-                        </label>
-                        <input type="date" id="fechaHasta" class="form-control-filtro" />
-                    </div>
-                </div>
-                <div class="filtro-nota">
-                    <i class="fa-solid fa-info-circle"></i>
-                    Si no selecciona fechas, se incluirán todos los registros disponibles
-                </div>
-            </div>
+            <div id="filtrosContainer"></div>
 
             <div class="pregunta-footer">
                 <button type="button" class="btn-gradient-secondary" id="btnAtras3">
@@ -156,7 +140,7 @@
             </div>
         </div>
 
-        <!-- Pregunta 4: Exportar -->
+        <!-- Pregunta 4: Formato -->
         <div class="pregunta-section" id="pregunta4">
             <div class="pregunta-titulo">
                 <i class="fa-solid fa-file-export"></i>
@@ -193,14 +177,34 @@
                 </label>
             </div>
 
+            <div class="pregunta-footer">
+                <button type="button" class="btn-gradient-secondary" id="btnAtras4">
+                    <i class="fa-solid fa-arrow-left"></i> Atrás
+                </button>
+                <button type="button" class="btn-gradient-primary btn-lg" id="btnSiguiente4">
+                    Continuar <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Pregunta 5: Resumen y Confirmar -->
+        <div class="pregunta-section" id="pregunta5">
+            <div class="pregunta-titulo">
+                <i class="fa-solid fa-clipboard-check"></i>
+                <div>
+                    <h2>Paso 5: Confirme su reporte</h2>
+                    <p>Revise la configuración antes de generar</p>
+                </div>
+            </div>
+
             <!-- Resumen -->
             <div class="resumen-panel">
-                <h3><i class="fa-solid fa-clipboard-check"></i> Resumen del Reporte</h3>
+                <h3><i class="fa-solid fa-list-check"></i> Resumen del Reporte</h3>
                 <div id="resumenContenido"></div>
             </div>
 
             <div class="pregunta-footer">
-                <button type="button" class="btn-gradient-secondary" id="btnAtras4">
+                <button type="button" class="btn-gradient-secondary" id="btnAtras5">
                     <i class="fa-solid fa-arrow-left"></i> Atrás
                 </button>
                 <button type="button" class="btn-gradient-success btn-lg" id="btnGenerar">
