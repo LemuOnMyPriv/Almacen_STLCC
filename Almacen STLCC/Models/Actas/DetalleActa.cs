@@ -39,5 +39,6 @@ namespace Almacen_STLCC.Models.Actas
 
         [ForeignKey("Id_Producto")]
         public required Producto Producto { get; set; }
+
     }
 }

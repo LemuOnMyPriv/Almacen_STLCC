@@ -82,7 +82,7 @@ namespace Almacen_STLCC.Pages.Actas
                 ? "Requisición removida exitosamente"
                 : "Requisición actualizada exitosamente";
 
-            TempData["SuccessMessage"] = mensaje;
+            TempData["successMessage"] = mensaje;
             return RedirectToPage("/Actas/Detalles", new { id = Input.Id_Acta });
         }
 

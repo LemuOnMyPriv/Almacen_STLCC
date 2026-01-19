@@ -9,33 +9,67 @@ namespace Almacen_STLCC.Pages.Actas
     {
         private readonly ApplicationDbContext _context = context;
 
-        public required Acta Acta { get; set; }
-        public List<DetalleActa> Detalles { get; set; } = [];
-        public int CantidadRequisiciones { get; set; }
+        public Acta? Acta { get; set; } = null!;
+        public List<DetalleActa> Detalles { get; set; } = new();
+        public List<string> RequisicionesUnicas { get; set; } = new();
+        public Dictionary<string, List<DetalleActa>> ProductosPorRequisicion { get; set; } = new();
 
         public async Task<IActionResult> OnGetAsync(int id)
         {
-            var acta = await _context.Actas
-                .Include(a => a.Proveedor)
-                .Include(a => a.Requisiciones)
-                .FirstOrDefaultAsync(a => a.Id_Acta == id);
+            await CargarDatos(id);
+            return Page();
+        }
 
-            if (acta == null)
+        public async Task<IActionResult> OnPostActualizarRequisicionAsync(int idDetalle, string? requisicion)
+        {
+            var detalle = await _context.DetallesActa.FindAsync(idDetalle);
+
+            if (detalle == null)
             {
-                return RedirectToPage("/Actas/Index");
+                TempData["ErrorMessage"] = "No se encontró el producto";
+                return RedirectToPage();
             }
 
-            Acta = acta;
+            // Actualizar la requisición (puede ser null o vacío para removerla)
+            detalle.Requisicion = string.IsNullOrWhiteSpace(requisicion) ? null : requisicion.Trim();
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToPage(new { id = detalle.Id_Acta });
+        }
+
+        private async Task CargarDatos(int id)
+        {
+            Acta = await _context.Actas
+                .Include(a => a.Proveedor)
+                .FirstOrDefaultAsync(a => a.Id_Acta == id);
+
+            if (Acta == null)
+            {
+                return;
+            }
 
             Detalles = await _context.DetallesActa
                 .Include(d => d.Producto)
                 .Where(d => d.Id_Acta == id)
-                .OrderBy(d => d.Producto.Nombre_Producto)
                 .ToListAsync();
 
-            CantidadRequisiciones = acta.Requisiciones.Count;
+            // Extraer requisiciones únicas
+            RequisicionesUnicas = Detalles
+                .Where(d => !string.IsNullOrWhiteSpace(d.Requisicion))
+                .Select(d => d.Requisicion!)
+                .Distinct()
+                .OrderBy(r => r)
+                .ToList();
 
-            return Page();
+            // Agrupar productos por requisición para mostrar en la vista
+            ProductosPorRequisicion = Detalles
+                .Where(d => !string.IsNullOrWhiteSpace(d.Requisicion))
+                .GroupBy(d => d.Requisicion!)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.ToList()
+                );
         }
     }
 }

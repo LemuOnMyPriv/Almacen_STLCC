@@ -3,7 +3,6 @@
 @{
     ViewData["Title"] = "Movimientos - Almacén STLCC";
 }
-<link rel="stylesheet" href="~/css/site.css" />
 <link rel="stylesheet" href="~/css/movimientos/Index.css" />
 
 <div class="contenedor">
@@ -109,15 +108,15 @@
                             <td>@item.Movimiento.Fecha.ToString("dd/MM/yyyy")</td>
                             <td>@item.NombreProducto</td>
                             <td>
-                                @if (item.Movimiento.Tipo_Movimiento == "entrada")
+                                @if (item.Movimiento.Tipo_Movimiento == "ENTRADA")
                                 {
                                     <span class="badge-gradient-success">ENTRADA</span>
                                 }
-                                else if (item.Movimiento.Tipo_Movimiento == "salida")
+                                else if (item.Movimiento.Tipo_Movimiento == "SALIDA")
                                 {
                                     <span class="badge-gradient-danger">SALIDA</span>
                                 }
-                                else if (item.Movimiento.Tipo_Movimiento == "ajuste")
+                                else if (item.Movimiento.Tipo_Movimiento == "AJUSTE")
                                 {
                                     <span class="badge-gradient-warning">AJUSTE</span>
                                 }

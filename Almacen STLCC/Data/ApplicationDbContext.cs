@@ -31,7 +31,6 @@ namespace Almacen_STLCC.Data
         public DbSet<Producto> Productos { get; set; }
         public DbSet<ProductoProveedor> ProductoProveedores { get; set; }
         public DbSet<Acta> Actas { get; set; }
-        public DbSet<ActaRequisicion> ActaRequisiciones { get; set; }
         public DbSet<DetalleActa> DetallesActa { get; set; }
         public DbSet<Movimiento> Movimientos { get; set; }
         public DbSet<Anexo> Anexos { get; set; }
