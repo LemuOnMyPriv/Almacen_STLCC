@@ -55,21 +55,19 @@ namespace Almacen_STLCC.Pages.Reportes
                     request.Formato
                 );
 
-                var filtrosPlanos = new Dictionary<string, string>();
+                // Convertir filtros al formato correcto
+                var filtrosConvertidos = new Dictionary<string, Dictionary<string, string>>();
 
                 foreach (var tabla in request.Filtros)
                 {
-                    foreach (var filtro in tabla.Value)
-                    {
-                        filtrosPlanos[$"{tabla.Key}.{filtro.Key}"] = filtro.Value;
-                    }
+                    filtrosConvertidos[tabla.Key] = tabla.Value;
                 }
 
                 var config = new ReporteService.ConfiguracionReporte
                 {
                     TablasSeleccionadas = request.Tablas,
                     ColumnasSeleccionadas = request.Columnas,
-                    Filtros = filtrosPlanos
+                    Filtros = filtrosConvertidos
                 };
 
                 byte[] archivo;
@@ -118,9 +116,7 @@ namespace Almacen_STLCC.Pages.Reportes
         {
             public List<string> Tablas { get; set; } = new();
             public Dictionary<string, List<string>> Columnas { get; set; } = new();
-
             public Dictionary<string, Dictionary<string, string>> Filtros { get; set; } = new();
-
             public string Formato { get; set; } = "excel";
         }
     }
