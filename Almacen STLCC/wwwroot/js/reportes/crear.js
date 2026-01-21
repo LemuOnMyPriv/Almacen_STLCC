@@ -6,6 +6,37 @@ const columnasDisponibles = {
     movimientos: ['Fecha', 'Producto', 'Tipo', 'Cantidad', 'Acta']
 };
 
+// Tipos de campos de filtro por columna
+const tiposCamposFiltro = {
+    productos: {
+        'Código': 'number',
+        'Nombre': 'text',
+        'Marca': 'text',
+        'Categoría': 'select',
+        'Unidad de Medida': 'text',
+        'Proveedores': 'select'
+    },
+    proveedores: {
+        'Nombre': 'text',
+        'RTN': 'text'
+    },
+    actas: {
+        'Numero de Acta': 'text',
+        'F01': 'text',
+        'Orden de Compra': 'text',
+        'Proveedor': 'select',
+        'Fecha': 'date',
+        'Productos': 'select'
+    },
+    movimientos: {
+        'Fecha': 'date',
+        'Producto': 'select',
+        'Tipo': 'select',
+        'Cantidad': 'number',
+        'Acta': 'select'
+    }
+};
+
 const iconosTablas = {
     productos: 'fa-box',
     proveedores: 'fa-truck',
@@ -20,9 +51,30 @@ let columnasSeleccionadas = {};
 let filtrosSeleccionados = {};
 let formatoSeleccionado = 'excel';
 
+// Datos para selects dinámicos
+let datosSelects = {
+    categorias: [],
+    proveedores: [],
+    productos: [],
+    actas: [],
+    tiposMovimiento: ['ENTRADA', 'SALIDA', 'AJUSTE']
+};
+
 document.addEventListener("DOMContentLoaded", function () {
     inicializarEventos();
+    cargarDatosSelects();
 });
+
+async function cargarDatosSelects() {
+    try {
+        const response = await fetch('/Reportes/Crear?handler=DatosSelects');
+        if (response.ok) {
+            datosSelects = await response.json();
+        }
+    } catch (error) {
+        console.error('Error cargando datos para selects:', error);
+    }
+}
 
 function inicializarEventos() {
     // Paso 1: Selección de tablas
@@ -59,6 +111,21 @@ function inicializarEventos() {
 
     document.getElementById('btnAtras5').addEventListener('click', () => irAPaso(4));
     document.getElementById('btnGenerar').addEventListener('click', generarReporte);
+
+    // Hacer los pasos clicables
+    for (let i = 1; i <= 5; i++) {
+        const stepElement = document.getElementById(`step${i}`);
+        if (stepElement) {
+            stepElement.addEventListener('click', function () {
+                if (this.classList.contains('completado') || this.classList.contains('activo')) {
+                    const numeroPaso = parseInt(this.querySelector('.step-circle').textContent);
+                    if (numeroPaso < pasoActual) {
+                        irAPaso(numeroPaso);
+                    }
+                }
+            });
+        }
+    }
 }
 
 function irAPaso(numeroPaso) {
@@ -67,7 +134,9 @@ function irAPaso(numeroPaso) {
 
     // Actualizar pasos en el indicador
     document.getElementById(`step${pasoActual}`).classList.remove('activo');
-    document.getElementById(`step${pasoActual}`).classList.add('completado');
+    if (numeroPaso > pasoActual) {
+        document.getElementById(`step${pasoActual}`).classList.add('completado');
+    }
 
     pasoActual = numeroPaso;
 
@@ -108,22 +177,29 @@ function generarSelectorColumnas() {
 
         container.appendChild(tablaDiv);
 
-        // Generar checkboxes de columnas
         const columnasGrid = document.getElementById(`columnas-${tabla}`);
         columnasDisponibles[tabla].forEach(columna => {
             const colDiv = document.createElement('div');
             colDiv.className = 'columna-checkbox';
             colDiv.innerHTML = `
                 <input type="checkbox" 
-                       id="col-${tabla}-${columna}" 
+                       id="col-${tabla}-${columna.replace(/ /g, '-')}" 
                        value="${columna}"
                        data-tabla="${tabla}" />
-                <label for="col-${tabla}-${columna}">${columna}</label>
+                <label for="col-${tabla}-${columna.replace(/ /g, '-')}">${columna}</label>
             `;
             columnasGrid.appendChild(colDiv);
 
-            // Event listener
-            colDiv.querySelector('input').addEventListener('change', validarColumnas);
+            const checkbox = colDiv.querySelector('input');
+            checkbox.addEventListener('change', validarColumnas);
+
+            // Hacer que todo el div sea clicable
+            colDiv.addEventListener('click', function (e) {
+                if (e.target !== checkbox) {
+                    checkbox.checked = !checkbox.checked;
+                    checkbox.dispatchEvent(new Event('change'));
+                }
+            });
         });
     });
 
@@ -150,7 +226,6 @@ function generarFiltrosDinamicos() {
     const container = document.getElementById('filtrosContainer');
     container.innerHTML = '';
 
-    // Nota informativa
     const nota = document.createElement('div');
     nota.className = 'filtro-nota';
     nota.innerHTML = `
@@ -159,7 +234,6 @@ function generarFiltrosDinamicos() {
     `;
     container.appendChild(nota);
 
-    // Generar filtros por cada tabla seleccionada
     tablasSeleccionadas.forEach(tabla => {
         const tablaDiv = document.createElement('div');
         tablaDiv.className = 'filtros-tabla';
@@ -179,30 +253,66 @@ function generarFiltrosDinamicos() {
 
         const filtrosGrid = document.getElementById(`filtros-${tabla}`);
 
-        // Generar inputs de filtro para cada columna seleccionada
         if (columnasSeleccionadas[tabla]) {
             columnasSeleccionadas[tabla].forEach(columna => {
                 const filtroDiv = document.createElement('div');
                 filtroDiv.className = 'filtro-item';
 
                 const inputId = `filtro-${tabla}-${columna.replace(/ /g, '-')}`;
+                const tipoCampo = tiposCamposFiltro[tabla][columna];
+
+                let inputHTML = '';
+
+                if (tipoCampo === 'date') {
+                    inputHTML = `
+                        <input type="date" 
+                               id="${inputId}" 
+                               class="form-control-filtro"
+                               data-tabla="${tabla}"
+                               data-columna="${columna}" />
+                    `;
+                } else if (tipoCampo === 'number') {
+                    inputHTML = `
+                        <input type="number" 
+                               id="${inputId}" 
+                               class="form-control-filtro"
+                               placeholder="Filtrar por ${columna.toLowerCase()}..."
+                               data-tabla="${tabla}"
+                               data-columna="${columna}" />
+                    `;
+                } else if (tipoCampo === 'select') {
+                    const opciones = obtenerOpcionesSelect(tabla, columna);
+                    inputHTML = `
+                        <select id="${inputId}" 
+                                class="form-control-filtro searchable-select"
+                                data-tabla="${tabla}"
+                                data-columna="${columna}">
+                            <option value="">-- Todos --</option>
+                            ${opciones.map(op => `<option value="${op}">${op}</option>`).join('')}
+                        </select>
+                    `;
+                } else {
+                    inputHTML = `
+                        <input type="text" 
+                               id="${inputId}" 
+                               class="form-control-filtro"
+                               placeholder="Filtrar por ${columna.toLowerCase()}..."
+                               data-tabla="${tabla}"
+                               data-columna="${columna}" />
+                    `;
+                }
 
                 filtroDiv.innerHTML = `
                     <label for="${inputId}">
                         <i class="fa-solid fa-filter"></i> ${columna}:
                     </label>
-                    <input type="text" 
-                           id="${inputId}" 
-                           class="form-control-filtro"
-                           placeholder="Filtrar por ${columna.toLowerCase()}..."
-                           data-tabla="${tabla}"
-                           data-columna="${columna}" />
+                    ${inputHTML}
                 `;
 
                 filtrosGrid.appendChild(filtroDiv);
 
-                // Event listener para guardar filtros
-                filtroDiv.querySelector('input').addEventListener('input', function () {
+                const input = filtroDiv.querySelector('input, select');
+                input.addEventListener('input', function () {
                     if (!filtrosSeleccionados[tabla]) {
                         filtrosSeleccionados[tabla] = {};
                     }
@@ -213,16 +323,45 @@ function generarFiltrosDinamicos() {
                         delete filtrosSeleccionados[tabla][columna];
                     }
                 });
+
+                // Inicializar searchable select si es necesario
+                if (tipoCampo === 'select') {
+                    inicializarSearchableSelect(inputId);
+                }
             });
         }
     });
+}
+
+function obtenerOpcionesSelect(tabla, columna) {
+    if (tabla === 'productos' && columna === 'Categoría') {
+        return datosSelects.categorias || [];
+    }
+    if (tabla === 'productos' && columna === 'Proveedores') {
+        return datosSelects.proveedores || [];
+    }
+    if (tabla === 'actas' && columna === 'Proveedor') {
+        return datosSelects.proveedores || [];
+    }
+    if (tabla === 'actas' && columna === 'Productos') {
+        return datosSelects.productos || [];
+    }
+    if (tabla === 'movimientos' && columna === 'Producto') {
+        return datosSelects.productos || [];
+    }
+    if (tabla === 'movimientos' && columna === 'Tipo') {
+        return datosSelects.tiposMovimiento || [];
+    }
+    if (tabla === 'movimientos' && columna === 'Acta') {
+        return datosSelects.actas || [];
+    }
+    return [];
 }
 
 function actualizarResumen() {
     const container = document.getElementById('resumenContenido');
     container.innerHTML = '';
 
-    // Tablas seleccionadas
     const tablasItem = document.createElement('div');
     tablasItem.className = 'resumen-item';
     tablasItem.innerHTML = `
@@ -241,7 +380,6 @@ function actualizarResumen() {
     `;
     container.appendChild(tablasItem);
 
-    // Columnas por tabla
     Object.entries(columnasSeleccionadas).forEach(([tabla, columnas]) => {
         if (columnas.length > 0) {
             const colItem = document.createElement('div');
@@ -259,7 +397,6 @@ function actualizarResumen() {
         }
     });
 
-    // Filtros aplicados
     const hayFiltros = Object.keys(filtrosSeleccionados).some(tabla =>
         Object.keys(filtrosSeleccionados[tabla] || {}).length > 0
     );
@@ -285,7 +422,6 @@ function actualizarResumen() {
         });
     }
 
-    // Formato
     const formatoItem = document.createElement('div');
     formatoItem.className = 'resumen-item';
     const iconoFormato = formatoSeleccionado === 'excel' ? 'fa-file-excel' :
@@ -301,7 +437,6 @@ function actualizarResumen() {
 
 async function generarReporte() {
     try {
-        // Mostrar loading
         document.getElementById('loadingOverlay').style.display = 'flex';
 
         const payload = {
@@ -311,23 +446,18 @@ async function generarReporte() {
             formato: formatoSeleccionado
         };
 
-        console.log('Enviando payload:', payload);
-
         const response = await fetch('/Reportes/Crear?handler=Generar', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify(payload)
         });
 
         if (!response.ok) {
-            const errorText = await response.text();
-            console.error('Error del servidor:', errorText);
             throw new Error(`Error del servidor: ${response.status}`);
         }
 
-        // Descargar archivo
         const blob = await response.blob();
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
@@ -342,10 +472,8 @@ async function generarReporte() {
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
 
-        // Ocultar loading
         document.getElementById('loadingOverlay').style.display = 'none';
 
-        // Mensaje de éxito
         Swal.fire({
             icon: 'success',
             title: '¡Reporte generado!',
@@ -354,7 +482,7 @@ async function generarReporte() {
         });
 
     } catch (error) {
-        console.error('Error completo:', error);
+        console.error('Error:', error);
         document.getElementById('loadingOverlay').style.display = 'none';
 
         Swal.fire({

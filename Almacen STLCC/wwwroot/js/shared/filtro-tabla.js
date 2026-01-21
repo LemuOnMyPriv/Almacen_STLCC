@@ -36,6 +36,8 @@ function inicializarFiltroTabla(inputId, tableId, columnasAFiltrar = null) {
         // Insertar ANTES de la tabla
         const seccionTabla = table.closest('.tabla-productos, .tabla-proveedores, .tabla-categorias, .tabla-actas, .tabla-auditoria') || table.parentElement;
         seccionTabla.insertBefore(contadorResultados, seccionTabla.firstChild);
+
+        contadorResultados.style.display = 'none';
     }
 
     // Función de filtrado

@@ -102,7 +102,13 @@ namespace Almacen_STLCC.Pages.Movimientos
             switch (Input.Tipo_Movimiento)
             {
                 case "entrada":
-                    // Entrada: suma directamente la cantidad
+                    if (Input.Cantidad <= 0)
+                    {
+                        ErrorMessage = $"La cantidad debe ser mayor a 0";
+                        await CargarDatos();
+                        return Page();
+                    }
+                        // Entrada: suma directamente la cantidad
                     cantidadMovimiento = Input.Cantidad;
                     break;
 
@@ -111,6 +117,13 @@ namespace Almacen_STLCC.Pages.Movimientos
                     if (inventarioActual < Input.Cantidad)
                     {
                         ErrorMessage = $"Inventario insuficiente. Disponible: {inventarioActual}";
+                        await CargarDatos();
+                        return Page();
+                    }
+
+                    if (Input.Cantidad <= 0)
+                    {
+                        ErrorMessage = $"La cantidad debe ser mayor a 0";
                         await CargarDatos();
                         return Page();
                     }

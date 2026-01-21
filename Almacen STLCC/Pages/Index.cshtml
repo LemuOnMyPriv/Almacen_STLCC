@@ -14,14 +14,14 @@
 
     <section class="paneles">
         <div class="tarjetas">
-            <i class="fa-solid fa-eye fa-4x" style="color:#88CFE0"></i>
+            <i class="fa-solid fa-boxes-stacked fa-4x" style="color:#88CFE0"></i>
             <h3>Ver Productos</h3>
             <p>Consulte los productos que existen en registro.</p>
             <a asp-page="/Productos/Index" class="btn-gradient-primary">Ver Productos</a>
         </div>
 
         <div class="tarjetas">
-            <i class="fa-solid fa-circle-plus fa-4x" style="color:#88CFE0;"></i>
+            <i class="fa-solid fa-box fa-4x" style="color:#88CFE0;"></i>
             <h3>Añadir Nuevo Producto</h3>
             <p>Añada un nuevo producto para ingresar al registro.</p>
             <a asp-page="/Productos/CrearP" class="btn-gradient-primary">Registrar Producto</a>
@@ -35,35 +35,49 @@
         </div>
 
         <div class="tarjetas">
-            <i class="fa-solid fa-circle-plus fa-4x" style="color:#88CFE0;"></i>
+            <i class="fa-solid fa-truck-ramp-box fa-4x" style="color:#88CFE0;"></i>
             <h3>Añadir Nuevo Proveedor</h3>
             <p>Añada un nuevo proveedor para ingresar al registro.</p>
             <a asp-page="/Proveedores/CrearProveedor" class="btn-gradient-primary">Registrar Proveedor</a>
         </div>
 
         <div class="tarjetas">
-            <i class="fa-solid fa-clipboard fa-4x" style="color:#88CFE0"></i>
+            <i class="fa-solid fa-list-check fa-4x" style="color:#88CFE0"></i>
+            <h3>Ver Categorías</h3>
+            <p>Consulte las categorías que existen en registro.</p>
+            <a asp-page="/Categorias/Index" class="btn-gradient-primary">Ver Categorías</a>
+        </div>
+
+        <div class="tarjetas">
+            <i class="fa-solid fa-list-ol fa-4x" style="color:#88CFE0;"></i>
+            <h3>Añadir Nueva Categoría</h3>
+            <p>Añada una nueva categoría para ingresar al registro.</p>
+            <a asp-page="/Categorias/Create" class="btn-gradient-primary">Registrar Categoría</a>
+        </div>
+
+        <div class="tarjetas">
+            <i class="fa-solid fa-clipboard-list fa-4x" style="color:#88CFE0"></i>
             <h3>Ver Actas</h3>
             <p>Consulte las actas que existen en registro.</p>
             <a asp-page="/Actas/Index" class="btn-gradient-primary">Ver Actas</a>
         </div>
 
         <div class="tarjetas">
-            <i class="fa-solid fa-circle-plus fa-4x" style="color:#88CFE0;"></i>
+            <i class="fa-solid fa-clipboard fa-4x" style="color:#88CFE0;"></i>
             <h3>Añadir Nueva Acta</h3>
             <p>Añada una nueva acta para ingresar al registro.</p>
             <a asp-page="/Actas/CrearActa" class="btn-gradient-primary">Registrar Acta</a>
         </div>
 
         <div class="tarjetas">
-            <i class="fa-solid fa-clipboard fa-4x" style="color:#88CFE0"></i>
+            <i class="fa-solid fa-clock-rotate-left fa-4x" style="color:#88CFE0"></i>
             <h3>Ver Movimientos</h3>
             <p>Consulte los movimientos que han sido realizados.</p>
             <a asp-page="/Movimientos/Index" class="btn-gradient-primary">Ver Movimientos</a>
         </div>
 
         <div class="tarjetas">
-            <i class="fa-solid fa-circle-plus fa-4x" style="color:#88CFE0;"></i>
+            <i class="fa-solid fa-arrow-right-arrow-left fa-4x" style="color:#88CFE0;"></i>
             <h3>Registrar Nuevo Movimiento</h3>
             <p>Registre un movimiento para ingresar al registro.</p>
             <a asp-page="/Movimientos/Movimiento" class="btn-gradient-primary">Registrar Movimiento</a>
@@ -74,13 +88,6 @@
             <h3>Generar Reportes</h3>
             <p>Obtenga reportes detallados sobre los datos que necesite.</p>
             <a asp-page="/Reportes/Crear" class="btn-gradient-primary">Generar Reportes</a>
-        </div>
-
-        <div class="tarjetas">
-            <i class="fa-solid fa-clock-rotate-left fa-4x" style="color: #88CFE0"></i>
-            <h3>Historial de Movimientos</h3>
-            <p>Consulte los registros de entradas y salidas del almacén.</p>
-            <a asp-page="/Historial/Index" class="btn-gradient-primary">Ver Historial</a>
         </div>
     </section>
 </div>

@@ -7,6 +7,7 @@
     max-width: 1200px;
     margin: 40px auto;
     padding: 20px;
+    padding-bottom: 120px; /* Espacio para botones fijos */
 }
 
 /* Header */
@@ -51,10 +52,16 @@
     gap: 8px;
     opacity: 0.4;
     transition: all 0.3s ease;
+    cursor: pointer;
 }
+
+    .step:hover {
+        opacity: 0.7;
+    }
 
     .step.activo {
         opacity: 1;
+        cursor: default;
     }
 
     .step.completado {
@@ -64,6 +71,11 @@
         .step.completado .step-circle {
             background: #28a745;
             color: white;
+        }
+
+        .step.completado:hover .step-circle {
+            transform: scale(1.1);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
         }
 
 .step-circle {
@@ -168,7 +180,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     gap: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
 }
 
 .opcion-card {
@@ -280,6 +292,7 @@
     gap: 10px;
     cursor: pointer;
     transition: all 0.2s ease;
+    user-select: none;
 }
 
     .columna-checkbox:hover {
@@ -292,6 +305,7 @@
         height: 20px;
         cursor: pointer;
         accent-color: #88CFE0;
+        pointer-events: none;
     }
 
     .columna-checkbox label {
@@ -300,35 +314,69 @@
         font-size: 14px;
         color: #2c3e50;
         font-weight: 500;
+        flex: 1;
+        pointer-events: none;
     }
 
 /* Filtros */
-.filtros-box {
-    background: #f8f9fa;
-    border-radius: 12px;
-    padding: 30px;
-    margin-bottom: 35px;
+.filtro-nota {
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 15px;
+    border-radius: 6px;
+    color: #856404;
+    font-size: 14px;
+    margin-bottom: 25px;
 }
 
-.filtro-row {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    margin-bottom: 20px;
-}
-
-.filtro-item label {
-    display: block;
-    font-weight: 600;
-    margin-bottom: 10px;
-    color: #555;
-    font-size: 15px;
-}
-
-    .filtro-item label i {
-        color: #88CFE0;
+    .filtro-nota i {
         margin-right: 8px;
     }
+
+.filtros-tabla {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    border-left: 4px solid #88CFE0;
+}
+
+    .filtros-tabla h3 {
+        color: #2c3e50;
+        font-size: 20px;
+        margin: 0 0 20px 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+        .filtros-tabla h3 i {
+            color: #88CFE0;
+        }
+
+.filtros-tabla-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.filtro-item {
+    display: flex;
+    flex-direction: column;
+}
+
+    .filtro-item label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #555;
+        font-size: 14px;
+    }
+
+        .filtro-item label i {
+            color: #88CFE0;
+            margin-right: 8px;
+        }
 
 .form-control-filtro {
     width: 100%;
@@ -344,19 +392,6 @@
         outline: none;
         border-color: #88CFE0;
         box-shadow: 0 0 0 3px rgba(136, 207, 224, 0.1);
-    }
-
-.filtro-nota {
-    background: #fff3cd;
-    border-left: 4px solid #ffc107;
-    padding: 15px;
-    border-radius: 6px;
-    color: #856404;
-    font-size: 14px;
-}
-
-    .filtro-nota i {
-        margin-right: 8px;
     }
 
 /* Formatos */
@@ -499,42 +534,20 @@
         color: #88CFE0;
     }
 
-/* Filtros por tabla */
-.filtros-tabla {
-    background: #f8f9fa;
-    border-radius: 12px;
-    padding: 25px;
-    margin-bottom: 25px;
-    border-left: 4px solid #88CFE0;
-}
-
-    .filtros-tabla h3 {
-        color: #2c3e50;
-        font-size: 20px;
-        margin: 0 0 20px 0;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-
-        .filtros-tabla h3 i {
-            color: #88CFE0;
-        }
-
-.filtros-tabla-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 15px;
-}
-
-/* Footer */
+/* Footer fijo */
 .pregunta-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    border-top: 2px solid #e0e0e0;
+    padding: 20px;
     display: flex;
     gap: 15px;
-    justify-content: flex-end;
-    padding-top: 25px;
-    margin-top: 30px;
-    border-top: 2px solid #f0f0f0;
+    justify-content: center;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
+    z-index: 1000;
 }
 
 .btn-lg {
@@ -586,12 +599,17 @@
         grid-template-columns: 1fr;
     }
 
-    .filtro-row {
+    .filtros-tabla-grid {
         grid-template-columns: 1fr;
     }
 
     .pregunta-footer {
         flex-direction: column;
+        padding: 15px;
+    }
+
+    .btn-lg {
+        width: 100%;
     }
 
     .step-line {
