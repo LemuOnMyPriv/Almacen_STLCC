@@ -168,12 +168,17 @@ namespace Almacen_STLCC.Services
 
             foreach (var filtro in filtros)
             {
-                if (fila.ContainsKey(filtro.Key))
-                {
-                    var valor = fila[filtro.Key]?.ToString()?.ToLower() ?? "";
-                    var filtroValor = filtro.Value.ToLower();
+                // Buscar la clave ignorando mayúsculas/minúsculas
+                var claveEncontrada = fila.Keys.FirstOrDefault(k =>
+                    k.Equals(filtro.Key, StringComparison.OrdinalIgnoreCase));
 
-                    if (!valor.Contains(filtroValor))
+                if (claveEncontrada != null)
+                {
+                    var valor = fila[claveEncontrada]?.ToString() ?? "";
+                    var filtroValor = filtro.Value;
+
+                    // Usar Contains para búsqueda parcial (case-insensitive)
+                    if (!valor.Contains(filtroValor, StringComparison.OrdinalIgnoreCase))
                         return false;
                 }
             }

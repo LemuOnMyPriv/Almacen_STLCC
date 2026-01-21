@@ -69,13 +69,13 @@
     }
 
         .step.completado .step-circle {
-            background: #28a745;
+            background: linear-gradient(135deg, #48c774 0%, #3ec46d 100%);
             color: white;
         }
 
         .step.completado:hover .step-circle {
             transform: scale(1.1);
-            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+            box-shadow: 0 4px 12px rgba(72, 199, 116, 0.4);
         }
 
 .step-circle {
@@ -591,6 +591,16 @@
     font-size: 18px;
     font-weight: 600;
 }
+
+#btnGuardarComo {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+    #btnGuardarComo:hover {
+        background: linear-gradient(135deg, #5568d3 0%, #6a3f8f 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    }
 
 /* Responsive */
 @media (max-width: 768px) {

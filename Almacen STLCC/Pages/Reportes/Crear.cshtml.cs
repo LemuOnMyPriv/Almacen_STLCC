@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
+using Almacen_STLCC.Data;
 using Almacen_STLCC.Services;
 using System.Text.Json;
 
@@ -9,110 +11,99 @@ namespace Almacen_STLCC.Pages.Reportes
     public class CrearModel : SecurePageModel
     {
         private readonly ReporteService _reporteService;
-        private readonly ILogger<CrearModel> _logger;
+        private readonly ApplicationDbContext _context;
 
-        public CrearModel(
-            ReporteService reporteService,
-            ILogger<CrearModel> logger)
+        public CrearModel(ReporteService reporteService, ApplicationDbContext context)
         {
             _reporteService = reporteService;
-            _logger = logger;
+            _context = context;
         }
 
         public void OnGet()
         {
         }
 
-        public async Task<IActionResult> OnPostGenerarAsync()
+        // Handler para obtener datos de selects
+        public async Task<IActionResult> OnGetDatosSelectsAsync()
+        {
+            var datos = new
+            {
+                categorias = await _context.Categorias
+                    .OrderBy(c => c.Nombre_Categoria)
+                    .Select(c => c.Nombre_Categoria)
+                    .ToListAsync(),
+
+                proveedores = await _context.Proveedores
+                    .OrderBy(p => p.Nombre_Proveedor)
+                    .Select(p => p.Nombre_Proveedor)
+                    .ToListAsync(),
+
+                productos = await _context.Productos
+                    .OrderBy(p => p.Nombre_Producto)
+                    .Select(p => p.Nombre_Producto)
+                    .ToListAsync(),
+
+                actas = await _context.Actas
+                    .OrderBy(a => a.Numero_Acta)
+                    .Select(a => a.Numero_Acta)
+                    .ToListAsync(),
+
+                tiposMovimiento = new[] { "ENTRADA", "SALIDA", "AJUSTE" }
+            };
+
+            return new JsonResult(datos);
+        }
+
+        // Handler para generar el reporte
+        public async Task<IActionResult> OnPostGenerarAsync([FromBody] ConfiguracionReporteDto config)
         {
             try
             {
-                using var reader = new StreamReader(Request.Body);
-                var body = await reader.ReadToEndAsync();
-
-                if (string.IsNullOrWhiteSpace(body))
+                var configuracion = new ReporteService.ConfiguracionReporte
                 {
-                    _logger.LogWarning("El body del request llegó vacío");
-                    return BadRequest("Request vacío");
-                }
-
-                var request = JsonSerializer.Deserialize<ReporteRequest>(
-                    body,
-                    new JsonSerializerOptions
-                    {
-                        PropertyNameCaseInsensitive = true
-                    });
-
-                if (request == null)
-                {
-                    _logger.LogWarning("No se pudo deserializar el request");
-                    return BadRequest("Datos inválidos");
-                }
-
-                _logger.LogInformation(
-                    "Generando reporte. Tablas: {Tablas} | Formato: {Formato}",
-                    string.Join(", ", request.Tablas),
-                    request.Formato
-                );
-
-                // Convertir filtros al formato correcto
-                var filtrosConvertidos = new Dictionary<string, Dictionary<string, string>>();
-
-                foreach (var tabla in request.Filtros)
-                {
-                    filtrosConvertidos[tabla.Key] = tabla.Value;
-                }
-
-                var config = new ReporteService.ConfiguracionReporte
-                {
-                    TablasSeleccionadas = request.Tablas,
-                    ColumnasSeleccionadas = request.Columnas,
-                    Filtros = filtrosConvertidos
+                    TablasSeleccionadas = config.Tablas,
+                    ColumnasSeleccionadas = config.Columnas,
+                    Filtros = config.Filtros
                 };
 
                 byte[] archivo;
                 string contentType;
                 string extension;
 
-                switch (request.Formato?.ToLower())
+                switch (config.Formato.ToLower())
                 {
                     case "excel":
-                        archivo = await _reporteService.GenerarExcel(config);
+                        archivo = await _reporteService.GenerarExcel(configuracion);
                         contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                         extension = "xlsx";
                         break;
 
                     case "pdf":
-                        archivo = await _reporteService.GenerarPDF(config);
+                        archivo = await _reporteService.GenerarPDF(configuracion);
                         contentType = "application/pdf";
                         extension = "pdf";
                         break;
 
                     case "word":
-                        archivo = await _reporteService.GenerarWord(config);
+                        archivo = await _reporteService.GenerarWord(configuracion);
                         contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
                         extension = "docx";
                         break;
 
                     default:
-                        _logger.LogWarning("Formato no válido: {Formato}", request.Formato);
                         return BadRequest("Formato no válido");
                 }
 
                 var nombreArchivo = $"reporte_{DateTime.Now:yyyyMMddHHmmss}.{extension}";
-
-                _logger.LogInformation("Reporte generado correctamente: {Archivo}", nombreArchivo);
-
                 return File(archivo, contentType, nombreArchivo);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error al generar el reporte");
-                return StatusCode(500, ex.ToString());
+                return BadRequest($"Error al generar reporte: {ex.Message}");
             }
         }
 
-        public class ReporteRequest
+        public class ConfiguracionReporteDto
         {
             public List<string> Tablas { get; set; } = new();
             public Dictionary<string, List<string>> Columnas { get; set; } = new();

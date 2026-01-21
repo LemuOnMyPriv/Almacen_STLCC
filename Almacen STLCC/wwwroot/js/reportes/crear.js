@@ -70,6 +70,7 @@ async function cargarDatosSelects() {
         const response = await fetch('/Reportes/Crear?handler=DatosSelects');
         if (response.ok) {
             datosSelects = await response.json();
+            console.log('Datos cargados:', datosSelects);
         }
     } catch (error) {
         console.error('Error cargando datos para selects:', error);
@@ -101,7 +102,7 @@ function inicializarEventos() {
     document.getElementById('btnAtras4').addEventListener('click', () => irAPaso(3));
     document.getElementById('btnSiguiente4').addEventListener('click', () => irAPaso(5));
 
-    // Paso 5: Formato
+    // Paso 5: Formato y botones
     document.querySelectorAll('input[name="formato"]').forEach(radio => {
         radio.addEventListener('change', function () {
             formatoSeleccionado = this.value;
@@ -110,7 +111,8 @@ function inicializarEventos() {
     });
 
     document.getElementById('btnAtras5').addEventListener('click', () => irAPaso(4));
-    document.getElementById('btnGenerar').addEventListener('click', generarReporte);
+    document.getElementById('btnGenerar').addEventListener('click', () => generarReporte(false));
+    document.getElementById('btnGuardarComo').addEventListener('click', () => generarReporte(true));
 
     // Hacer los pasos clicables
     for (let i = 1; i <= 5; i++) {
@@ -208,18 +210,19 @@ function generarSelectorColumnas() {
 
 function validarColumnas() {
     columnasSeleccionadas = {};
-    let haySeleccion = false;
+    let todasLasTablasTienenColumnas = true;
 
     tablasSeleccionadas.forEach(tabla => {
         const checkboxes = document.querySelectorAll(`input[data-tabla="${tabla}"]:checked`);
         columnasSeleccionadas[tabla] = Array.from(checkboxes).map(cb => cb.value);
 
-        if (columnasSeleccionadas[tabla].length > 0) {
-            haySeleccion = true;
+        // Verificar que cada tabla tenga al menos 1 columna
+        if (columnasSeleccionadas[tabla].length === 0) {
+            todasLasTablasTienenColumnas = false;
         }
     });
 
-    document.getElementById('btnSiguiente2').disabled = !haySeleccion;
+    document.getElementById('btnSiguiente2').disabled = !todasLasTablasTienenColumnas;
 }
 
 function generarFiltrosDinamicos() {
@@ -326,7 +329,9 @@ function generarFiltrosDinamicos() {
 
                 // Inicializar searchable select si es necesario
                 if (tipoCampo === 'select') {
-                    inicializarSearchableSelect(inputId);
+                    setTimeout(() => {
+                        inicializarSearchableSelect(inputId);
+                    }, 100);
                 }
             });
         }
@@ -435,7 +440,36 @@ function actualizarResumen() {
     container.appendChild(formatoItem);
 }
 
-async function generarReporte() {
+async function generarReporte(guardarComo = false) {
+    let nombrePersonalizado = null;
+
+    if (guardarComo) {
+        const { value: nombre } = await Swal.fire({
+            title: 'Nombre del archivo',
+            input: 'text',
+            inputLabel: 'Ingrese el nombre para su reporte',
+            inputPlaceholder: 'Ej: Reporte_Productos_2025',
+            inputValue: `reporte_${new Date().toLocaleDateString('es-HN').replace(/\//g, '-')}`,
+            showCancelButton: true,
+            confirmButtonText: 'Guardar',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#28a745',
+            cancelButtonColor: '#6c757d',
+            inputValidator: (value) => {
+                if (!value) {
+                    return 'Debe ingresar un nombre';
+                }
+                // Validar caracteres no permitidos en nombres de archivo
+                if (/[<>:"/\\|?*]/.test(value)) {
+                    return 'El nombre contiene caracteres no permitidos';
+                }
+            }
+        });
+
+        if (!nombre) return; // Usuario canceló
+        nombrePersonalizado = nombre;
+    }
+
     try {
         document.getElementById('loadingOverlay').style.display = 'flex';
 
@@ -446,6 +480,8 @@ async function generarReporte() {
             formato: formatoSeleccionado
         };
 
+        console.log('Enviando payload:', payload);
+
         const response = await fetch('/Reportes/Crear?handler=Generar', {
             method: 'POST',
             headers: {
@@ -455,7 +491,9 @@ async function generarReporte() {
         });
 
         if (!response.ok) {
-            throw new Error(`Error del servidor: ${response.status}`);
+            const errorText = await response.text();
+            console.error('Error del servidor:', errorText);
+            throw new Error(`Error del servidor: ${response.status} - ${errorText}`);
         }
 
         const blob = await response.blob();
@@ -465,7 +503,13 @@ async function generarReporte() {
 
         const extension = formatoSeleccionado === 'excel' ? 'xlsx' :
             formatoSeleccionado === 'pdf' ? 'pdf' : 'docx';
-        a.download = `reporte_${new Date().getTime()}.${extension}`;
+
+        // Usar nombre personalizado o nombre por defecto
+        if (nombrePersonalizado) {
+            a.download = `${nombrePersonalizado}.${extension}`;
+        } else {
+            a.download = `reporte_${new Date().getTime()}.${extension}`;
+        }
 
         document.body.appendChild(a);
         a.click();
@@ -478,18 +522,20 @@ async function generarReporte() {
             icon: 'success',
             title: '¡Reporte generado!',
             text: 'Su reporte se ha descargado correctamente',
-            confirmButtonText: 'Aceptar'
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#28a745'
         });
 
     } catch (error) {
-        console.error('Error:', error);
+        console.error('Error completo:', error);
         document.getElementById('loadingOverlay').style.display = 'none';
 
         Swal.fire({
             icon: 'error',
             title: 'Error',
             text: 'Ocurrió un error al generar el reporte: ' + error.message,
-            confirmButtonText: 'Aceptar'
+            confirmButtonText: 'Aceptar',
+            confirmButtonColor: '#dc3545'
         });
     }
 }
