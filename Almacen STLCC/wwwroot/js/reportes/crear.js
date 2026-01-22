@@ -315,16 +315,25 @@ function generarFiltrosDinamicos() {
                 filtrosGrid.appendChild(filtroDiv);
 
                 const input = filtroDiv.querySelector('input, select');
-                input.addEventListener('input', function () {
+
+                // CORRECCIÓN CRÍTICA: Usar 'change' para selects y 'input' para inputs
+                const eventoEscucha = input.tagName === 'SELECT' ? 'change' : 'input';
+
+                input.addEventListener(eventoEscucha, function () {
                     if (!filtrosSeleccionados[tabla]) {
                         filtrosSeleccionados[tabla] = {};
                     }
 
-                    if (this.value.trim()) {
-                        filtrosSeleccionados[tabla][columna] = this.value.trim();
+                    const valor = this.value.trim();
+                    if (valor && valor !== '') {
+                        filtrosSeleccionados[tabla][columna] = valor;
+                        console.log(`Filtro agregado - Tabla: ${tabla}, Columna: ${columna}, Valor: "${valor}"`);
                     } else {
                         delete filtrosSeleccionados[tabla][columna];
+                        console.log(`Filtro removido - Tabla: ${tabla}, Columna: ${columna}`);
                     }
+
+                    console.log('📋 Filtros actuales:', JSON.stringify(filtrosSeleccionados, null, 2));
                 });
 
                 // Inicializar searchable select si es necesario
@@ -480,7 +489,7 @@ async function generarReporte(guardarComo = false) {
             formato: formatoSeleccionado
         };
 
-        console.log('Enviando payload:', payload);
+        console.log('Enviando payload:', JSON.stringify(payload, null, 2));
 
         const response = await fetch('/Reportes/Crear?handler=Generar', {
             method: 'POST',
