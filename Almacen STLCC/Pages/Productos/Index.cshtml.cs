@@ -22,14 +22,13 @@ namespace Almacen_STLCC.Pages.Productos
                 .OrderBy(p => p.Nombre_Producto)
                 .ToListAsync();
 
+            // Inventario actual = SUMA de Movimientos.Cantidad (porque ya está guardado como delta)
             var movimientos = await _context.Movimientos
                 .GroupBy(m => m.Id_Producto)
                 .Select(g => new
                 {
                     IdProducto = g.Key,
-                    InventarioActual = g.Sum(m =>
-                        m.Tipo_Movimiento == "entrada" ? m.Cantidad :
-                        m.Tipo_Movimiento == "salida" ? -m.Cantidad : 0)
+                    InventarioActual = g.Sum(m => m.Cantidad)
                 })
                 .ToListAsync();
 

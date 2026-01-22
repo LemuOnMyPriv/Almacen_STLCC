@@ -88,7 +88,7 @@
     flex-wrap: wrap;
 }
 
-.form-select {
+.form-select searchable-select{
     flex: 1;
     min-width: 250px;
     padding: 10px 12px;
@@ -98,7 +98,7 @@
     background-color: white;
 }
 
-    .form-select:focus {
+    .form-select searchable-select:focus {
         outline: none;
         border-color: #88CFE0;
     }

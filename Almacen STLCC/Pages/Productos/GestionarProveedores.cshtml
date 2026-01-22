@@ -36,7 +36,7 @@
         <form method="post" asp-page-handler="Agregar" class="form-agregar">
             <input type="hidden" name="IdProducto" value="@Model.Producto?.Id_Producto" />
             <div class="form-inline">
-                <select name="IdProveedor" class="form-select" required>
+                <select name="IdProveedor" class="form-select searchable-select" id= "selectProveedor" required>
                     <option value="">-- Seleccione un proveedor --</option>
                     @foreach (var proveedor in Model.ProveedoresDisponibles)
                     {
@@ -91,3 +91,6 @@
         }
     </div>
 </div>
+@section Scripts {
+    <script src="~/js/productos/gestionarproveedores.js"></script>
+}
