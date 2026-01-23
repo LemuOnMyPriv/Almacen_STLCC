@@ -9,26 +9,25 @@ namespace Almacen_STLCC.Pages.Actas
     {
         private readonly ApplicationDbContext _context = context;
 
-        public List<ActaViewModel> Actas { get; set; } = new();
+        public List<ActaConDetalles> Actas { get; set; } = [];
 
-        public class ActaViewModel
+        public class ActaConDetalles
         {
-            public Acta Acta { get; set; } = null!;
-            public List<string> Requisiciones { get; set; } = new();
+            public required Acta Acta { get; set; }
+            public List<string> Requisiciones { get; set; } = [];
         }
 
         public async Task OnGetAsync()
         {
-            var actas = await _context.Actas
+            var actasConDetalles = await _context.Actas
                 .Include(a => a.Proveedor)
-                .Include(a => a.DetallesActa) // Incluir los detalles para extraer requisiciones
+                .Include(a => a.DetallesActa)
                 .OrderByDescending(a => a.Fecha)
                 .ToListAsync();
 
-            Actas = actas.Select(acta => new ActaViewModel
+            Actas = actasConDetalles.Select(acta => new ActaConDetalles
             {
                 Acta = acta,
-                // Extraer requisiciones únicas de los productos del acta
                 Requisiciones = acta.DetallesActa
                     .Where(d => !string.IsNullOrWhiteSpace(d.Requisicion))
                     .Select(d => d.Requisicion!)

@@ -1,19 +1,207 @@
 ﻿document.addEventListener("DOMContentLoaded", function () {
-    // Inicializar filtro múltiple para actas con filtro de fechas
-    inicializarFiltroMultiple({
-        'filtroNumeroActa': 0,   // Columna 0: Numero de Acta
-        'filtroF01': 1,           // Columna 1: F01
-        'filtroOrdenCompra': 2,   // Columna 2: Orden de Compra
-        'filtroProveedor': 3      // Columna 3: Proveedor
-    }, 'tablaActas', {
-        columnaFecha: 5,           // Columna 5: Fecha
-        inputDesde: 'filtroFechaDesde',
-        inputHasta: 'filtroFechaHasta'
+    const tabla = document.getElementById('tablaActas');
+    if (!tabla) return;
+
+    const tbody = tabla.querySelector('tbody');
+    
+    // Todos los inputs de filtro
+    const filtros = {
+        'filtroNumeroActa': 0,
+        'filtroF01': 1,
+        'filtroOrdenCompra': 2,
+        'filtroProveedor': 3,
+        'filtroRequisicion': 4, // Este es especial, usa data-attribute
+        'filtroFechaDesde': 5,
+        'filtroFechaHasta': 5
+    };
+
+    // Función principal de filtrado
+    function aplicarTodosFiltros() {
+        const filas = tbody.getElementsByTagName('tr');
+        let filasVisibles = 0;
+        let totalFilas = 0;
+
+        for (let i = 0; i < filas.length; i++) {
+            const fila = filas[i];
+
+            // Ignorar filas especiales
+            if (fila.classList.contains('mensaje-vacio') ||
+                fila.classList.contains('fila-sin-resultados')) {
+                continue;
+            }
+
+            totalFilas++;
+            let mostrarFila = true;
+
+            // 1. Filtrar por Número de Acta
+            const filtroNumeroActa = document.getElementById('filtroNumeroActa').value.toLowerCase().trim();
+            if (filtroNumeroActa && !fila.cells[0].textContent.toLowerCase().includes(filtroNumeroActa)) {
+                mostrarFila = false;
+            }
+
+            // 2. Filtrar por F01
+            const filtroF01 = document.getElementById('filtroF01').value.toLowerCase().trim();
+            if (mostrarFila && filtroF01 && !fila.cells[1].textContent.toLowerCase().includes(filtroF01)) {
+                mostrarFila = false;
+            }
+
+            // 3. Filtrar por Orden de Compra
+            const filtroOrdenCompra = document.getElementById('filtroOrdenCompra').value.toLowerCase().trim();
+            if (mostrarFila && filtroOrdenCompra && !fila.cells[2].textContent.toLowerCase().includes(filtroOrdenCompra)) {
+                mostrarFila = false;
+            }
+
+            // 4. Filtrar por Proveedor
+            const filtroProveedor = document.getElementById('filtroProveedor').value.toLowerCase().trim();
+            if (mostrarFila && filtroProveedor && !fila.cells[3].textContent.toLowerCase().includes(filtroProveedor)) {
+                mostrarFila = false;
+            }
+
+            // 5. Filtrar por Requisición (usando data-attribute)
+            const filtroRequisicion = document.getElementById('filtroRequisicion').value.toLowerCase().trim();
+            if (mostrarFila && filtroRequisicion) {
+                const requisicionesData = fila.getAttribute('data-requisiciones') || '';
+                const requisiciones = requisicionesData.toLowerCase();
+                
+                // Solo mostrar si el filtro está contenido en las requisiciones
+                if (!requisiciones.includes(filtroRequisicion)) {
+                    mostrarFila = false;
+                }
+            }
+
+            // 6. Filtrar por fecha
+            const filtroFechaDesde = document.getElementById('filtroFechaDesde').value;
+            const filtroFechaHasta = document.getElementById('filtroFechaHasta').value;
+            
+            if (mostrarFila && (filtroFechaDesde || filtroFechaHasta)) {
+                const textoFecha = fila.cells[5].textContent.trim();
+                const fechaFila = parsearFecha(textoFecha);
+
+                if (fechaFila) {
+                    if (filtroFechaDesde) {
+                        const desde = new Date(filtroFechaDesde);
+                        if (fechaFila < desde) {
+                            mostrarFila = false;
+                        }
+                    }
+                    if (filtroFechaHasta && mostrarFila) {
+                        const hasta = new Date(filtroFechaHasta);
+                        hasta.setHours(23, 59, 59, 999);
+                        if (fechaFila > hasta) {
+                            mostrarFila = false;
+                        }
+                    }
+                }
+            }
+
+            // Aplicar visibilidad
+            if (mostrarFila) {
+                fila.style.display = '';
+                fila.removeAttribute('data-oculto-filtro');
+                filasVisibles++;
+            } else {
+                fila.style.display = 'none';
+                fila.setAttribute('data-oculto-filtro', 'true');
+            }
+        }
+
+        actualizarContador(filasVisibles, totalFilas);
+        mostrarMensajeSinResultados(filasVisibles, tbody);
+        
+        // Actualizar resumen si existe
+        if (typeof actualizarResumen === 'function') {
+            actualizarResumen();
+        }
+    }
+
+    // Función auxiliar para parsear fechas dd/MM/yyyy
+    function parsearFecha(textoFecha) {
+        const partes = textoFecha.split('/');
+        if (partes.length === 3) {
+            const dia = parseInt(partes[0]);
+            const mes = parseInt(partes[1]) - 1;
+            const año = parseInt(partes[2]);
+            return new Date(año, mes, dia);
+        }
+        return null;
+    }
+
+    // Función para actualizar contador
+    function actualizarContador(visibles, total) {
+        let contadorResultados = document.getElementById('contadorResultadosMultiple');
+        
+        const hayFiltrosActivos = Array.from(document.querySelectorAll('.panel-busqueda-avanzado input')).some(
+            input => input.value.trim() !== ''
+        );
+
+        if (!hayFiltrosActivos) {
+            if (contadorResultados) {
+                contadorResultados.style.display = 'none';
+            }
+            return;
+        }
+
+        if (!contadorResultados) {
+            contadorResultados = document.createElement('div');
+            contadorResultados.id = 'contadorResultadosMultiple';
+            contadorResultados.className = 'contador-resultados';
+
+            const seccionTabla = tabla.closest('.tabla-actas') || tabla.parentElement;
+            const primeraTabla = seccionTabla.querySelector('table');
+            if (primeraTabla) {
+                seccionTabla.insertBefore(contadorResultados, primeraTabla);
+            }
+        }
+
+        contadorResultados.style.display = 'flex';
+        contadorResultados.innerHTML = `
+            <i class="fa-solid fa-filter"></i> 
+            Mostrando <strong>${visibles}</strong> de <strong>${total}</strong> registros
+        `;
+    }
+
+    // Función para mostrar mensaje sin resultados
+    function mostrarMensajeSinResultados(visibles, tbody) {
+        let mensajeNoResultados = tbody.querySelector('.fila-sin-resultados');
+
+        const hayFiltrosActivos = Array.from(document.querySelectorAll('.panel-busqueda-avanzado input')).some(
+            input => input.value.trim() !== ''
+        );
+
+        if (visibles === 0 && hayFiltrosActivos) {
+            if (!mensajeNoResultados) {
+                const numColumnas = tbody.closest('table').querySelectorAll('thead th').length;
+
+                mensajeNoResultados = document.createElement('tr');
+                mensajeNoResultados.className = 'fila-sin-resultados';
+                mensajeNoResultados.innerHTML = `
+                    <td colspan="${numColumnas}">
+                        <div class="filtro-vacio">
+                            <i class="fa-solid fa-magnifying-glass"></i> 
+                            No se encontraron resultados con los filtros aplicados
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(mensajeNoResultados);
+            }
+        } else {
+            if (mensajeNoResultados) {
+                mensajeNoResultados.remove();
+            }
+        }
+    }
+
+    // Agregar event listeners a TODOS los filtros
+    const todosLosFiltros = document.querySelectorAll('.panel-busqueda-avanzado input');
+    todosLosFiltros.forEach(input => {
+        input.addEventListener('input', aplicarTodosFiltros);
+        input.addEventListener('change', aplicarTodosFiltros);
     });
 
     // Inicializar sistema de agrupación
     inicializarAgrupacionActas();
 
+    // Inicializar paginación
     inicializarPaginacion('tablaActas', 10);
 
     // Mostrar mensaje de éxito si existe
@@ -36,7 +224,7 @@ function inicializarAgrupacionActas() {
     }
 
     // Función para actualizar el resumen
-    function actualizarResumen() {
+    window.actualizarResumen = function() {
         // Solo mostrar si hay filtros activos
         if (!hayFiltrosActivos()) {
             resumenContainer.style.display = 'none';
@@ -46,7 +234,8 @@ function inicializarAgrupacionActas() {
         const filas = Array.from(tbody.getElementsByTagName('tr')).filter(fila =>
             !fila.classList.contains('mensaje-vacio') &&
             !fila.classList.contains('fila-sin-resultados') &&
-            fila.style.display !== 'none'
+            fila.style.display !== 'none' &&
+            !fila.hasAttribute('data-oculto-filtro')
         );
 
         if (filas.length === 0) {
@@ -80,14 +269,13 @@ function inicializarAgrupacionActas() {
         // Agrupar por requisiciones
         const porRequisicion = {};
         filas.forEach(fila => {
-            const requisicionesCell = fila.cells[4];
-            const badges = requisicionesCell.querySelectorAll('.badge-requisicion');
-            badges.forEach(badge => {
-                const req = badge.textContent.trim();
-                if (!req.startsWith('+')) {  // Ignorar el badge de "+N"
+            const requisicionesData = fila.getAttribute('data-requisiciones') || '';
+            if (requisicionesData) {
+                const requisiciones = requisicionesData.split(',').filter(r => r.trim() !== '');
+                requisiciones.forEach(req => {
                     porRequisicion[req] = (porRequisicion[req] || 0) + 1;
-                }
-            });
+                });
+            }
         });
 
         // Generar HTML del resumen

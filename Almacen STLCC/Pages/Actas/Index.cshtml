@@ -68,6 +68,17 @@
             </div>
 
             <div class="busqueda-grupo">
+                <label for="filtroRequisicion">
+                    <i class="fa-solid fa-file-lines"></i> Requisición:
+                </label>
+                <input type="text"
+                       id="filtroRequisicion"
+                       class="form-control-busqueda"
+                       placeholder="Ej: REQ-2025-001"
+                       autocomplete="off">
+            </div>
+
+            <div class="busqueda-grupo">
                 <label for="filtroFechaDesde">
                     <i class="fa-solid fa-calendar-days"></i> Fecha Desde:
                 </label>
@@ -110,7 +121,7 @@
                 {
                     @foreach (var item in Model.Actas)
                     {
-                        <tr>
+                        <tr data-requisiciones="@string.Join(",", item.Requisiciones)">
                             <td>@item.Acta.Numero_Acta</td>
                             <td>@item.Acta.F01</td>
                             <td>@(item.Acta.Orden_Compra ?? "N/A")</td>

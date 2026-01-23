@@ -84,13 +84,17 @@
 .form-inline {
     display: flex;
     gap: 15px;
-    align-items: center;
-    flex-wrap: wrap;
+    align-items: flex-start;
+    flex-wrap: nowrap;
 }
 
-.form-select searchable-select{
+.form-select,
+.searchable-select-wrapper {
     flex: 1;
     min-width: 250px;
+}
+
+.form-select {
     padding: 10px 12px;
     border: 2px solid #e0e0e0;
     border-radius: 6px;
@@ -98,7 +102,7 @@
     background-color: white;
 }
 
-    .form-select searchable-select:focus {
+    .form-select:focus {
         outline: none;
         border-color: #88CFE0;
     }
@@ -116,6 +120,7 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    white-space: nowrap;
 }
 
     .btn-agregar:hover {
